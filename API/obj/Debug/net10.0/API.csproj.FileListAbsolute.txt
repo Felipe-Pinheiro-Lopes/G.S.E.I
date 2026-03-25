@@ -396,3 +396,4 @@ C:\Users\Felipe Lopes\Documents\G.S.E.I\API\obj\Debug\net10.0\refint\API.dll
 C:\Users\Felipe Lopes\Documents\G.S.E.I\API\obj\Debug\net10.0\API.pdb
 C:\Users\Felipe Lopes\Documents\G.S.E.I\API\obj\Debug\net10.0\API.genruntimeconfig.cache
 C:\Users\Felipe Lopes\Documents\G.S.E.I\API\obj\Debug\net10.0\ref\API.dll
+C:\Users\Felipe Lopes\Documents\G.S.E.I\API\obj\Debug\net10.0\API.sourcelink.json

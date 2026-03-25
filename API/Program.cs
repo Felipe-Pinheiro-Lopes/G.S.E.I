@@ -67,6 +67,17 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// 1. ADICIONE ISSO AQUI (Antes do builder.Build())
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") // URL do seu Front-end
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build(); 
 
 // --- 4. ORDEM DOS MIDDLEWARES (CRUCIAL) ---
