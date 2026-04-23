@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Training | The Living Ledger</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#88d982",
+                    "outline-variant": "#bfcaba",
+                    "on-tertiary-fixed-variant": "#004f56",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#92f1fe",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#0d631b",
+                    "on-secondary-fixed-variant": "#00468c",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#071e27",
+                    "on-secondary-container": "#003670",
+                    "on-primary-fixed": "#002204",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#cfe6f2",
+                    "secondary-fixed-dim": "#a9c7ff",
+                    "on-surface-variant": "#40493d",
+                    "on-primary-fixed-variant": "#005312",
+                    "surface-container-high": "#d5ecf8",
+                    "primary-container": "#2e7d32",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#dff4ff",
+                    "tertiary": "#005e67",
+                    "tertiary-container": "#007984",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed-dim": "#75d5e2",
+                    "secondary": "#005db7",
+                    "inverse-primary": "#88d982",
+                    "secondary-container": "#64a1ff",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#a3f69c",
+                    "surface-container": "#dbf1fe",
+                    "on-background": "#071e27",
+                    "surface-container-highest": "#cfe6f2",
+                    "on-tertiary-fixed": "#001f23",
+                    "on-primary-container": "#cbffc2",
+                    "surface-tint": "#1b6d24",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-container": "#cdf8ff",
+                    "background": "#f3faff",
+                    "secondary-fixed": "#d6e3ff",
+                    "surface-dim": "#c7dde9",
+                    "surface-bright": "#f3faff",
+                    "surface-container-low": "#e6f6ff",
+                    "outline": "#707a6c",
+                    "inverse-surface": "#1e333c",
+                    "on-secondary-fixed": "#001b3d",
+                    "surface": "#f3faff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "display": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#f3faff]/80 backdrop-blur-md shadow-sm">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#0d631b] cursor-pointer">menu</span>
+<h1 class="font-headline font-bold tracking-tight text-xl font-black text-[#0d631b]">The Living Ledger</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="Close-up professional portrait of a sustainability manager in a bright modern office with plants in background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMTgcxDQLNQy5CkIJVF_FLhurUsnMwpgK3ypvZfw7jhvSnA-8PkZ7zbzLndcSS99I55_ZoQuquwJmBnvRpd3xAPb7VjLecKMLzadN6RBKD-ckxnpfmonaY1Tcrm-iUG7nB4BYGqD6i99P9z7npXThAX8xJnC70A8oGtrBsv-ukFNO_XZmBKmwAdcX8qyDRhmJcWLNBfApfohc31fS-eBgdyYBI7KsdZO1YZrsH4rB9OlrxTcorU-qvsWX0dQrlT_Dnj9wJKc13hJY"/>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6">
+<!-- Header: Hero Progress -->
+<section class="mb-10">
+<div class="flex flex-col gap-1">
+<span class="text-tertiary font-headline font-bold text-sm tracking-wider uppercase">Level 4 Analyst</span>
+<h2 class="text-display-lg font-headline font-extrabold text-3xl text-on-surface leading-tight">Welcome back, Sarah.</h2>
+</div>
+<div class="mt-6 p-6 rounded-full bg-surface-container-low flex flex-col gap-4 shadow-sm border-l-4 border-primary">
+<div class="flex justify-between items-end">
+<div>
+<p class="text-on-surface-variant text-sm font-medium">Global Sustainability Certification</p>
+<p class="text-primary font-bold text-lg">85% to completion</p>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%] rounded-full"></div>
+</div>
+</div>
+</section>
+<!-- Enrolled Courses: Horizontal Bento -->
+<section class="mb-10">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline font-bold text-xl">Active Learning</h3>
+<span class="text-primary text-sm font-semibold">2 modules active</span>
+</div>
+<div class="flex overflow-x-auto gap-4 no-scrollbar pb-4 -mx-6 px-6">
+<!-- Course Card 1 -->
+<div class="min-w-[280px] bg-surface-container-lowest rounded-full p-6 shadow-[0px_12px_32px_rgba(7,30,39,0.06)] flex flex-col gap-6">
+<div class="flex gap-4 items-start">
+<div class="p-3 bg-secondary-fixed rounded-xl">
+<span class="material-symbols-outlined text-on-secondary-fixed-variant">inventory_2</span>
+</div>
+<div class="flex-1">
+<h4 class="font-headline font-bold text-base leading-tight">IT Asset Lifecycle Management</h4>
+<p class="text-xs text-on-surface-variant mt-1">4 of 6 modules finished</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex-1 bg-surface-container-low h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[66%]"></div>
+</div>
+<span class="text-xs font-bold text-secondary">66%</span>
+</div>
+</div>
+<!-- Course Card 2 -->
+<div class="min-w-[280px] bg-surface-container-lowest rounded-full p-6 shadow-[0px_12px_32px_rgba(7,30,39,0.06)] flex flex-col gap-6">
+<div class="flex gap-4 items-start">
+<div class="p-3 bg-primary-fixed rounded-xl">
+<span class="material-symbols-outlined text-on-primary-fixed-variant">recycling</span>
+</div>
+<div class="flex-1">
+<h4 class="font-headline font-bold text-base leading-tight">E-Waste Compliance</h4>
+<p class="text-xs text-on-surface-variant mt-1">1 of 5 modules finished</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex-1 bg-surface-container-low h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[20%]"></div>
+</div>
+<span class="text-xs font-bold text-primary">20%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Course Catalog: Editorial Grid -->
+<section class="mb-10">
+<h3 class="font-headline font-bold text-xl mb-6">Discover New Tracks</h3>
+<div class="grid grid-cols-1 gap-4">
+<!-- Catalog Item 1 -->
+<div class="group relative overflow-hidden rounded-full bg-surface-container-low p-1 transition-all hover:bg-surface-container-high">
+<div class="flex items-center gap-4 p-4">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0">
+<img alt="Circular Economy" class="w-full h-full object-cover" data-alt="Minimalist abstract representation of circular economy with green flowing lines forming an infinite loop on clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAELJzeFQsUUkGhitHtuslyh1r5ZKdJCoQ1b_kD36gBT1hvfLpHY2mZNwQ8up91D0VPlysgDhOI9ntT89ndi3X8Vfr2picZg5dv6dE6ZT3HaTrLcIgL6b8DsZWKa6Yh1npXOwa7Jnb_3NX4eluG5bIlMX4fGroW96CbZnsJhMe-RAPHwmrRF7itNT7n4wH7FRMLkGXMJOrNCiNtbWIH5Kjf_1P_D7cPp3GTifQNKPXGdys4O8kAUtjsru-rdVsNBkrt1RCb4ipzvK0"/>
+</div>
+<div class="flex-1">
+<p class="text-[10px] uppercase font-bold tracking-widest text-tertiary">Strategic</p>
+<h4 class="font-headline font-bold text-base">Circular Economy Basics</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-xs">schedule</span>
+<span class="text-xs text-on-surface-variant">2.5 Hours</span>
+</div>
+</div>
+<button class="bg-surface-container-lowest p-2 rounded-full shadow-sm text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<!-- Catalog Item 2 -->
+<div class="group relative overflow-hidden rounded-full bg-surface-container-low p-1 transition-all hover:bg-surface-container-high">
+<div class="flex items-center gap-4 p-4">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0">
+<img alt="Sustainable Procurement" class="w-full h-full object-cover" data-alt="Top down view of eco-friendly office supplies and paper textures in soft organic greens and creams" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVNw4nsfCr0bYcijvn8lKEFwTRYpA6QzrJ8-htM-2-iKnYeavGXTUqAmmQx-QDOgyrNfs7dfTegLRGo0xGG5coVVixstwR_nULoOVHSVAeqyHCaK0W1GgWtFC19BfiujGXQEru7BkD3J5bMxJMP5G7jKkaOP6Hl6Ri1DelG6h-A_V_LxWbE2iZfnfrAVuLCckSw62QTEIYGWSr3fhMptAqzF39QPAYEUtdEiwbSgYCr0iRKAuDY9LtPuz4eO_2qJIZR-xFv2wuAb8"/>
+</div>
+<div class="flex-1">
+<p class="text-[10px] uppercase font-bold tracking-widest text-secondary">Procurement</p>
+<h4 class="font-headline font-bold text-base">Sustainable Procurement</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-xs">schedule</span>
+<span class="text-xs text-on-surface-variant">4.0 Hours</span>
+</div>
+</div>
+<button class="bg-surface-container-lowest p-2 rounded-full shadow-sm text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Training History -->
+<section class="mb-8">
+<h3 class="font-headline font-bold text-xl mb-6">Completed Training</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-5 bg-surface-container-lowest rounded-full border border-outline-variant/15">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div>
+<h5 class="font-semibold text-sm">Carbon Footprint Analysis</h5>
+<p class="text-xs text-on-surface-variant">Completed Dec 2023</p>
+</div>
+</div>
+<button class="text-primary text-xs font-bold px-4 py-2 hover:bg-primary-fixed-dim/20 rounded-full transition-colors">
+                        View Certificate
+                    </button>
+</div>
+<div class="flex items-center justify-between p-5 bg-surface-container-lowest rounded-full border border-outline-variant/15">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div>
+<h5 class="font-semibold text-sm">Energy Efficient Data Centers</h5>
+<p class="text-xs text-on-surface-variant">Completed Oct 2023</p>
+</div>
+</div>
+<button class="text-primary text-xs font-bold px-4 py-2 hover:bg-primary-fixed-dim/20 rounded-full transition-colors">
+                        View Certificate
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-[#f3faff]/90 backdrop-blur-xl rounded-t-2xl shadow-[0px_-4px_16px_rgba(7,30,39,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#526066] p-2 hover:bg-[#e6f6ff] transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body text-[11px] font-semibold">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#d6e3ff] text-[#00468c] rounded-xl px-5 py-2 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-body text-[11px] font-semibold">Training</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#526066] p-2 hover:bg-[#e6f6ff] transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-body text-[11px] font-semibold">Ledger</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#526066] p-2 hover:bg-[#e6f6ff] transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">eco</span>
+<span class="font-body text-[11px] font-semibold">Impact</span>
+</a>
+</nav>
+</body></html>

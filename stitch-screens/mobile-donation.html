@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EcoLink Ledger - Donation Portal</title>
+<!-- Google Fonts: Manrope & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#64a1ff",
+                    "primary-fixed": "#a3f69c",
+                    "outline": "#707a6c",
+                    "on-surface": "#071e27",
+                    "inverse-primary": "#88d982",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#92f1fe",
+                    "surface": "#f3faff",
+                    "tertiary": "#005e67",
+                    "on-primary-fixed": "#002204",
+                    "on-secondary-fixed-variant": "#00468c",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#001f23",
+                    "surface-variant": "#cfe6f2",
+                    "surface-container-low": "#e6f6ff",
+                    "primary-fixed-dim": "#88d982",
+                    "secondary-fixed-dim": "#a9c7ff",
+                    "on-primary-container": "#cbffc2",
+                    "outline-variant": "#bfcaba",
+                    "tertiary-fixed-dim": "#75d5e2",
+                    "primary": "#0d631b",
+                    "surface-container-highest": "#cfe6f2",
+                    "secondary": "#005db7",
+                    "on-tertiary-fixed-variant": "#004f56",
+                    "tertiary-container": "#007984",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#2e7d32",
+                    "on-secondary-fixed": "#001b3d",
+                    "error": "#ba1a1a",
+                    "on-surface-variant": "#40493d",
+                    "inverse-on-surface": "#dff4ff",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#f3faff",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#c7dde9",
+                    "surface-tint": "#1b6d24",
+                    "background": "#f3faff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#005312",
+                    "on-background": "#071e27",
+                    "inverse-surface": "#1e333c",
+                    "surface-container": "#dbf1fe",
+                    "on-tertiary-container": "#cdf8ff",
+                    "on-secondary-container": "#003670",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#d5ecf8",
+                    "secondary-fixed": "#d6e3ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "display": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#f3faff]/80 backdrop-blur-md">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#0d631b]">menu</span>
+<h1 class="text-xl font-extrabold text-[#0d631b] font-['Manrope'] tracking-tight">EcoLink Ledger</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest">
+<img alt="GSEI Admin" class="w-full h-full object-cover" data-alt="professional male administrator headshot with neutral background, corporate style lighting, high quality portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLaK42qdQKhMsI7nALBGok-3cSkcpVYqQGmGLvd1kjf0SUM49goBkkKjJgIhecfShactwQRpU3jB-VLBtOM3Hr0r6GsJgelmsujPUmpSW3I4yIMbVpOfauu8UEeNvFj2SyX9bipZUMD2T0SllU4c9grhrzRdfvGx6XToo_gMeg1LIYOl2zqcODlhm8TULuCMQmNQcH472FgR1HrfN1mOrh62Jpch6JP6xoa7PwCDkmHNYvkmrrXbt2-_qDYbs0FsYzRMsAZqFtL7Y"/>
+</div>
+</header>
+<main class="pt-24 px-6 space-y-10 max-w-md mx-auto">
+<!-- Header Section -->
+<section>
+<h2 class="text-3xl font-extrabold tracking-tight text-on-surface mb-2">Donate Assets</h2>
+<p class="text-on-surface-variant text-sm">Bridge the digital divide by allocating IT equipment to vetted institutions.</p>
+</section>
+<!-- 1. Institution Selection (Horizontal Carousel style) -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h3 class="text-lg font-bold tracking-tight">1. Select Institution</h3>
+<span class="text-primary text-xs font-semibold uppercase tracking-widest">View Map</span>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 no-scrollbar">
+<!-- Institution Card 1 -->
+<div class="flex-shrink-0 w-64 p-5 rounded-xl bg-surface-container-lowest shadow-[0px_12px_32px_rgba(7,30,39,0.06)] border-2 border-primary">
+<div class="flex items-start justify-between mb-4">
+<div class="w-12 h-12 rounded-lg bg-tertiary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</div>
+<h4 class="font-bold text-on-surface">City Library Network</h4>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Providing public internet access to underserved urban districts.</p>
+<div class="mt-4 flex items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-variant text-[10px] font-bold rounded-full text-secondary uppercase">Urban Reach</span>
+</div>
+</div>
+<!-- Institution Card 2 -->
+<div class="flex-shrink-0 w-64 p-5 rounded-xl bg-surface-container-lowest shadow-[0px_4px_12px_rgba(7,30,39,0.03)] border-2 border-transparent">
+<div class="flex items-start justify-between mb-4">
+<div class="w-12 h-12 rounded-lg bg-primary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+</div>
+<h4 class="font-bold text-on-surface">Green-Hub Education</h4>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Equipping rural schools with sustainable IT labs for digital literacy.</p>
+<div class="mt-4 flex items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-variant text-[10px] font-bold rounded-full text-secondary uppercase">Education</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. Equipment Selection (Asymmetric List) -->
+<section class="space-y-4">
+<h3 class="text-lg font-bold tracking-tight">2. Select Equipment</h3>
+<div class="space-y-4">
+<!-- Equipment Item 1 -->
+<div class="flex items-center gap-4 p-4 bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(7,30,39,0.03)]">
+<div class="flex-shrink-0 relative">
+<input checked="" class="w-6 h-6 rounded text-primary focus:ring-primary-container border-outline-variant/30" type="checkbox"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-secondary uppercase tracking-tighter">Inventory #4920</span>
+<span class="px-2 py-0.5 bg-tertiary/10 text-tertiary text-[10px] font-bold rounded-full">Ready</span>
+</div>
+<h4 class="font-semibold text-sm">MacBook Pro 16" (M1 Pro)</h4>
+<p class="text-[11px] text-on-surface-variant">Battery health: 94% • Cleaned &amp; Reset</p>
+</div>
+</div>
+<!-- Equipment Item 2 -->
+<div class="flex items-center gap-4 p-4 bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(7,30,39,0.03)]">
+<div class="flex-shrink-0 relative">
+<input checked="" class="w-6 h-6 rounded text-primary focus:ring-primary-container border-outline-variant/30" type="checkbox"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-secondary uppercase tracking-tighter">Inventory #2104</span>
+<span class="px-2 py-0.5 bg-tertiary/10 text-tertiary text-[10px] font-bold rounded-full">Ready</span>
+</div>
+<h4 class="font-semibold text-sm">Dell PowerEdge R750</h4>
+<p class="text-[11px] text-on-surface-variant">Server Unit • Decommissioned 2023</p>
+</div>
+</div>
+<!-- Equipment Item 3 -->
+<div class="flex items-center gap-4 p-4 bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(7,30,39,0.03)] opacity-60">
+<div class="flex-shrink-0 relative">
+<input class="w-6 h-6 rounded text-primary focus:ring-primary-container border-outline-variant/30" type="checkbox"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<span class="text-xs font-bold text-secondary uppercase tracking-tighter">Inventory #8832</span>
+<span class="px-2 py-0.5 bg-error/10 text-error text-[10px] font-bold rounded-full uppercase">Maintenance</span>
+</div>
+<h4 class="font-semibold text-sm">iPad Air (5th Gen)</h4>
+<p class="text-[11px] text-on-surface-variant">Screen repair pending</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Review & Confirm (Glassmorphism Sticky-ish Card) -->
+<section class="mt-8 p-6 bg-surface-container-low/60 backdrop-blur-xl rounded-3xl border border-white/20">
+<h3 class="text-sm font-bold text-primary uppercase tracking-widest mb-4">Donation Summary</h3>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Target Institution</span>
+<span class="font-semibold">City Library Network</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Selected Items</span>
+<span class="font-semibold">2 Assets</span>
+</div>
+<div class="flex justify-between items-center text-sm pt-3 border-t border-outline-variant/20">
+<span class="font-bold text-on-surface">Total Impact Value</span>
+<span class="font-black text-primary">$4,250.00</span>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-[#0d631b] to-[#2e7d32] text-white rounded-xl font-bold tracking-tight shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform">
+                Confirm Donation
+            </button>
+<p class="text-center text-[10px] text-on-surface-variant mt-4 leading-tight">
+                By confirming, you authorize the transfer of ownership to the selected institution under the G.S.E.I. Framework.
+            </p>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-[#e6f6ff]/90 backdrop-blur-lg rounded-t-xl shadow-[0px_-4px_24px_rgba(7,30,39,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#5c717b] hover:text-[#0d631b] transition-all" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#d6e3ff] text-[#00468c] rounded-full px-5 py-1 scale-110" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">volunteer_activism</span>
+<span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider">Donations</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#5c717b] hover:text-[#0d631b] transition-all" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider">Ledger</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#5c717b] hover:text-[#0d631b] transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider">Account</span>
+</a>
+</nav>
+<!-- Visual Decor (Minimalistic organic shapes for Living Ledger theme) -->
+<div class="fixed top-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="fixed bottom-40 -left-20 w-48 h-48 bg-secondary/5 rounded-full blur-3xl pointer-events-none"></div>
+</body></html>

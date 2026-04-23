@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Living Ledger - Equipment Inventory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#a3f69c",
+                        "primary-fixed-dim": "#88d982",
+                        "tertiary-container": "#007984",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#92f1fe",
+                        "on-secondary": "#ffffff",
+                        "outline": "#707a6c",
+                        "on-tertiary-fixed": "#001f23",
+                        "background": "#f3faff",
+                        "surface-container-high": "#d5ecf8",
+                        "outline-variant": "#bfcaba",
+                        "on-tertiary-fixed-variant": "#004f56",
+                        "on-primary-fixed-variant": "#005312",
+                        "on-surface": "#071e27",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#40493d",
+                        "on-primary-fixed": "#002204",
+                        "surface-bright": "#f3faff",
+                        "tertiary-fixed-dim": "#75d5e2",
+                        "primary": "#0d631b",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#cfe6f2",
+                        "on-tertiary-container": "#cdf8ff",
+                        "surface-dim": "#c7dde9",
+                        "on-secondary-fixed": "#001b3d",
+                        "surface-container-highest": "#cfe6f2",
+                        "secondary-container": "#64a1ff",
+                        "secondary": "#005db7",
+                        "inverse-surface": "#1e333c",
+                        "inverse-primary": "#88d982",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#cbffc2",
+                        "surface-container-low": "#e6f6ff",
+                        "surface-container": "#dbf1fe",
+                        "on-secondary-container": "#003670",
+                        "on-error-container": "#93000a",
+                        "surface": "#f3faff",
+                        "primary-container": "#2e7d32",
+                        "on-secondary-fixed-variant": "#00468c",
+                        "inverse-on-surface": "#dff4ff",
+                        "secondary-fixed-dim": "#a9c7ff",
+                        "surface-tint": "#1b6d24",
+                        "secondary-fixed": "#d6e3ff",
+                        "on-error": "#ffffff",
+                        "tertiary": "#005e67",
+                        "on-background": "#071e27"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "display": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f3faff]/80 dark:bg-slate-950/80 backdrop-blur-xl flex justify-between items-center px-6 pt-4 pb-2 w-full max-w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Professional headshot of a corporate IT manager in a light blue shirt, clean white background, soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8QMR9gz5Z4-j7GxE9goVSABEXcjT60hn4tFQu459JL3zueAGYFr8IdhPdNGwqk_49AMrUgqtQqe4WPtsFTtLKbSgV5ejgNJ7LUL0ImmYJSfXBX7qkmrXLMiSat7TdAcbCDVBelqoCbEe6PJ_tNuLl4lbwa15xJCEdb0KUH2q1ROnrkWxm1XASv51akB4gwLfWheZpmx63EuWfpsVcpKNt44CgpZlhHmVnuFTF23MAOF72wbLw2rWy0ML2PEzM3GcQ9dKdpHjW4Fo"/>
+</div>
+<h1 class="font-['Manrope'] font-bold tracking-tight text-3xl text-[#0d631b] dark:text-white font-black tracking-tighter">Inventory</h1>
+</div>
+<button class="text-[#0d631b] dark:text-[#2e7d32] hover:opacity-80 transition-opacity scale-95 active:scale-90 duration-200">
+<span class="material-symbols-outlined text-2xl" data-icon="search">search</span>
+</button>
+</header>
+<main class="pt-24 pb-32 px-6">
+<!-- Search and Action Bar -->
+<section class="mb-8">
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+</div>
+<input class="w-full bg-surface-container-highest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary transition-all duration-300" placeholder="Search Asset ID or Serial..." type="text"/>
+</div>
+</section>
+<!-- Filter Chips (Horizontal Scroll) -->
+<section class="mb-8 overflow-x-auto no-scrollbar -mx-6 px-6">
+<div class="flex gap-3">
+<button class="flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-full font-semibold whitespace-nowrap shadow-md">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+                    All Assets
+                </button>
+<button class="flex items-center gap-2 bg-surface-container-low text-on-surface px-5 py-2.5 rounded-full font-semibold whitespace-nowrap hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-lg text-primary" data-icon="check_circle">check_circle</span>
+                    Available
+                </button>
+<button class="flex items-center gap-2 bg-surface-container-low text-on-surface px-5 py-2.5 rounded-full font-semibold whitespace-nowrap hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-lg text-secondary" data-icon="person_play">person_play</span>
+                    In Use
+                </button>
+<button class="flex items-center gap-2 bg-surface-container-low text-on-surface px-5 py-2.5 rounded-full font-semibold whitespace-nowrap hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-lg text-error" data-icon="build">build</span>
+                    Triage
+                </button>
+<button class="flex items-center gap-2 bg-surface-container-low text-on-surface px-5 py-2.5 rounded-full font-semibold whitespace-nowrap hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-lg text-tertiary" data-icon="eco">eco</span>
+                    Recycling
+                </button>
+</div>
+</section>
+<!-- Equipment List -->
+<section class="space-y-4">
+<!-- Asset Card 1 -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0px_12px_32px_rgba(7,30,39,0.06)] flex gap-4 relative group">
+<div class="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="laptop_mac">laptop_mac</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">ASSET #4829-X</p>
+<h3 class="font-headline font-bold text-on-surface text-lg leading-tight">MacBook Pro 16"</h3>
+</div>
+<button class="p-1 text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">M2 Max • 32GB RAM</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-fixed text-on-primary-fixed-variant">
+                            Available
+                        </span>
+</div>
+</div>
+</div>
+<!-- Asset Card 2 -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0px_12px_32px_rgba(7,30,39,0.06)] flex gap-4 relative">
+<div class="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" data-icon="dns">dns</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">ASSET #SERVER-02</p>
+<h3 class="font-headline font-bold text-on-surface text-lg leading-tight">Dell PowerEdge R750</h3>
+</div>
+<button class="p-1 text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">Rack Unit • Node B</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-secondary-fixed text-on-secondary-fixed-variant">
+                            In Use
+                        </span>
+</div>
+</div>
+</div>
+<!-- Asset Card 3 -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0px_12px_32px_rgba(7,30,39,0.06)] flex gap-4 relative">
+<div class="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-3xl" data-icon="tablet_mac">tablet_mac</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">ASSET #9910-T</p>
+<h3 class="font-headline font-bold text-on-surface text-lg leading-tight">iPad Pro 12.9"</h3>
+</div>
+<button class="p-1 text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">Broken Display</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-error-container text-on-error-container">
+                            Triage
+                        </span>
+</div>
+</div>
+</div>
+<!-- Asset Card 4 -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0px_12px_32px_rgba(7,30,39,0.06)] flex gap-4 relative">
+<div class="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-3xl" data-icon="monitor">monitor</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">ASSET #8271-W</p>
+<h3 class="font-headline font-bold text-on-surface text-lg leading-tight">HP Z27 4K Display</h3>
+</div>
+<button class="p-1 text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">End of Life Cycle</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-tertiary-fixed text-on-tertiary-fixed-variant">
+                            Recycling
+                        </span>
+</div>
+</div>
+</div>
+<!-- Asset Card 5 -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0px_12px_32px_rgba(7,30,39,0.06)] flex gap-4 relative">
+<div class="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="router">router</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">ASSET #NET-112</p>
+<h3 class="font-headline font-bold text-on-surface text-lg leading-tight">Cisco Catalyst 9300</h3>
+</div>
+<button class="p-1 text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">Network Hub A</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-fixed text-on-primary-fixed-variant">
+                            Available
+                        </span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#f3faff]/90 dark:bg-slate-950/90 backdrop-blur-2xl z-50 rounded-t-2xl shadow-[0px_-12px_32px_rgba(7,30,39,0.06)]">
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-4 py-1.5 hover:bg-[#cfe6f2] dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider mt-1">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#d6e3ff] dark:bg-blue-900/40 text-[#00468c] dark:text-blue-200 rounded-xl px-4 py-1.5 scale-105 duration-300 ease-out">
+<span class="material-symbols-outlined" data-icon="inventory_2" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider mt-1">Inventory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-4 py-1.5 hover:bg-[#cfe6f2] dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined" data-icon="eco">eco</span>
+<span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider mt-1">Impact</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-4 py-1.5 hover:bg-[#cfe6f2] dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider mt-1">Settings</span>
+</div>
+</nav>
+<!-- Floating Action Button -->
+<button class="fixed right-6 bottom-28 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-2xl shadow-xl flex items-center justify-center active:scale-90 transition-transform duration-200 z-40">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+</body></html>

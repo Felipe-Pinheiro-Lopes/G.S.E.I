@@ -1,3 +1,6 @@
+# G.S.E.I Frontend
+Frontend para o projeto G.S.E.I (Gestão Sustentável de Equipamentos de Informática). O conceito completo do projeto está disponível em [CONCEITO_PROJETO.md](../../CONCEITO_PROJETO.md).
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
