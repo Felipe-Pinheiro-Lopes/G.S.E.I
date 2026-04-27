@@ -9,7 +9,6 @@ O conceito detalhado do projeto está disponível em [CONCEITO_PROJETO.md](./CON
 - `API/`: Backend .NET 10 C# (ASP.NET Core, EF Core, PostgreSQL, JWT, Swagger)
 - `Bd/`: Scripts e diagramas de schema PostgreSQL
 - `front-end/`: Frontend Next.js 16 React (TypeScript, Tailwind)
-- `.kilo/`: Configurações e skills para o assistente Kilo
 
 ## Branches (Gitflow)
 main, develop, Release, Feature, Hotfix
