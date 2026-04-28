@@ -3,6 +3,8 @@
 !define LIGHTBLUE #b3e5fc
 !define WHITE #ffffff
 
+left to right direction
+
 skinparam backgroundColor WHITE
 skinparam usecase {
   BackgroundColor LIGHTGREEN
@@ -31,46 +33,46 @@ skinparam package {
 package "G.S.E.I - Gestão Sustentável de Equipamentos" {
 
   ' Dashboard Use Cases
-  usecase "altera o status do produto no site" as UC01
-  usecase "cadastra produto no site" as UC02
+  usecase "alterar o status do produto" as UC01
+  usecase "cadastrar produto" as UC02
   usecase "solicitar substituição de peças" as UC03
-  usecase "define destino final" as UC04
-  usecase "registra peças reaproveitadas" as UC05
+  usecase "definir destino final" as UC04
+  usecase "registrar peças reaproveitadas" as UC05
 
   ' Inventory Use Cases
-  usecase "solicita o produto" as UC06
-  usecase "confirma recebimento" as UC07
+  usecase "solicitar o produto" as UC06
+  usecase "confirmar recebimento" as UC07
 
   ' Triage Use Cases
-  usecase "criptografa dados p/ descarte do produto" as UC08
-  usecase "retira unidade de armazenamento" as UC09
+  usecase "criptografar dados para descarte do produto" as UC08
+  usecase "retirar unidade de armazenamento" as UC09
 
   ' Donation Use Cases
-  usecase "Se livram fisicamente do produto" as UC10
-  usecase "Consertam o produto" as UC11
+  usecase "Descartar o produto" as UC10
+  usecase "Consertar o produto" as UC11
 
   ' Disposal Use Cases
-  usecase "Reaproveitam o produto p/ aulas" as UC12
+  usecase "Reaproveitar o produto p/ aulas" as UC12
 
   ' Actor associations
-  Tecnico --> UC01
-  Tecnico --> UC02
-  Tecnico --> UC03
-  Tecnico --> UC04
-  Tecnico --> UC05
+  Tecnico -- UC01
+  Tecnico -- UC02
+  Tecnico -- UC03
+  Tecnico -- UC04
+  Tecnico -- UC05
 
-  Entidade --> UC06
-  Entidade --> UC07
+  Entidade -- UC06
+  Entidade -- UC07
 
-  Cibersegurança --> UC08
+  Cibersegurança -- UC08
 
-  Manutenção --> UC10
-  Manutenção --> UC11
+  Manutenção -- UC10
+  Manutenção -- UC11
 
-  Instrutor --> UC12
+  Instrutor -- UC12
 
   ' Includes and Extends
-  UC09 .. UC08 : <<extend>>
+  UC09 <.. UC08 : <<extend>>
 }
 
 @enduml
