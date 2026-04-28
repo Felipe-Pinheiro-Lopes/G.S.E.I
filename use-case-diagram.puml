@@ -22,123 +22,55 @@ skinparam package {
   FontColor #33691e
 }
 
+  actor "Segurança da Informação" as Cibersegurança
+  actor "Técnico de Triagem" as Tecnico
+  actor "Professor" as Instrutor
+  actor "Manutenção" as Manutenção
+  actor "Entidade Beneficiária" as Entidade
+
 package "G.S.E.I - Gestão Sustentável de Equipamentos" {
-  
-  actor "Administrador" as Admin
-  actor "Técnico" as Tecnico
-  actor "Colaborador" as Colaborador
-  actor "Sistema" as Sistema
 
   ' Dashboard Use Cases
-  usecase "Visualizar Dashboard" as UC01
-  usecase "Ver Métricas de Sustentabilidade" as UC02
-  usecase "Ver Atividades do Sistema" as UC03
-  usecase "Gerar Relatório Rápido" as UC04
+  usecase "altera o status do produto no site" as UC01
+  usecase "cadastra produto no site" as UC02
+  usecase "solicitar substituição de peças" as UC03
+  usecase "define destino final" as UC04
+  usecase "registra peças reaproveitadas" as UC05
 
   ' Inventory Use Cases
-  usecase "Visualizar Inventário" as UC05
-  usecase "Pesquisar Equipamento" as UC06
-  usecase "Ver Detalhes do Ativo" as UC07
-  usecase "Cadastrar Novo Equipamento" as UC08
-  usecase "Exportar Dados (CSV)" as UC09
+  usecase "solicita o produto" as UC06
+  usecase "confirma recebimento" as UC07
 
   ' Triage Use Cases
-  usecase "Iniciar Triagem" as UC10
-  usecase "Realizar Testes de Hardware" as UC11
-  usecase "Verificar Eliminação de Dados" as UC12
-  usecase "Inspecionar Condição Cosmética" as UC13
-  usecase "Recomendar Destinação Final" as UC14
-  usecase "Finalizar Triagem" as UC15
+  usecase "criptografa dados p/ descarte do produto" as UC08
+  usecase "retira unidade de armazenamento" as UC09
 
   ' Donation Use Cases
-  usecase "Selecionar Instituição" as UC16
-  usecase "Selecionar Equipamentos para Doação" as UC17
-  usecase "Confirmar Doação" as UC18
-  usecase "Visualizar Histórico de Doações" as UC19
+  usecase "Se livram fisicamente do produto" as UC10
+  usecase "Consertam o produto" as UC11
 
   ' Disposal Use Cases
-  usecase "Gerenciar Descarte" as UC20
-  usecase "Fazer Upload de Certificado" as UC21
-  usecase "Visualizar Histórico de Descarte" as UC22
-  usecase "Finalizar Descarte" as UC23
-
-  ' Training Use Cases
-  usecase "Visualizar Cursos Disponíveis" as UC24
-  usecase "Inscrever-se em Curso" as UC25
-  usecase "Acompanhar Progresso" as UC26
-  usecase "Visualizar Certificados" as UC27
-
-  ' Reports Use Cases
-  usecase "Gerar Relatório de Impacto" as UC28
-  usecase "Visualizar Métricas Ambientais" as UC29
-  usecase "Exportar Relatório (PDF)" as UC30
+  usecase "Reaproveitam o produto p/ aulas" as UC12
 
   ' Actor associations
-  Admin --> UC01
-  Admin --> UC02
-  Admin --> UC03
-  Admin --> UC04
-  Admin --> UC05
-  Admin --> UC06
-  Admin --> UC07
-  Admin --> UC08
-  Admin --> UC09
-  Admin --> UC16
-  Admin --> UC17
-  Admin --> UC18
-  Admin --> UC19
-  Admin --> UC20
-  Admin --> UC21
-  Admin --> UC22
-  Admin --> UC23
-  Admin --> UC28
-  Admin --> UC29
-  Admin --> UC30
-
+  Tecnico --> UC01
+  Tecnico --> UC02
+  Tecnico --> UC03
+  Tecnico --> UC04
   Tecnico --> UC05
-  Tecnico --> UC06
-  Tecnico --> UC07
-  Tecnico --> UC10
-  Tecnico --> UC11
-  Tecnico --> UC12
-  Tecnico --> UC13
-  Tecnico --> UC14
-  Tecnico --> UC15
-  Tecnico --> UC24
-  Tecnico --> UC25
-  Tecnico --> UC26
-  Tecnico --> UC27
 
-  Colaborador --> UC01
-  Colaborador --> UC24
-  Colaborador --> UC25
-  Colaborador --> UC26
-  Colaborador --> UC27
+  Entidade --> UC06
+  Entidade --> UC07
 
-  Sistema --> UC02
-  Sistema --> UC03
-  Sistema --> UC09
-  Sistema --> UC19
-  Sistema --> UC22
-  Sistema --> UC28
-  Sistema --> UC29
-  Sistema --> UC30
+  Cibersegurança --> UC08
+
+  Manutenção --> UC10
+  Manutenção --> UC11
+
+  Instrutor --> UC12
 
   ' Includes and Extends
-  UC10 <|-- UC11 : <<include>>
-  UC10 <|-- UC12 : <<include>>
-  UC10 <|-- UC13 : <<include>>
-  UC10 <|-- UC14 : <<include>>
-  
-  UC18 <|-- UC16 : <<include>>
-  UC18 <|-- UC17 : <<include>>
-  
-  UC23 <|-- UC21 : <<include>>
-  
-  UC26 <|-- UC25 : <<include>>
-  
-  UC28 <|-- UC29 : <<include>>
-  UC28 <|-- UC30 : <<extend>>
+  UC09 .. UC08 : <<extend>>
 }
 
 @enduml
