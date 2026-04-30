@@ -1,267 +1,234 @@
 <!DOCTYPE html>
-
-<html lang="en"><head>
+<html lang="pt-BR">
+<head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>EcoLink Ledger - Triage</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>G.S.E.I. - Controle de Triagem</title>
+
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "on-secondary": "#ffffff",
-                        "error-container": "#ffdad6",
-                        "secondary-container": "#64a1ff",
-                        "on-tertiary-fixed": "#001f23",
-                        "surface-dim": "#c7dde9",
-                        "primary": "#0d631b",
-                        "surface-container-low": "#e6f6ff",
-                        "error": "#ba1a1a",
-                        "surface-container-highest": "#cfe6f2",
-                        "secondary-fixed-dim": "#a9c7ff",
-                        "on-error-container": "#93000a",
-                        "on-surface": "#071e27",
-                        "on-primary-fixed": "#002204",
-                        "surface-container-lowest": "#ffffff",
-                        "on-tertiary": "#ffffff",
-                        "on-surface-variant": "#40493d",
-                        "surface-tint": "#1b6d24",
-                        "primary-fixed": "#a3f69c",
-                        "inverse-on-surface": "#dff4ff",
-                        "on-secondary-container": "#003670",
-                        "on-primary-container": "#cbffc2",
-                        "outline": "#707a6c",
-                        "on-primary": "#ffffff",
-                        "tertiary-fixed-dim": "#75d5e2",
-                        "surface-variant": "#cfe6f2",
-                        "on-primary-fixed-variant": "#005312",
-                        "inverse-surface": "#1e333c",
-                        "tertiary-fixed": "#92f1fe",
-                        "secondary": "#005db7",
-                        "surface-container": "#dbf1fe",
-                        "secondary-fixed": "#d6e3ff",
-                        "background": "#f3faff",
-                        "inverse-primary": "#88d982",
-                        "on-secondary-fixed": "#001b3d",
-                        "surface-bright": "#f3faff",
-                        "outline-variant": "#bfcaba",
-                        "surface-container-high": "#d5ecf8",
-                        "on-secondary-fixed-variant": "#00468c",
-                        "on-tertiary-container": "#cdf8ff",
-                        "tertiary": "#005e67",
-                        "tertiary-container": "#007984",
-                        "primary-fixed-dim": "#88d982",
-                        "on-tertiary-fixed-variant": "#004f56",
-                        "primary-container": "#2e7d32",
-                        "surface": "#f3faff",
-                        "on-error": "#ffffff",
-                        "on-background": "#071e27"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.25rem",
-                        "xl": "0.5rem",
-                        "full": "0.75rem"
-                    },
-                    "fontFamily": {
-                        "headline": ["Manrope"],
-                        "display": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    }
-                }
-            }
-        }
-    </script>
+
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
-    </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="bg-surface text-on-surface min-h-screen pb-24">
-<!-- TopAppBar -->
-<header class="fixed top-0 w-full z-50 bg-[#f3faff]/80 backdrop-blur-xl flex justify-between items-center px-6 py-4 w-full shadow-[0px_12px_32px_rgba(7,30,39,0.06)]">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-[#2e7d32]" data-icon="menu">menu</span>
-<h1 class="font-['Manrope'] font-black text-[#2e7d32] tracking-tight text-lg">Triage Ledger</h1>
+body { font-family: 'Inter', sans-serif; }
+h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+</style>
+</head>
+
+<body class="bg-[#f3faff] text-[#071e27] min-h-screen">
+
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity lg:hidden"></div>
+
+<aside id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-[#f8fbff] z-[70] border-r border-gray-100 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+  
+  <div class="p-6 pb-8 flex justify-between items-center">
+    <div>
+      <h2 class="font-black text-2xl text-green-800 tracking-tight">G.S.E.I.</h2>
+      <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">IT Management</p>
+    </div>
+    <button id="close-menu-btn" class="material-symbols-outlined text-gray-500 hover:text-red-500 lg:hidden">close</button>
+  </div>
+
+  <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+    <a href="#" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors">
+      <span class="material-symbols-outlined text-[22px]">grid_view</span>
+      <span class="font-semibold text-sm">Dashboard</span>
+    </a>
+    <a href="#" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors">
+      <span class="material-symbols-outlined text-[22px]">inventory_2</span>
+      <span class="font-semibold text-sm">Inventário</span>
+    </a>
+    
+    <a href="#" class="flex items-center gap-4 px-4 py-3 bg-[#e6eeff] text-[#1a56db] rounded-lg transition-colors">
+      <span class="material-symbols-outlined text-[22px]">speed</span>
+      <span class="font-bold text-sm">Triagem</span>
+    </a>
+    
+    <a href="#" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors">
+      <span class="material-symbols-outlined text-[22px]">autorenew</span>
+      <span class="font-semibold text-sm">Recuperados</span>
+    </a>
+    <a href="#" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors">
+      <span class="material-symbols-outlined text-[22px]">volunteer_activism</span>
+      <span class="font-semibold text-sm">Doações</span>
+    </a>
+    <a href="#" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors">
+      <span class="material-symbols-outlined text-[22px]">delete</span>
+      <span class="font-semibold text-sm">Descartes</span>
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-gray-200 mt-auto bg-white/50">
+    <div class="flex items-center gap-3">
+      <img src="https://i.pravatar.cc/150?img=11" alt="Marcus Chen" class="w-10 h-10 rounded-full border border-gray-300 object-cover"/>
+      <div>
+        <p class="text-sm font-bold text-gray-800">Marcus Chen</p>
+        <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Fleet Supervisor</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div class="lg:ml-64 flex flex-col min-h-screen">
+
+  <header class="sticky top-0 w-full z-40 bg-white/80 backdrop-blur flex justify-between items-center px-4 md:px-8 py-4 border-b border-gray-100 shadow-sm">
+    <div class="flex items-center gap-4">
+      <span id="menu-btn" class="material-symbols-outlined text-green-800 cursor-pointer lg:hidden">menu</span>
+      <h1 class="font-black text-green-800 text-lg hidden sm:block">Controle de Triagem</h1>
+    </div>
+    
+    <div class="flex-1 max-w-md mx-4 hidden md:flex items-center bg-[#f0f5f9] px-4 py-2 rounded-full">
+      <span class="material-symbols-outlined text-gray-400 text-sm mr-2">search</span>
+      <input type="text" placeholder="Search equipment ID..." class="bg-transparent border-none focus:ring-0 text-sm w-full outline-none text-gray-700"/>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-gray-500 cursor-pointer hidden md:block">notifications</span>
+      <span class="material-symbols-outlined text-green-800 cursor-pointer md:hidden">search</span>
+    </div>
+  </header>
+
+  <main class="flex-1 p-4 md:p-8 max-w-6xl w-full mx-auto space-y-8 pb-24 lg:pb-8">
+
+    <section class="flex overflow-x-auto gap-3 pb-2 scrollbar-hide">
+      <button class="px-5 py-2 rounded-full bg-green-700 text-white font-bold text-sm whitespace-nowrap shadow-sm">Fila</button>
+      <button class="px-5 py-2 rounded-full bg-white border border-gray-200 text-gray-600 font-medium hover:bg-gray-50 text-sm whitespace-nowrap transition">Em Andamento</button>
+      <button class="px-5 py-2 rounded-full bg-white border border-gray-200 text-gray-600 font-medium hover:bg-gray-50 text-sm whitespace-nowrap transition">Revisão</button>
+    </section>
+
+    <section class="space-y-6">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl md:text-2xl font-extrabold text-gray-800">Aguardando Triagem</h2>
+        <span class="text-xs font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">12 itens</span>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 flex flex-col gap-6">
+        <div class="flex justify-between items-start">
+          <div class="flex gap-4 items-center">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+              <span class="material-symbols-outlined text-2xl">laptop_mac</span>
+            </div>
+            <div>
+              <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">ID do Equipamento</p>
+              <h3 class="text-xl font-black text-gray-800">EQ-1024</h3>
+            </div>
+          </div>
+          <span class="text-xs font-bold bg-orange-100 text-orange-700 px-3 py-1.5 rounded-lg">Alta Prioridade</span>
+        </div>
+
+        <div class="bg-gray-50 p-5 rounded-xl space-y-4 border border-gray-100">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Checklist de Verificação</h4>
+
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-600"/>
+            <span class="text-sm font-medium text-gray-700 group-hover:text-black">Diagnóstico de Hardware Concluído</span>
+          </label>
+
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" checked class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-600"/>
+            <span class="text-sm font-medium text-gray-700 group-hover:text-black">Limpeza de Dados Verificada e Certificada</span>
+          </label>
+
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-600"/>
+            <span class="text-sm font-medium text-gray-700 group-hover:text-black">Condição Física Inspecionada</span>
+          </label>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Observações Técnicas</h4>
+          <textarea class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-green-600 focus:border-transparent outline-none transition" rows="3" placeholder="Descreva defeitos ou anomalias encontradas..."></textarea>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Recomendação Final</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <label class="flex items-start gap-3 cursor-pointer p-3 border border-gray-200 hover:border-green-500 hover:bg-green-50 rounded-xl transition">
+              <input type="radio" name="dispo" class="mt-1 text-green-600 focus:ring-green-600"/>
+              <div>
+                <p class="font-bold text-sm text-gray-800">Recondicionar</p>
+                <p class="text-xs text-gray-500 mt-0.5">Aprovado para reuso</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-3 cursor-pointer p-3 border border-gray-200 hover:border-blue-500 hover:bg-blue-50 rounded-xl transition">
+              <input type="radio" name="dispo" class="mt-1 text-blue-600 focus:ring-blue-600"/>
+              <div>
+                <p class="font-bold text-sm text-gray-800">Doar</p>
+                <p class="text-xs text-gray-500 mt-0.5">Funcional, porém antigo</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-3 cursor-pointer p-3 border border-gray-200 hover:border-red-500 hover:bg-red-50 rounded-xl transition">
+              <input type="radio" name="dispo" class="mt-1 text-red-600 focus:ring-red-600"/>
+              <div>
+                <p class="font-bold text-sm text-gray-800">Descartar</p>
+                <p class="text-xs text-gray-500 mt-0.5">Fim de vida útil</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <button class="w-full bg-green-700 hover:bg-green-800 transition-colors text-white py-3.5 rounded-xl font-bold shadow-md shadow-green-700/20">
+          Finalizar Triagem
+        </button>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow cursor-pointer">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+            <span class="material-symbols-outlined text-xl">dns</span>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-800 text-sm">EQ-1025</h3>
+            <p class="text-xs text-gray-500 font-medium">Servidor • Rack 4</p>
+          </div>
+        </div>
+        <button class="bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors px-4 py-2 rounded-lg text-sm font-bold">Iniciar</button>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow cursor-pointer">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+            <span class="material-symbols-outlined text-xl">smartphone</span>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-800 text-sm">EQ-1026</h3>
+            <p class="text-xs text-gray-500 font-medium">Dispositivo Móvel</p>
+          </div>
+        </div>
+        <button class="bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors px-4 py-2 rounded-lg text-sm font-bold">Iniciar</button>
+      </div>
+    </section>
+
+  </main>
 </div>
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[#2e7d32]" data-icon="search">search</span>
-</div>
-<div class="absolute bottom-0 left-0 w-full bg-gradient-to-b from-[#e6f6ff] to-transparent h-1"></div>
-</header>
-<main class="pt-24 px-6 space-y-8">
-<!-- Status Filters -->
-<section class="flex overflow-x-auto gap-3 pb-2 no-scrollbar">
-<button class="flex-none px-6 py-2.5 rounded-full bg-primary text-on-primary font-bold text-sm shadow-md transition-all active:scale-95">
-                Queue
-            </button>
-<button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-semibold text-sm hover:bg-surface-container-highest transition-all">
-                In Progress
-            </button>
-<button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-semibold text-sm hover:bg-surface-container-highest transition-all">
-                Review
-            </button>
-</section>
-<!-- Equipment List Section -->
-<section class="space-y-4">
-<div class="flex justify-between items-end">
-<h2 class="text-2xl font-extrabold tracking-tight text-on-surface">Awaiting Triage</h2>
-<span class="text-xs font-bold text-primary px-3 py-1 bg-primary-fixed rounded-full">12 items</span>
-</div>
-<!-- Bento Card 1 (Active Triage) -->
-<div class="bg-surface-container-lowest rounded-[2rem] p-6 shadow-[0px_12px_32px_rgba(7,30,39,0.06)] flex flex-col gap-6">
-<div class="flex items-start justify-between">
-<div class="flex gap-4 items-center">
-<div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center">
-<span class="material-symbols-outlined text-primary text-3xl" data-icon="laptop">laptop</span>
-</div>
-<div>
-<p class="text-xs font-bold text-outline uppercase tracking-widest">Asset ID</p>
-<h3 class="text-lg font-black text-on-surface">EQ-1024</h3>
-</div>
-</div>
-<span class="px-3 py-1 bg-tertiary-container/10 text-tertiary text-[10px] font-black uppercase tracking-tighter rounded-md border border-tertiary/20">High Priority</span>
-</div>
-<!-- Expandable Triage Form Style -->
-<div class="bg-surface-container-low rounded-2xl p-5 space-y-6">
-<div>
-<h4 class="text-xs font-bold text-on-surface uppercase tracking-wider mb-4">Checklist Verification</h4>
-<div class="space-y-3">
-<label class="flex items-center gap-3 cursor-pointer group">
-<div class="w-6 h-6 rounded-lg bg-surface-container-highest flex items-center justify-center text-transparent group-hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
-</div>
-<span class="text-sm font-medium text-on-surface-variant">Hardware Diagnostics Complete</span>
-</label>
-<label class="flex items-center gap-3 cursor-pointer group">
-<div class="w-6 h-6 rounded-lg border-2 border-primary bg-primary flex items-center justify-center text-on-primary">
-<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
-</div>
-<span class="text-sm font-bold text-on-surface">Data Wipe Verified &amp; Certified</span>
-</label>
-<label class="flex items-center gap-3 cursor-pointer group">
-<div class="w-6 h-6 rounded-lg bg-surface-container-highest flex items-center justify-center text-transparent">
-<span class="material-symbols-outlined text-sm">check</span>
-</div>
-<span class="text-sm font-medium text-on-surface-variant">Cosmetic Condition Inspected</span>
-</label>
-</div>
-</div>
-<div>
-<h4 class="text-xs font-bold text-on-surface uppercase tracking-wider mb-2">Technical Observations</h4>
-<textarea class="w-full bg-surface-container-highest border-none rounded-xl text-sm focus:ring-2 focus:ring-primary min-h-[100px] placeholder:text-outline-variant" placeholder="Note hardware defects or anomalies..."></textarea>
-</div>
-<div>
-<h4 class="text-xs font-bold text-on-surface uppercase tracking-wider mb-4">Final Disposition Recommendation</h4>
-<div class="grid grid-cols-1 gap-2">
-<label class="relative flex items-center p-4 rounded-xl bg-surface-container-lowest border border-transparent hover:border-primary/20 transition-all cursor-pointer">
-<input class="w-4 h-4 text-primary focus:ring-primary border-outline-variant" name="dispo" type="radio"/>
-<div class="ml-4">
-<p class="text-sm font-bold text-on-surface">Refurbish/Reissue</p>
-<p class="text-[10px] text-outline">Passed all health markers.</p>
-</div>
-</label>
-<label class="relative flex items-center p-4 rounded-xl bg-surface-container-lowest border border-transparent hover:border-primary/20 transition-all cursor-pointer">
-<input class="w-4 h-4 text-primary focus:ring-primary border-outline-variant" name="dispo" type="radio"/>
-<div class="ml-4">
-<p class="text-sm font-bold text-on-surface">Donate</p>
-<p class="text-[10px] text-outline">Functional but legacy hardware.</p>
-</div>
-</label>
-<label class="relative flex items-center p-4 rounded-xl bg-surface-container-lowest border border-transparent hover:border-primary/20 transition-all cursor-pointer">
-<input class="w-4 h-4 text-primary focus:ring-primary border-outline-variant" name="dispo" type="radio"/>
-<div class="ml-4">
-<p class="text-sm font-bold text-on-surface">Recycle/Disposal</p>
-<p class="text-[10px] text-outline">End-of-life or hardware failure.</p>
-</div>
-</label>
-</div>
-</div>
-<button class="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-black text-sm uppercase tracking-widest shadow-lg shadow-primary/20 active:scale-95 transition-all">
-                        Finalize Triage
-                    </button>
-</div>
-</div>
-<!-- List Item 2 (Standard) -->
-<div class="bg-surface-container-lowest rounded-3xl p-5 shadow-[0px_4px_12px_rgba(7,30,39,0.04)] flex items-center justify-between">
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center">
-<span class="material-symbols-outlined text-outline" data-icon="dns">dns</span>
-</div>
-<div>
-<h3 class="text-sm font-black text-on-surface">EQ-1025</h3>
-<p class="text-[11px] font-semibold text-outline">Rack Server • Row 4</p>
-</div>
-</div>
-<button class="px-5 py-2.5 bg-surface-container-high text-primary font-bold text-xs rounded-xl hover:bg-primary hover:text-on-primary transition-all active:scale-90">
-                    Start Triage
-                </button>
-</div>
-<!-- List Item 3 (Standard) -->
-<div class="bg-surface-container-lowest rounded-3xl p-5 shadow-[0px_4px_12px_rgba(7,30,39,0.04)] flex items-center justify-between opacity-80">
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center">
-<span class="material-symbols-outlined text-outline" data-icon="tablet_mac">tablet_mac</span>
-</div>
-<div>
-<h3 class="text-sm font-black text-on-surface">EQ-1026</h3>
-<p class="text-[11px] font-semibold text-outline">Mobile Device • Intake A</p>
-</div>
-</div>
-<button class="px-5 py-2.5 bg-surface-container-high text-primary font-bold text-xs rounded-xl hover:bg-primary hover:text-on-primary transition-all active:scale-90">
-                    Start Triage
-                </button>
-</div>
-</section>
-<!-- Contextual Stats / Insights -->
-<section class="grid grid-cols-2 gap-4">
-<div class="bg-surface-container-low p-6 rounded-[2rem] space-y-2">
-<p class="text-[10px] font-black text-tertiary uppercase tracking-widest">Processed Today</p>
-<p class="text-3xl font-black text-on-surface">42</p>
-<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div class="bg-tertiary h-full w-[65%]"></div>
-</div>
-</div>
-<div class="bg-[#e7f5e9] p-6 rounded-[2rem] space-y-2">
-<p class="text-[10px] font-black text-[#1b5e20] uppercase tracking-widest">Health Index</p>
-<p class="text-3xl font-black text-[#1b5e20]">98%</p>
-<div class="h-1.5 w-full bg-white/50 rounded-full overflow-hidden">
-<div class="bg-[#1b5e20] h-full w-[98%]"></div>
-</div>
-</div>
-</section>
-</main>
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full bg-[#ffffff]/90 backdrop-blur-lg flex justify-around items-center pt-3 pb-6 px-4 rounded-t-[2rem] z-50 shadow-[0px_-8px_24px_rgba(7,30,39,0.04)] border-t border-[#bfcaba]/15">
-<a class="flex flex-col items-center justify-center text-[#5c6063] hover:bg-[#e6f6ff] transition-all p-2 rounded-xl active:scale-90" href="#">
-<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
-<span class="font-['Inter'] text-[11px] font-semibold tracking-wide">Inventory</span>
-</a>
-<a class="flex flex-col items-center justify-center bg-[#d6e3ff] text-[#00468c] rounded-xl px-5 py-1.5 transition-all active:scale-90" href="#">
-<span class="material-symbols-outlined" data-icon="fact_check" style="font-variation-settings: 'FILL' 1;">fact_check</span>
-<span class="font-['Inter'] text-[11px] font-semibold tracking-wide">Triage</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#5c6063] hover:bg-[#e6f6ff] transition-all p-2 rounded-xl active:scale-90" href="#">
-<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
-<span class="font-['Inter'] text-[11px] font-semibold tracking-wide">Reports</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#5c6063] hover:bg-[#e6f6ff] transition-all p-2 rounded-xl active:scale-90" href="#">
-<span class="material-symbols-outlined" data-icon="person">person</span>
-<span class="font-['Inter'] text-[11px] font-semibold tracking-wide">Profile</span>
-</a>
-</nav>
-</body></html>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuBtn = document.getElementById("menu-btn");
+    const closeBtn = document.getElementById("close-menu-btn");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebar-overlay");
+
+    // Abrir o menu (Mobile)
+    const openMenu = () => {
+      sidebar.classList.remove("-translate-x-full");
+      overlay.classList.remove("hidden");
+    };
+
+    // Fechar o menu (Mobile)
+    const closeMenu = () => {
+      sidebar.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+    };
+
+    menuBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+  });
+</script>
+
+</body>
+</html>
