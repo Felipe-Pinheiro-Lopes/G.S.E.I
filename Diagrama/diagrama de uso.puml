@@ -27,38 +27,42 @@ skinparam package {
   actor "Técnico de Informática" as Tecnico
   actor "Usuário da instituição" as usuario
   actor "Entidade Beneficiária" as Entidade
+  actor "Administrador" as ADM
 
 package "G.S.E.I - Gestão Sustentável de Equipamentos" {
 
   ' Técnico de Informática
-  usecase "alterar o status do equipamento" as UC01
-  usecase "cadastrar equipamento" as UC02
-  usecase "solicitar substituição de peças" as UC03
-  usecase "definir destino final" as UC04
-  usecase "registrar peças reaproveitadas" as UC05
-  usecase "Descartar o equipamento" as UC06
-  usecase "Consertar o equipamento" as UC07
+  usecase "Disponibilizar equipamento" as UC01
+  usecase "Cadastrar equipamento" as UC04
+  usecase "Definir destino final" as UC03
 
   ' Entidade Beneficiária
-  usecase "solicitar o equipamento" as UC08
-  usecase "confirmar recebimento" as UC09
+  usecase "Cadastrar no sistema" as UC04
+  usecase "Pesquisar equipamentos" as UC05
+  usecase "Solicitar o equipamento" as UC06
 
   ' Usuário da instituição
-  usecase "Cadastra o equipamento" as UC10
+  usecase "Abrir a chamada" as UC07
+
+  ' ADM
+  usecase "Confirmar retirada" as UC08
+  usecase "Aprovar entidade beneficiária" as UC09
+  usecase "Aprovar doação" as UC10
 
   ' Actor associations
   Tecnico -- UC01
   Tecnico -- UC02
   Tecnico -- UC03
-  Tecnico -- UC04
-  Tecnico -- UC05
-  Tecnico -- UC06
-  Tecnico -- UC07
 
-  Entidade -- UC08
-  Entidade -- UC09
+  Entidade -- UC04
+  Entidade -- UC05
+  Entidade -- UC06
 
-  usuario -- UC10
+  usuario -- UC07
+
+  ADM -- UC08
+  ADM -- UC09
+  ADM -- UC10
 }
 
 @enduml
