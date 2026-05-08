@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G.S.E.I. - Controle de Triagem</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Manrope', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-[#f3faff] text-[#071e27] min-h-screen">
+
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity lg:hidden"></div>
+
+  <aside id="sidebar"
+    class="fixed top-0 left-0 w-64 h-full bg-[#f8fbff] z-[70] border-r border-gray-100 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+
+    <div class="p-6 pb-8 flex justify-between items-center">
+      <div>
+        <h2 class="font-black text-2xl text-green-800 tracking-tight">G.S.E.I.</h2>
+        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">IT Management</p>
+      </div>
+      <button id="close-menu-btn"
+        class="material-symbols-outlined text-gray-500 hover:text-red-500 lg:hidden">close</button>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+
+      <!-- Dashboard -->
+      <a href="dashboard.html"
+        class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors">
+
+        <span class="material-symbols-outlined text-[22px]">
+          grid_view
+        </span>
+
+        <span class="font-semibold text-sm">
+          Dashboard
+        </span>
+      </a>
+
+      <!-- Inventário -->
+      <a href="inventario.html"
+        class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors">
+
+        <span class="material-symbols-outlined text-[22px]">
+          inventory_2
+        </span>
+
+        <span class="font-semibold text-sm">
+          Inventário
+        </span>
+      </a>
+
+      <!-- Triagem (ATIVA) -->
+      <a href="triagem.html"
+        class="flex items-center gap-4 px-4 py-3 bg-[#e6eeff] text-[#1a56db] rounded-lg transition-colors">
+
+        <span class="material-symbols-outlined text-[22px]">
+          speed
+        </span>
+
+        <span class="font-bold text-sm">
+          Triagem
+        </span>
+      </a>
+
+      <!-- Recuperados -->
+      <a href="recuperados.html"
+        class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors">
+
+        <span class="material-symbols-outlined text-[22px]">
+          autorenew
+        </span>
+
+        <span class="font-semibold text-sm">
+          Recuperados
+        </span>
+      </a>
+
+      <!-- Doações -->
+      <a href="doacoes.html"
+        class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors">
+
+        <span class="material-symbols-outlined text-[22px]">
+          volunteer_activism
+        </span>
+
+        <span class="font-semibold text-sm">
+          Doações
+        </span>
+      </a>
+
+      <!-- Descartes -->
+      <a href="descartes.html"
+        class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors">
+
+        <span class="material-symbols-outlined text-[22px]">
+          delete
+        </span>
+
+        <span class="font-semibold text-sm">
+          Descartes
+        </span>
+      </a>
+
+    </nav>
+
+    <div class="p-4 border-t border-gray-200 mt-auto bg-white/50">
+      <div class="flex items-center gap-3">
+        <img src="https://i.pravatar.cc/150?img=11" alt="Marcus Chen"
+          class="w-10 h-10 rounded-full border border-gray-300 object-cover" />
+        <div>
+          <p class="text-sm font-bold text-gray-800">Marcus Chen</p>
+          <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Fleet Supervisor</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="lg:ml-64 flex flex-col min-h-screen">
+
+    <header
+      class="sticky top-0 w-full z-40 bg-white/80 backdrop-blur flex justify-between items-center px-4 md:px-8 py-4 border-b border-gray-100 shadow-sm">
+      <div class="flex items-center gap-4">
+        <span id="menu-btn" class="material-symbols-outlined text-green-800 cursor-pointer lg:hidden">menu</span>
+        <h1 class="font-black text-green-800 text-lg hidden sm:block">Controle de Triagem</h1>
+      </div>
+
+      <div class="flex-1 max-w-md mx-4 hidden md:flex items-center bg-[#f0f5f9] px-4 py-2 rounded-full">
+        <span class="material-symbols-outlined text-gray-400 text-sm mr-2">search</span>
+        <input type="text" placeholder="Search equipment ID..."
+          class="bg-transparent border-none focus:ring-0 text-sm w-full outline-none text-gray-700" />
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-gray-500 cursor-pointer hidden md:block">notifications</span>
+        <span class="material-symbols-outlined text-green-800 cursor-pointer md:hidden">search</span>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 max-w-6xl w-full mx-auto space-y-8 pb-24 lg:pb-8">
+
+      <section class="flex overflow-x-auto gap-3 pb-2 scrollbar-hide">
+        <button
+          class="px-5 py-2 rounded-full bg-green-700 text-white font-bold text-sm whitespace-nowrap shadow-sm">Fila</button>
+        <button
+          class="px-5 py-2 rounded-full bg-white border border-gray-200 text-gray-600 font-medium hover:bg-gray-50 text-sm whitespace-nowrap transition">Em
+          Andamento</button>
+        <button
+          class="px-5 py-2 rounded-full bg-white border border-gray-200 text-gray-600 font-medium hover:bg-gray-50 text-sm whitespace-nowrap transition">Revisão</button>
+      </section>
+
+      <section class="space-y-6">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl md:text-2xl font-extrabold text-gray-800">Aguardando Triagem</h2>
+          <span class="text-xs font-bold text-green-800 bg-green-100 px-3 py-1 rounded-full">12 itens</span>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 flex flex-col gap-6">
+          <div class="flex justify-between items-start">
+            <div class="flex gap-4 items-center">
+              <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                <span class="material-symbols-outlined text-2xl">laptop_mac</span>
+              </div>
+              <div>
+                <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">ID do Equipamento</p>
+                <h3 class="text-xl font-black text-gray-800">EQ-1024</h3>
+              </div>
+            </div>
+            <span class="text-xs font-bold bg-orange-100 text-orange-700 px-3 py-1.5 rounded-lg">Alta Prioridade</span>
+          </div>
+
+          <div class="bg-gray-50 p-5 rounded-xl space-y-4 border border-gray-100">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Checklist de Verificação</h4>
+
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-600" />
+              <span class="text-sm font-medium text-gray-700 group-hover:text-black">Diagnóstico de Hardware
+                Concluído</span>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" checked
+                class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-600" />
+              <span class="text-sm font-medium text-gray-700 group-hover:text-black">Limpeza de Dados Verificada e
+                Certificada</span>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-600" />
+              <span class="text-sm font-medium text-gray-700 group-hover:text-black">Condição Física Inspecionada</span>
+            </label>
+          </div>
+
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Observações Técnicas</h4>
+            <textarea
+              class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-green-600 focus:border-transparent outline-none transition"
+              rows="3" placeholder="Descreva defeitos ou anomalias encontradas..."></textarea>
+          </div>
+
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Recomendação Final</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <label
+                class="flex items-start gap-3 cursor-pointer p-3 border border-gray-200 hover:border-green-500 hover:bg-green-50 rounded-xl transition">
+                <input type="radio" name="dispo" class="mt-1 text-green-600 focus:ring-green-600" />
+                <div>
+                  <p class="font-bold text-sm text-gray-800">Recondicionar</p>
+                  <p class="text-xs text-gray-500 mt-0.5">Aprovado para reuso</p>
+                </div>
+              </label>
+
+              <label
+                class="flex items-start gap-3 cursor-pointer p-3 border border-gray-200 hover:border-blue-500 hover:bg-blue-50 rounded-xl transition">
+                <input type="radio" name="dispo" class="mt-1 text-blue-600 focus:ring-blue-600" />
+                <div>
+                  <p class="font-bold text-sm text-gray-800">Doar</p>
+                  <p class="text-xs text-gray-500 mt-0.5">Funcional, porém antigo</p>
+                </div>
+              </label>
+
+              <label
+                class="flex items-start gap-3 cursor-pointer p-3 border border-gray-200 hover:border-red-500 hover:bg-red-50 rounded-xl transition">
+                <input type="radio" name="dispo" class="mt-1 text-red-600 focus:ring-red-600" />
+                <div>
+                  <p class="font-bold text-sm text-gray-800">Descartar</p>
+                  <p class="text-xs text-gray-500 mt-0.5">Fim de vida útil</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <button
+            class="w-full bg-green-700 hover:bg-green-800 transition-colors text-white py-3.5 rounded-xl font-bold shadow-md shadow-green-700/20">
+            Finalizar Triagem
+          </button>
+        </div>
+
+        <div
+          class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow cursor-pointer">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+              <span class="material-symbols-outlined text-xl">dns</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-800 text-sm">EQ-1025</h3>
+              <p class="text-xs text-gray-500 font-medium">Servidor • Rack 4</p>
+            </div>
+          </div>
+          <button
+            class="bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors px-4 py-2 rounded-lg text-sm font-bold">Iniciar</button>
+        </div>
+
+        <div
+          class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center hover:shadow-md transition-shadow cursor-pointer">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+              <span class="material-symbols-outlined text-xl">smartphone</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-800 text-sm">EQ-1026</h3>
+              <p class="text-xs text-gray-500 font-medium">Dispositivo Móvel</p>
+            </div>
+          </div>
+          <button
+            class="bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors px-4 py-2 rounded-lg text-sm font-bold">Iniciar</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const menuBtn = document.getElementById("menu-btn");
+      const closeBtn = document.getElementById("close-menu-btn");
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebar-overlay");
+
+      // Abrir o menu (Mobile)
+      const openMenu = () => {
+        sidebar.classList.remove("-translate-x-full");
+        overlay.classList.remove("hidden");
+      };
+
+      // Fechar o menu (Mobile)
+      const closeMenu = () => {
+        sidebar.classList.add("-translate-x-full");
+        overlay.classList.add("hidden");
+      };
+
+      menuBtn.addEventListener("click", openMenu);
+      closeBtn.addEventListener("click", closeMenu);
+      overlay.addEventListener("click", closeMenu);
+    });
+  </script>
+
+</body>
+
+</html>
