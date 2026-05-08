@@ -94,19 +94,19 @@
         h1, h2, h3, .font-headline {
             font-family: 'Manrope', sans-serif;
         }
-    </style>
+</style>
 
 </head>
 
 <body class="bg-surface text-on-surface flex min-h-screen">
-    <!-- SideNavBar -->
+    <!-- Menu da esquerda -->
     <aside class="h-screen w-64 fixed left-0 top-0 bg-[#e6f6ff] dark:bg-slate-900/50 backdrop-blur-xl flex flex-col py-8 transition-all duration-300 ease-in-out">
         <div class="px-8">
             <h1 class="text-2xl font-black text-green-800 dark:text-green-100 mb-1 leading-none">G.S.E.I.</h1>
             <p class="font-headline font-medium text-xs tracking-widest text-primary uppercase opacity-70 mb-8">IT Management</p>
         </div>
 
-        <nav class="flex-1 space-y-1">
+        <nav class="pt-4 flex-1 space-y-1">
             <a class="bg-[#d6e3ff] text-[#00468c] dark:bg-blue-900/40 dark:text-blue-100 rounded-lg mx-2 px-4 py-3 flex items-center gap-3 transition-transform scale-98 active:scale-95 group" href="#">
                 <span class="material-symbols-outlined filled-icon">dashboard</span>
                 <span class="font-manrope font-medium text-sm">Dashboard</span>
@@ -138,20 +138,19 @@
             </a>
         </nav>
             <div class="mt-auto px-6 py-4 border-t border-primary/10">
-                <div class="flex items-center gap-3">
+                <div class=" pt-3 flex items-center gap-3">
                     <img class="w-10 h-10 rounded-full object-cover" data-alt="portrait of a male IT professional with a warm smile in a brightly lit modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOFwOZH6VjmpbDTVXk3oYp8NJQhcTmMvKPcubfrkizpP9g4bYwcS4O7xlkVF3Zea-iWpW2SiXHUEWKG4K_l62XfuHz1Mdu98ZFC4qW1V4wuctHGkJBuKjsyh55SW7EHFvcq94ifBITZA1ocQ0NBK_gvSHjf7X83s1jJe_0xG5saoafVWcGcyjsN3tA2QHgIoQ8sklpNDwVu6LrREjc3ySuOW2GuP0HOBaY40PKZR3NkmSE28jntY1Jlmmisr3nK2M5kCChQgerAaI"/>
                     
                     <div class="overflow-hidden">
-                        <p class="text-xs font-bold text-on-surface truncate">Marcus Chen</p>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-tighter">Fleet Supervisor</p>
+                        <p class="text-s font-bold text-on-surface truncate">Marcus Chen</p>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-tighter">Técnico de Triagem</p>
                     </div>
                 </div>
             </div>
     </aside>
 
-    <!-- Main Content Canvas -->
     <main class="ml-64 flex-1 flex flex-col min-h-screen">
-    <!-- TopAppBar -->
+    <!-- Barra de cima -->
         <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg sticky top-0 z-50 flex justify-between items-center w-full px-8 py-4 shadow-[0_12_32px_rgba(7,30,39,0.06)]">
             <div class="flex items-center gap-6">
                 <h2 class="text-xl font-black text-green-800 dark:text-green-400 font-manrope tracking-tight">The Living Ledger</h2>
@@ -172,186 +171,179 @@
         </header>
 
         <div class="p-8 flex flex-col gap-8">
-            <!-- Dashboard Headline -->
             <section class="flex justify-between items-end">
                 <div>
-                    <h3 class="text-4xl font-extrabold text-on-surface tracking-tighter mb-2">Fleet Overview</h3>
-                    <p class="text-on-surface-variant font-medium">Sustainable management lifecycle for IT assets.</p>
+                    <h3 class="text-4xl font-extrabold text-on-surface tracking-tighter mb-2">Dashboard</h3>
                 </div>
                 <button class="bg-gradient-to-r from-primary to-primary-container text-white px-6 py-3 rounded-xl font-bold text-sm shadow-xl flex items-center gap-2 hover:opacity-90 transition-all active:scale-95">
                     <span class="material-symbols-outlined text-sm">add_circle</span>
-                Register Batch</button>
+                Registrar Ativo</button>
+
             </section>
-            <!-- Metrics Bento Grid -->
+            
             <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4">
-            <div class="flex justify-between items-start">
-            <div class="p-3 bg-secondary-fixed rounded-lg text-on-secondary-fixed-variant">
-            <span class="material-symbols-outlined">devices</span>
+                <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4">
+                    <div class="flex justify-between items-start">
+                        <div class="p-3 bg-secondary-fixed rounded-lg text-on-secondary-fixed-variant">
+                            <span class="material-symbols-outlined">devices</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Fila de triagem</span>
+                    </div>
+                    <div>
+                    <p class="text-3xl font-black text-on-surface">48</p>
+                    <p class="text-xs font-medium text-on-surface-variant">Equipamentos aguardando</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4">
+                    <div class="flex justify-between items-start">
+                        <div class="p-3 bg-tertiary-fixed-dim rounded-lg text-on-tertiary-fixed-variant">
+                        <span class="material-symbols-outlined">pending_actions</span>
+                        </div>
+                        <span class="pl-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status de peças</span>
+                    </div>
+                    <div>
+                        <p class="text-3xl font-black text-on-surface">142</p>
+                        <p class="text-xs font-medium text-on-surface-variant">Peças faltantes, aguardando reposição.</p>
+                    </div>
+                </div>
+                <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4">
+                    <div class="flex justify-between items-start">
+                        <div class="p-3 bg-primary-fixed rounded-lg text-on-primary-fixed-variant">
+                        <span class="material-symbols-outlined">cached</span>
+                        </div>
+                        <span class="pl-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Processados no turno</span>
+                    </div>
+                    <div>
+                        <p class="text-3xl font-black text-on-surface">18/25</p>
+                        <p class="text-xs font-medium text-on-surface-variant">4h restantes no turno</p>
+                    </div>
+                </div>
+                <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 border-b-2 border-primary">
+                    <div class="flex justify-between items-start">
+                        <div class="p-3 bg-tertiary-container rounded-lg text-on-tertiary-container">
+                        <span class="material-symbols-outlined">handshake</span>
+                        </div>
+                        <span class="pl-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sanitização de Dados</span>
+                    </div>
+                    <div>
+                        <p class="text-3xl font-black text-on-surface">156</p>
+                        <p class="text-xs font-medium text-on-surface-variant">Aguardando formatação segura</p>
+                    </div>
+                </div>
+                
             </div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Global Fleet</span>
-            </div>
-            <div>
-            <p class="text-3xl font-black text-on-surface">1,248</p>
-            <p class="text-xs font-medium text-on-surface-variant">Total Equipment</p>
-            </div>
-            </div>
-            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4">
-            <div class="flex justify-between items-start">
-            <div class="p-3 bg-tertiary-fixed-dim rounded-lg text-on-tertiary-fixed-variant">
-            <span class="material-symbols-outlined">pending_actions</span>
-            </div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Processing</span>
-            </div>
-            <div>
-            <p class="text-3xl font-black text-on-surface">142</p>
-            <p class="text-xs font-medium text-on-surface-variant">In Triage</p>
-            </div>
-            </div>
-            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4">
-            <div class="flex justify-between items-start">
-            <div class="p-3 bg-primary-fixed rounded-lg text-on-primary-fixed-variant">
-            <span class="material-symbols-outlined">cached</span>
-            </div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Life Extended</span>
-            </div>
-            <div>
-            <p class="text-3xl font-black text-on-surface">892</p>
-            <p class="text-xs font-medium text-on-surface-variant">Recovered Assets</p>
-            </div>
-            </div>
-            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 border-b-2 border-primary">
-            <div class="flex justify-between items-start">
-            <div class="p-3 bg-tertiary-container rounded-lg text-on-tertiary-container">
-            <span class="material-symbols-outlined">handshake</span>
-            </div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Community Reach</span>
-            </div>
-            <div>
-            <p class="text-3xl font-black text-on-surface">156</p>
-            <p class="text-xs font-medium text-on-surface-variant">Donated Items</p>
-            </div>
-            </div>
-            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 border-b-2 border-primary">
-            <div class="flex justify-between items-start material-symbols-outlined">
-            <div class="p-3 bg-tertiary-container rounded-lg text-on-tertiary-container">
-            <span class="material-symbols-outlined">delete_sweep</span>
-            </div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Community Reach</span>
-            </div>
-            <div>
-                <p class="text-3xl font-black text-on-surface tracking-tighter">58</p>
-                <p class="text-xs font-medium text-on-surface-variant">Disposal</p>
-            </div>
-            </div>
+
             </section>
-            <!-- Middle Section: Visuals and Feed -->
+            <!-- Gráficos -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Chart Section -->
-            <div class="lg:col-span-2 bg-surface-container-low rounded-xl p-8 flex flex-col gap-6">
-            <div class="flex justify-between items-center">
-            <h4 class="text-xl font-bold text-on-surface">Status Distribution</h4>
-            <div class="flex gap-2">
-            <span class="flex items-center gap-1.5 text-[10px] font-bold text-on-surface-variant">
-            <span class="w-2 h-2 rounded-full bg-primary"></span> Recovered
-                                        </span>
-            <span class="flex items-center gap-1.5 text-[10px] font-bold text-on-surface-variant">
-            <span class="w-2 h-2 rounded-full bg-secondary"></span> Donation
-                                        </span>
-            <span class="flex items-center gap-1.5 text-[10px] font-bold text-on-surface-variant">
-            <span class="w-2 h-2 rounded-full bg-tertiary"></span> Triage
-                                        </span>
+                <!-- Cards -->
+                <div class="lg:col-span-2 bg-surface-container-low rounded-xl p-8 flex flex-col gap-6">
+                    <div class="flex text-center justify-center items-center">
+                        <div class="block">
+                            <h4 class="text-xl font-bold text-on-surface">Pareto de Defeitos</h4>
+                            <p class="text-xs font-medium text-on-surface-variant">Problemas mais encontrados na semana</p>
+                        </div>
+                    </div>
+
+
+                    <div class="relative h-64 w-full flex items-end justify-between gap-4 px-4">
+                        <div class="flex-1 bg-primary/20 rounded-t-lg relative group transition-all hover:bg-primary/40" style="height: 60%;">
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">892</div>
+                        </div>
+
+                        <div class="flex-1 bg-secondary/20 rounded-t-lg relative group transition-all hover:bg-secondary/40" style="height: 45%;">
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">156</div>
+                        </div>
+
+                        <div class="flex-1 bg-tertiary/20 rounded-t-lg relative group transition-all hover:bg-tertiary/40" style="height: 30%;">
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">142</div>
+                        </div>
+
+                        <div class="flex-1 bg-primary/20 rounded-t-lg relative group transition-all hover:bg-tertiary/40" style="height: 50%;">
+                            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">200</div>
+                        </div>
+
+                    </div>
+
+                    <div class="flex justify-between px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <span>Bateria Viciada</span>
+                        <span>Tela Quebrada</span>
+                        <span>Placa-mãe em curto</span>
+                        <span>Problemas com Software</span>
+                    </div>
+                </div>
+                
+                <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_12_32px_rgba(7,30,39,0.06)]">
+                        <h4 class="text-xl font-bold text-on-surface mb-8">System Activity</h4>
+                        <div class="space-y-8 relative before:absolute before:left-3.5 before:top-2 before:bottom-2 before:w-px before:bg-slate-100">
+                            <div class="relative pl-10">
+                                <span class="absolute left-0 top-0 w-7 h-7 bg-primary-fixed text-on-primary-fixed-variant rounded-full flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[16px] filled-icon">volunteer_activism</span>
+                                </span>
+                                <p class="text-sm font-bold text-on-surface">50 Laptops Donated</p>
+                                <p class="text-xs text-on-surface-variant">To City Library Network</p>
+                                <p class="text-[10px] text-slate-400 mt-1 uppercase">2 hours ago</p>
+                            </div>
+
+                            <div class="relative pl-10">
+                                <span class="absolute left-0 top-0 w-7 h-7 bg-secondary-fixed text-on-secondary-fixed-variant rounded-full flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[16px]">inventory_2</span>
+                                </span>
+                                <p class="text-sm font-bold text-on-surface">New Inventory Batch</p>
+                                <p class="text-xs text-on-surface-variant">32 Workstations incoming</p>
+                                <p class="text-[10px] text-slate-400 mt-1 uppercase">5 hours ago</p>
+                            </div>
+
+                            <div class="relative pl-10">
+                                <span class="absolute left-0 top-0 w-7 h-7 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[16px]">build_circle</span>
+                                </span>
+                                <p class="text-sm font-bold text-on-surface">Maintenance Complete</p>
+                                <p class="text-xs text-on-surface-variant">Batch-745 Server Blades</p>
+                                <p class="text-[10px] text-slate-400 mt-1 uppercase">Yesterday</p>
+                            </div>
+
+                            <div class="relative pl-10">
+                                <span class="absolute left-0 top-0 w-7 h-7 bg-error-container text-on-error-container rounded-full flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[16px]">delete_outline</span>
+                                </span>
+                                <p class="text-sm font-bold text-on-surface">Disposal Batch Approved</p>
+                                <p class="text-xs text-on-surface-variant">Environmental safe protocols</p>
+                                <p class="text-[10px] text-slate-400 mt-1 uppercase">2 days ago</p>
+                            </div>
+                        </div>
+                </div>
             </div>
-            </div>
-            <!-- Simplified Visual Chart Representation -->
-            <div class="relative h-64 w-full flex items-end justify-between gap-4 px-4">
-            <div class="flex-1 bg-primary/20 rounded-t-lg relative group transition-all hover:bg-primary/40" style="height: 60%;">
-            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">892</div>
-            </div>
-            <div class="flex-1 bg-secondary/20 rounded-t-lg relative group transition-all hover:bg-secondary/40" style="height: 45%;">
-            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">156</div>
-            </div>
-            <div class="flex-1 bg-tertiary/20 rounded-t-lg relative group transition-all hover:bg-tertiary/40" style="height: 30%;">
-            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">142</div>
-            </div>
-            <div class="flex-1 bg-primary/20 rounded-t-lg relative group transition-all hover:bg-primary/40" style="height: 75%;"></div>
-            <div class="flex-1 bg-secondary/20 rounded-t-lg relative group transition-all hover:bg-secondary/40" style="height: 50%;"></div>
-            <div class="flex-1 bg-tertiary/20 rounded-t-lg relative group transition-all hover:bg-tertiary/40" style="height: 40%;"></div>
-            <div class="flex-1 bg-primary/20 rounded-t-lg relative group transition-all hover:bg-primary/40" style="height: 85%;"></div>
-            <div class="flex-1 bg-secondary/20 rounded-t-lg relative group transition-all hover:bg-secondary/40" style="height: 65%;"></div>
-            </div>
-            <div class="flex justify-between px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            <span>Week 1</span>
-            <span>Week 2</span>
-            <span>Week 3</span>
-            <span>Week 4</span>
-            </div>
-            </div>
-            <!-- System Activity Feed -->
-            <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_12_32px_rgba(7,30,39,0.06)]">
-            <h4 class="text-xl font-bold text-on-surface mb-8">System Activity</h4>
-            <div class="space-y-8 relative before:absolute before:left-3.5 before:top-2 before:bottom-2 before:w-px before:bg-slate-100">
-            <div class="relative pl-10">
-            <span class="absolute left-0 top-0 w-7 h-7 bg-primary-fixed text-on-primary-fixed-variant rounded-full flex items-center justify-center">
-            <span class="material-symbols-outlined text-[16px] filled-icon">volunteer_activism</span>
-            </span>
-            <p class="text-sm font-bold text-on-surface">50 Laptops Donated</p>
-            <p class="text-xs text-on-surface-variant">To City Library Network</p>
-            <p class="text-[10px] text-slate-400 mt-1 uppercase">2 hours ago</p>
-            </div>
-            <div class="relative pl-10">
-            <span class="absolute left-0 top-0 w-7 h-7 bg-secondary-fixed text-on-secondary-fixed-variant rounded-full flex items-center justify-center">
-            <span class="material-symbols-outlined text-[16px]">inventory_2</span>
-            </span>
-            <p class="text-sm font-bold text-on-surface">New Inventory Batch</p>
-            <p class="text-xs text-on-surface-variant">32 Workstations incoming</p>
-            <p class="text-[10px] text-slate-400 mt-1 uppercase">5 hours ago</p>
-            </div>
-            <div class="relative pl-10">
-            <span class="absolute left-0 top-0 w-7 h-7 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full flex items-center justify-center">
-            <span class="material-symbols-outlined text-[16px]">build_circle</span>
-            </span>
-            <p class="text-sm font-bold text-on-surface">Maintenance Complete</p>
-            <p class="text-xs text-on-surface-variant">Batch-745 Server Blades</p>
-            <p class="text-[10px] text-slate-400 mt-1 uppercase">Yesterday</p>
-            </div>
-            <div class="relative pl-10">
-            <span class="absolute left-0 top-0 w-7 h-7 bg-error-container text-on-error-container rounded-full flex items-center justify-center">
-            <span class="material-symbols-outlined text-[16px]">delete_outline</span>
-            </span>
-            <p class="text-sm font-bold text-on-surface">Disposal Batch Approved</p>
-            <p class="text-xs text-on-surface-variant">Environmental safe protocols</p>
-            <p class="text-[10px] text-slate-400 mt-1 uppercase">2 days ago</p>
-            </div>
-            </div>
-            </div>
-            </div>
-            <!-- Impact Summary Grid -->
+            
             <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div class="relative overflow-hidden group bg-primary-container text-on-primary-container p-8 rounded-xl flex items-center gap-6">
-            <div class="flex-1">
-            <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80 mb-1">Impact score</p>
-            <h5 class="text-2xl font-black">4.2k Trees Equivalent Saved</h5>
-            <p class="text-xs font-medium mt-2 opacity-90">Carbon sequestration via asset recovery</p>
-            </div>
-            <span class="material-symbols-outlined text-6xl opacity-20 absolute -right-4 -bottom-4 rotate-12 scale-150">forest</span>
-            </div>
-            <div class="relative overflow-hidden group bg-tertiary text-on-tertiary p-8 rounded-xl flex items-center gap-6">
-            <div class="flex-1">
-            <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80 mb-1">Resource Efficiency</p>
-            <h5 class="text-2xl font-black">12.8 MWh Energy Offset</h5>
-            <p class="text-xs font-medium mt-2 opacity-90">Avoided manufacturing energy costs</p>
-            </div>
-            <span class="material-symbols-outlined text-6xl opacity-20 absolute -right-4 -bottom-4 -rotate-12 scale-150">bolt</span>
-            </div>
-            <div class="relative overflow-hidden group bg-secondary text-on-secondary p-8 rounded-xl flex items-center gap-6">
-            <div class="flex-1">
-            <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80 mb-1">Network Stability</p>
-            <h5 class="text-2xl font-black">18 Active NGO Partnerships</h5>
-            <p class="text-xs font-medium mt-2 opacity-90">Trusted distribution ecosystem</p>
-            </div>
-            <span class="material-symbols-outlined text-6xl opacity-20 absolute -right-4 -bottom-4 rotate-45 scale-150">groups</span>
-            </div>
+                <div class="relative overflow-hidden group bg-primary-container text-on-primary-container p-8 rounded-xl flex items-center gap-6">
+                    <div class="flex-1">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80 mb-1">Impact score</p>
+                        <h5 class="text-2xl font-black">4.2k Trees Equivalent Saved</h5>
+                        <p class="text-xs font-medium mt-2 opacity-90">Carbon sequestration via asset recovery</p>
+                    </div>
+
+                <span class="material-symbols-outlined text-6xl opacity-20 absolute -right-4 -bottom-4 rotate-12 scale-150">forest</span>
+                </div>
+
+                <div class="relative overflow-hidden group bg-tertiary text-on-tertiary p-8 rounded-xl flex items-center gap-6">
+                    <div class="flex-1">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80 mb-1">Resource Efficiency</p>
+                        <h5 class="text-2xl font-black">12.8 MWh Energy Offset</h5>
+                        <p class="text-xs font-medium mt-2 opacity-90">Avoided manufacturing energy costs</p>
+                    </div>
+                    <span class="material-symbols-outlined text-6xl opacity-20 absolute -right-4 -bottom-4 -rotate-12 scale-150">bolt</span>
+                </div>
+                
+                <div class="relative overflow-hidden group bg-secondary text-on-secondary p-8 rounded-xl flex items-center gap-6">
+                    <div class="flex-1">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80 mb-1">Network Stability</p>
+                        <h5 class="text-2xl font-black">18 Active NGO Partnerships</h5>
+                        <p class="text-xs font-medium mt-2 opacity-90">Trusted distribution ecosystem</p>
+                    </div>
+                    <span class="material-symbols-outlined text-6xl opacity-20 absolute -right-4 -bottom-4 rotate-45 scale-150">groups</span>
+                </div>
             </section>
         </div>
     </main>
