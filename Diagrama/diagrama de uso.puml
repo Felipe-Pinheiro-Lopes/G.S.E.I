@@ -1,0 +1,64 @@
+@startuml
+!define LIGHTGREEN #c5e1a5
+!define LIGHTBLUE #b3e5fc
+!define WHITE #ffffff
+
+left to right direction
+
+skinparam backgroundColor WHITE
+skinparam usecase {
+  BackgroundColor LIGHTGREEN
+  BorderColor #388e3c
+  FontColor #1b5e20
+}
+
+skinparam actor {
+  BackgroundColor LIGHTBLUE
+  BorderColor #1565c0
+  FontColor #0d47a1
+}
+
+skinparam package {
+  BackgroundColor #f1f8e9
+  BorderColor #689f38
+  FontColor #33691e
+}
+
+  actor "Técnico de Informática" as Tecnico
+  actor "Usuário da instituição" as usuario
+  actor "Entidade Beneficiária" as Entidade
+
+package "G.S.E.I - Gestão Sustentável de Equipamentos" {
+
+  ' Técnico de Informática
+  usecase "alterar o status do equipamento" as UC01
+  usecase "cadastrar equipamento" as UC02
+  usecase "solicitar substituição de peças" as UC03
+  usecase "definir destino final" as UC04
+  usecase "registrar peças reaproveitadas" as UC05
+  usecase "Descartar o equipamento" as UC06
+  usecase "Consertar o equipamento" as UC07
+
+  ' Entidade Beneficiária
+  usecase "solicitar o equipamento" as UC08
+  usecase "confirmar recebimento" as UC09
+
+  ' Usuário da instituição
+  usecase "Cadastra o equipamento" as UC10
+
+  ' Actor associations
+  Tecnico -- UC01
+  Tecnico -- UC02
+  Tecnico -- UC03
+  Tecnico -- UC04
+  Tecnico -- UC05
+  Tecnico -- UC06
+  Tecnico -- UC07
+
+  Entidade -- UC08
+  Entidade -- UC09
+
+  usuario -- UC10
+}
+
+@enduml
