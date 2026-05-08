@@ -32,8 +32,7 @@ skinparam package {
 package "G.S.E.I - Gestão Sustentável de Equipamentos" {
 
   ' Técnico de Informática
-  usecase "Disponibilizar equipamento" as UC01
-  usecase "Cadastrar equipamento" as UC04
+  usecase "Cadastrar equipamento" as UC02
   usecase "Definir destino final" as UC03
 
   ' Entidade Beneficiária
@@ -50,7 +49,6 @@ package "G.S.E.I - Gestão Sustentável de Equipamentos" {
   usecase "Aprovar doação" as UC10
 
   ' Actor associations
-  Tecnico -- UC01
   Tecnico -- UC02
   Tecnico -- UC03
 

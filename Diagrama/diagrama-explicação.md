@@ -5,7 +5,7 @@ Técnico de Informática
 
 ## Descrição:
 Atualizar a situação que se encontra o equipamento
-(Recuperado, Descartado, Vendido, Doado)
+(Recuperado, Descartado, Vendido)
 
 ## Pré-condições:
 Ter o equipamento cadastrado;
@@ -24,6 +24,7 @@ Técnico valida o status do equipamento;
 
 **2-**
     equipamento precisa ser descartado;
+    criptografa unidade de armazenamento;
     Técnico de Triagem atualiza o sistema;
     Unidades de armazenamento do equipamento são criptografadas e retiradas;
 
