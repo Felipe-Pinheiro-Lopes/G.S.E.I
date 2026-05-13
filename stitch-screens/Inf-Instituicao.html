@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G.S.E.I. - Dados da Instituição</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1" rel="stylesheet"/>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+    
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+  </style>
+</head>
+
+<body class="bg-[#f3faff] text-[#071e27] min-h-screen flex flex-col">
+
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity lg:hidden"></div>
+
+  <aside id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-[#f8fbff] z-[70] border-r border-gray-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-xl lg:shadow-none">
+    
+    <div class="p-6 pb-8 flex justify-between items-center">
+      <div>
+        <h2 class="font-black text-2xl text-green-800 tracking-tight">G.S.E.I.</h2>
+        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Portal Institucional</p>
+      </div>
+      <button id="close-menu-btn" class="material-symbols-outlined text-gray-500 hover:text-red-500 lg:hidden">close</button>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+      
+      <a href="Solicitacao.html" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-green-50 hover:text-green-800 rounded-lg transition-colors">
+        <span class="material-symbols-outlined text-[22px]">add_circle</span>
+        <span class="font-semibold text-sm">Nova Solicitação</span>
+      </a>
+      
+      <a href="AcompanhamentoSolicitacao.html" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-green-50 hover:text-green-800 rounded-lg transition-colors">
+        <span class="material-symbols-outlined text-[22px]">assignment</span>
+        <span class="font-semibold text-sm">Minhas Solicitações</span>
+      </a>
+
+      <a href="Inf-Instituicao.html" class="flex items-center gap-4 px-4 py-3 bg-green-800 text-white rounded-lg shadow-md shadow-green-800/20 transition-colors">
+        <span class="material-symbols-outlined text-[22px]">account_balance</span>
+        <span class="font-bold text-sm">Dados da Instituição</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-gray-200 mt-auto bg-white/50">
+      <div class="flex items-center gap-3 mb-4 px-2">
+        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-800 font-bold">AF</div>
+        <div class="overflow-hidden">
+          <p class="text-sm font-bold text-gray-800 truncate">Assoc. Filantrópica</p>
+          <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider truncate">ID: 98231</p>
+        </div>
+      </div>
+      <a href="Login.html" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+        <span class="font-bold text-sm">Sair do Sistema</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="lg:ml-64 flex flex-col min-h-screen">
+
+    <header class="sticky top-0 w-full z-40 bg-white/80 backdrop-blur flex justify-between items-center px-4 md:px-8 py-4 border-b border-gray-200 shadow-sm">
+      <div class="flex items-center gap-4">
+        <button id="menu-btn" class="lg:hidden w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition">
+          <span class="material-symbols-outlined text-green-800">menu</span>
+        </button>
+        <h1 class="font-black text-green-800 text-xl hidden sm:block">Perfil Institucional</h1>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="hidden md:block text-xs font-bold text-gray-400 uppercase tracking-widest">Status da Conta: <span class="text-green-600">Verificada</span></span>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto space-y-6 pb-12">
+      
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h2 class="text-2xl font-black text-gray-800">Dados da Instituição</h2>
+          <p class="text-sm text-gray-500 mt-1">Consulte e gerencie as informações de cadastro e finalidade da sua entidade.</p>
+        </div>
+        <button class="w-full md:w-auto bg-white border border-gray-200 px-6 py-3 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition flex items-center justify-center gap-2 shadow-sm">
+            <span class="material-symbols-outlined text-[18px]">edit_note</span>
+            Solicitar Alteração de Dados
+        </button>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-sm flex flex-col md:flex-row items-center md:items-start gap-6">
+        <div class="w-24 h-24 rounded-full bg-green-50 flex items-center justify-center text-green-800 text-3xl font-black shadow-inner border border-green-100 shrink-0">
+          AF
+        </div>
+        <div class="flex-1 text-center md:text-left w-full">
+          <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
+            <div>
+              <h3 class="text-2xl font-black text-gray-800">Associação Filantrópica Nova Era</h3>
+              <p class="text-sm text-gray-500 font-medium mt-1">Instituição Parceira Oficial desde Março de 2021</p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 rounded-lg text-xs font-bold uppercase tracking-wider">
+              <span class="material-symbols-outlined text-[16px]">verified_user</span>
+              Cadastro Ativo
+            </span>
+          </div>
+          
+          <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-4">
+            <div class="bg-gray-50 border border-gray-100 px-4 py-2 rounded-lg flex items-center gap-2">
+                <span class="material-symbols-outlined text-gray-400 text-[18px]">tag</span>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">ID Registro</p>
+                    <p class="text-sm font-bold text-gray-700">98231</p>
+                </div>
+            </div>
+            <div class="bg-gray-50 border border-gray-100 px-4 py-2 rounded-lg flex items-center gap-2">
+                <span class="material-symbols-outlined text-gray-400 text-[18px]">volunteer_activism</span>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">Doações Recebidas</p>
+                    <p class="text-sm font-bold text-gray-700">4 Lotes</p>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <div class="lg:col-span-2 space-y-6">
+            
+            <div class="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-sm">
+                <h4 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-green-700">assignment_ind</span>
+                    Informações Cadastrais
+                </h4>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Razão Social</p>
+                        <p class="text-sm font-medium text-gray-800">Assoc. Filantrópica Educacional Nova Era</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">CNPJ</p>
+                        <p class="text-sm font-medium text-gray-800">12.345.678/0001-90</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Inscrição Estadual</p>
+                        <p class="text-sm font-medium text-gray-800">Isento</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Natureza Jurídica</p>
+                        <p class="text-sm font-medium text-gray-800">Associação Privada (ONG)</p>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Endereço Sede</p>
+                        <p class="text-sm font-medium text-gray-800">Rua da Esperança, 123, Sala 4 - Centro, Sorocaba/SP - CEP: 18010-000</p>
+                    </div>
+                </div>
+
+                <hr class="my-6 border-gray-100">
+
+                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Contatos Registrados</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Responsável Legal</p>
+                        <p class="text-sm font-medium text-gray-800">Marta Silva de Oliveira</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Cargo</p>
+                        <p class="text-sm font-medium text-gray-800">Diretora Administrativa</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">E-mail Principal</p>
+                        <p class="text-sm font-medium text-gray-800">contato@novaera.edu.br</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Telefone / WhatsApp</p>
+                        <p class="text-sm font-medium text-gray-800">(15) 3222-8899 / (15) 99999-0000</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-sm">
+                <h4 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-green-700">flag</span>
+                    Finalidade e Missão
+                </h4>
+                
+                <div class="space-y-6">
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Descrição das Atividades</p>
+                        <div class="bg-gray-50 border border-gray-100 p-4 rounded-xl">
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                A Associação Filantrópica Nova Era tem como missão promover a inclusão digital e educacional para crianças e adolescentes em situação de vulnerabilidade social na região metropolitana. Realizamos oficinas de informática básica, programação e desenvolvimento pessoal.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Público-Alvo</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-full text-xs font-bold">Crianças (7-12 anos)</span>
+                            <span class="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-full text-xs font-bold">Adolescentes (13-17 anos)</span>
+                            <span class="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-full text-xs font-bold">Estudantes de Rede Pública</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-1 space-y-6">
+            
+            <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
+                <h4 class="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-green-700">gavel</span>
+                    Termos Legais
+                </h4>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-3 bg-green-50 rounded-xl border border-green-100">
+                        <span class="material-symbols-outlined text-green-600">check_circle</span>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">Termo de Parceria</p>
+                            <p class="text-[10px] text-gray-500 font-medium">Assinado digitalmente</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-green-50 rounded-xl border border-green-100">
+                        <span class="material-symbols-outlined text-green-600">check_circle</span>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">Política LGPD</p>
+                            <p class="text-[10px] text-gray-500 font-medium">Termo de privacidade aceito</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-200">
+                        <span class="material-symbols-outlined text-gray-400">upload_file</span>
+                        <div class="flex-1">
+                            <p class="text-xs font-bold text-gray-800">Estatuto Social</p>
+                            <p class="text-[10px] text-gray-500 font-medium">Enviado para análise</p>
+                        </div>
+                        <button class="text-blue-600 text-[10px] font-bold hover:underline">Ver</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
+                <h4 class="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-gray-600">lock</span>
+                    Segurança da Conta
+                </h4>
+                <p class="text-xs text-gray-500 mb-4">Mantenha seus dados de acesso sempre protegidos e atualizados.</p>
+                
+                <button class="w-full py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-100 transition">
+                    Alterar Senha de Acesso
+                </button>
+            </div>
+
+            <div class="bg-blue-900 rounded-3xl p-6 text-white shadow-md relative overflow-hidden">
+                <span class="material-symbols-outlined absolute -right-4 -bottom-4 text-7xl opacity-10">support_agent</span>
+                <h4 class="text-lg font-bold mb-2">Precisa de ajuda?</h4>
+                <p class="text-xs text-blue-200 mb-6 leading-relaxed">Em caso de dúvidas sobre o seu cadastro ou dificuldades com solicitações, nossa equipe está pronta para atender.</p>
+                <button class="w-full py-3 bg-white text-blue-900 rounded-xl text-sm font-black shadow-sm hover:bg-blue-50 transition">
+                    Falar com Suporte
+                </button>
+            </div>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const menuBtn = document.getElementById("menu-btn");
+      const closeBtn = document.getElementById("close-menu-btn");
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebar-overlay");
+
+      const openMenu = () => { sidebar.classList.remove("-translate-x-full"); overlay.classList.remove("hidden"); };
+      const closeMenu = () => { sidebar.classList.add("-translate-x-full"); overlay.classList.add("hidden"); };
+
+      menuBtn.addEventListener("click", openMenu);
+      closeBtn.addEventListener("click", closeMenu);
+      overlay.addEventListener("click", closeMenu);
+    });
+  </script>
+
+</body>
+</html>
