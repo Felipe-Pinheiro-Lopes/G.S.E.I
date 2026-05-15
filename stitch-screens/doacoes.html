@@ -1,290 +1,590 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en">
-
+<html class="scroll-smooth" lang="pt-br">
 <head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>EcoLink Ledger - Donation Portal</title>
-  <!-- Google Fonts: Manrope & Inter -->
-  <link href="https://fonts.googleapis.com" rel="preconnect" />
-  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;700;800&amp;display=swap"
-    rel="stylesheet" />
-  <!-- Material Symbols -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-    rel="stylesheet" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-    rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          "colors": {
-            "secondary-container": "#64a1ff",
-            "primary-fixed": "#a3f69c",
-            "outline": "#707a6c",
-            "on-surface": "#071e27",
-            "inverse-primary": "#88d982",
-            "on-primary": "#ffffff",
-            "tertiary-fixed": "#92f1fe",
-            "surface": "#f3faff",
-            "tertiary": "#005e67",
-            "on-primary-fixed": "#002204",
-            "on-secondary-fixed-variant": "#00468c",
-            "error-container": "#ffdad6",
-            "on-tertiary-fixed": "#001f23",
-            "surface-variant": "#cfe6f2",
-            "surface-container-low": "#e6f6ff",
-            "primary-fixed-dim": "#88d982",
-            "secondary-fixed-dim": "#a9c7ff",
-            "on-primary-container": "#cbffc2",
-            "outline-variant": "#bfcaba",
-            "tertiary-fixed-dim": "#75d5e2",
-            "primary": "#0d631b",
-            "surface-container-highest": "#cfe6f2",
-            "secondary": "#005db7",
-            "on-tertiary-fixed-variant": "#004f56",
-            "tertiary-container": "#007984",
-            "on-error-container": "#93000a",
-            "primary-container": "#2e7d32",
-            "on-secondary-fixed": "#001b3d",
-            "error": "#ba1a1a",
-            "on-surface-variant": "#40493d",
-            "inverse-on-surface": "#dff4ff",
-            "on-error": "#ffffff",
-            "surface-bright": "#f3faff",
-            "on-tertiary": "#ffffff",
-            "surface-dim": "#c7dde9",
-            "surface-tint": "#1b6d24",
-            "background": "#f3faff",
-            "surface-container-lowest": "#ffffff",
-            "on-primary-fixed-variant": "#005312",
-            "on-background": "#071e27",
-            "inverse-surface": "#1e333c",
-            "surface-container": "#dbf1fe",
-            "on-tertiary-container": "#cdf8ff",
-            "on-secondary-container": "#003670",
-            "on-secondary": "#ffffff",
-            "surface-container-high": "#d5ecf8",
-            "secondary-fixed": "#d6e3ff"
-          },
-          "borderRadius": {
-            "DEFAULT": "0.125rem",
-            "lg": "0.25rem",
-            "xl": "0.5rem",
-            "full": "0.75rem"
-          },
-          "fontFamily": {
-            "headline": ["Manrope"],
-            "display": ["Manrope"],
-            "body": ["Inter"],
-            "label": ["Inter"]
-          }
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>G.S.E.I. - Gestão de Doações</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "inverse-primary": "#88d982",
+          "on-background": "#071e27",
+          "on-secondary-fixed": "#001b3d",
+          "on-primary-container": "#cbffc2",
+          "on-secondary": "#ffffff",
+          "tertiary-fixed-dim": "#75d5e2",
+          "tertiary-container": "#007984",
+          "tertiary-fixed": "#92f1fe",
+          "secondary-container": "#64a1ff",
+          "on-error": "#ffffff",
+          "inverse-surface": "#1e333c",
+          "error-container": "#ffdad6",
+          "outline": "#707a6c",
+          "tertiary": "#005e67",
+          "surface-container-highest": "#cfe6f2",
+          "secondary": "#005db7",
+          "background": "#f3faff",
+          "error": "#ba1a1a",
+          "on-secondary-container": "#003670",
+          "surface": "#f3faff",
+          "surface-container": "#dbf1fe",
+          "inverse-on-surface": "#dff4ff",
+          "primary": "#0d631b",
+          "on-primary-fixed": "#002204",
+          "on-primary-fixed-variant": "#005312",
+          "primary-fixed": "#a3f69c",
+          "on-surface": "#071e27",
+          "surface-container-low": "#e6f6ff",
+          "on-tertiary": "#ffffff",
+          "surface-variant": "#cfe6f2",
+          "outline-variant": "#bfcaba",
+          "on-error-container": "#93000a",
+          "primary-container": "#2e7d32",
+          "on-secondary-fixed-variant": "#00468c",
+          "secondary-fixed-dim": "#a9c7ff",
+          "primary-fixed-dim": "#88d982",
+          "on-surface-variant": "#40493d",
+          "on-tertiary-fixed-variant": "#004f56",
+          "surface-tint": "#1b6d24",
+          "on-tertiary-fixed": "#001f23",
+          "on-primary": "#ffffff",
+          "on-tertiary-container": "#cdf8ff",
+          "surface-container-lowest": "#ffffff",
+          "surface-dim": "#c7dde9",
+          "surface-container-high": "#d5ecf8",
+          "surface-bright": "#f3faff",
+          "secondary-fixed": "#d6e3ff"
         },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem",
+          "2xl": "1rem",
+          "3xl": "1.5rem"
+        },
+        "fontFamily": {
+          "headline": ["Manrope"],
+          "display": ["Manrope"],
+          "body": ["Inter"],
+          "label": ["Inter"]
+        }
       },
-    }
-  </script>
-  <style>
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
+    },
+  }
+</script>
 
-    body {
-      font-family: 'Inter', sans-serif;
-    }
+<style>
+  body { font-family: 'Inter', sans-serif; background-color: #f3faff; }
+  h1, h2, h3, h4, h5, .font-headline { font-family: 'Manrope', sans-serif; }
+  
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .filled-icon {
+    font-variation-settings: 'FILL' 1;
+  }
 
-    h1,
-    h2,
-    h3 {
-      font-family: 'Manrope', sans-serif;
-    }
-  </style>
-  <style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
 </head>
 
-<body class="bg-surface text-on-surface min-h-screen pb-32">
-  <!-- TopAppBar -->
-  <header
-    class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#f3faff]/80 backdrop-blur-md">
-    <div class="flex items-center gap-4">
-      <span class="material-symbols-outlined text-[#0d631b]">menu</span>
-      <h1 class="text-xl font-extrabold text-[#0d631b] font-['Manrope'] tracking-tight">EcoLink Ledger</h1>
-    </div>
-    <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest">
-      <img alt="GSEI Admin" class="w-full h-full object-cover"
-        data-alt="professional male administrator headshot with neutral background, corporate style lighting, high quality portrait"
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLaK42qdQKhMsI7nALBGok-3cSkcpVYqQGmGLvd1kjf0SUM49goBkkKjJgIhecfShactwQRpU3jB-VLBtOM3Hr0r6GsJgelmsujPUmpSW3I4yIMbVpOfauu8UEeNvFj2SyX9bipZUMD2T0SllU4c9grhrzRdfvGx6XToo_gMeg1LIYOl2zqcODlhm8TULuCMQmNQcH472FgR1HrfN1mOrh62Jpch6JP6xoa7PwCDkmHNYvkmrrXbt2-_qDYbs0FsYzRMsAZqFtL7Y" />
-    </div>
-  </header>
-  <main class="pt-24 px-6 space-y-10 max-w-md mx-auto">
-    <!-- Header Section -->
-    <section>
-      <h2 class="text-3xl font-extrabold tracking-tight text-on-surface mb-2">Donate Assets</h2>
-      <p class="text-on-surface-variant text-sm">Bridge the digital divide by allocating IT equipment to vetted
-        institutions.</p>
-    </section>
-    <!-- 1. Institution Selection (Horizontal Carousel style) -->
-    <section class="space-y-4">
-      <div class="flex justify-between items-end">
-        <h3 class="text-lg font-bold tracking-tight">1. Select Institution</h3>
-        <span class="text-primary text-xs font-semibold uppercase tracking-widest">View Map</span>
-      </div>
-      <div class="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 no-scrollbar">
-        <!-- Institution Card 1 -->
-        <div
-          class="flex-shrink-0 w-64 p-5 rounded-xl bg-surface-container-lowest shadow-[0px_12px_32px_rgba(7,30,39,0.06)] border-2 border-primary">
-          <div class="flex items-start justify-between mb-4">
-            <div class="w-12 h-12 rounded-lg bg-tertiary-container/10 flex items-center justify-center">
-              <span class="material-symbols-outlined text-tertiary-container"
-                style="font-variation-settings: 'FILL' 1;">account_balance</span>
-            </div>
-            <span class="material-symbols-outlined text-primary">check_circle</span>
-          </div>
-          <h4 class="font-bold text-on-surface">City Library Network</h4>
-          <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Providing public internet access to
-            underserved urban districts.</p>
-          <div class="mt-4 flex items-center gap-2">
-            <span
-              class="px-2 py-0.5 bg-surface-variant text-[10px] font-bold rounded-full text-secondary uppercase">Urban
-              Reach</span>
-          </div>
-        </div>
-        <!-- Institution Card 2 -->
-        <div
-          class="flex-shrink-0 w-64 p-5 rounded-xl bg-surface-container-lowest shadow-[0px_4px_12px_rgba(7,30,39,0.03)] border-2 border-transparent">
-          <div class="flex items-start justify-between mb-4">
-            <div class="w-12 h-12 rounded-lg bg-primary-container/10 flex items-center justify-center">
-              <span class="material-symbols-outlined text-primary-container"
-                style="font-variation-settings: 'FILL' 1;">school</span>
-            </div>
-          </div>
-          <h4 class="font-bold text-on-surface">Green-Hub Education</h4>
-          <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Equipping rural schools with sustainable IT
-            labs for digital literacy.</p>
-          <div class="mt-4 flex items-center gap-2">
-            <span
-              class="px-2 py-0.5 bg-surface-variant text-[10px] font-bold rounded-full text-secondary uppercase">Education</span>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- 2. Equipment Selection (Asymmetric List) -->
-    <section class="space-y-4">
-      <h3 class="text-lg font-bold tracking-tight">2. Select Equipment</h3>
-      <div class="space-y-4">
-        <!-- Equipment Item 1 -->
-        <div
-          class="flex items-center gap-4 p-4 bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(7,30,39,0.03)]">
-          <div class="flex-shrink-0 relative">
-            <input checked=""
-              class="w-6 h-6 rounded text-primary focus:ring-primary-container border-outline-variant/30"
-              type="checkbox" />
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-bold text-secondary uppercase tracking-tighter">Inventory #4920</span>
-              <span class="px-2 py-0.5 bg-tertiary/10 text-tertiary text-[10px] font-bold rounded-full">Ready</span>
-            </div>
-            <h4 class="font-semibold text-sm">MacBook Pro 16" (M1 Pro)</h4>
-            <p class="text-[11px] text-on-surface-variant">Battery health: 94% • Cleaned &amp; Reset</p>
-          </div>
-        </div>
-        <!-- Equipment Item 2 -->
-        <div
-          class="flex items-center gap-4 p-4 bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(7,30,39,0.03)]">
-          <div class="flex-shrink-0 relative">
-            <input checked=""
-              class="w-6 h-6 rounded text-primary focus:ring-primary-container border-outline-variant/30"
-              type="checkbox" />
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-bold text-secondary uppercase tracking-tighter">Inventory #2104</span>
-              <span class="px-2 py-0.5 bg-tertiary/10 text-tertiary text-[10px] font-bold rounded-full">Ready</span>
-            </div>
-            <h4 class="font-semibold text-sm">Dell PowerEdge R750</h4>
-            <p class="text-[11px] text-on-surface-variant">Server Unit • Decommissioned 2023</p>
-          </div>
-        </div>
-        <!-- Equipment Item 3 -->
-        <div
-          class="flex items-center gap-4 p-4 bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(7,30,39,0.03)] opacity-60">
-          <div class="flex-shrink-0 relative">
-            <input class="w-6 h-6 rounded text-primary focus:ring-primary-container border-outline-variant/30"
-              type="checkbox" />
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-start">
-              <span class="text-xs font-bold text-secondary uppercase tracking-tighter">Inventory #8832</span>
-              <span
-                class="px-2 py-0.5 bg-error/10 text-error text-[10px] font-bold rounded-full uppercase">Maintenance</span>
-            </div>
-            <h4 class="font-semibold text-sm">iPad Air (5th Gen)</h4>
-            <p class="text-[11px] text-on-surface-variant">Screen repair pending</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- 3. Review & Confirm (Glassmorphism Sticky-ish Card) -->
-    <section class="mt-8 p-6 bg-surface-container-low/60 backdrop-blur-xl rounded-3xl border border-white/20">
-      <h3 class="text-sm font-bold text-primary uppercase tracking-widest mb-4">Donation Summary</h3>
-      <div class="space-y-3 mb-6">
-        <div class="flex justify-between items-center text-sm">
-          <span class="text-on-surface-variant">Target Institution</span>
-          <span class="font-semibold">City Library Network</span>
-        </div>
-        <div class="flex justify-between items-center text-sm">
-          <span class="text-on-surface-variant">Selected Items</span>
-          <span class="font-semibold">2 Assets</span>
-        </div>
-        <div class="flex justify-between items-center text-sm pt-3 border-t border-outline-variant/20">
-          <span class="font-bold text-on-surface">Total Impact Value</span>
-          <span class="font-black text-primary">$4,250.00</span>
-        </div>
-      </div>
-      <button
-        class="w-full py-4 bg-gradient-to-r from-[#0d631b] to-[#2e7d32] text-white rounded-xl font-bold tracking-tight shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform">
-        Confirm Donation
-      </button>
-      <p class="text-center text-[10px] text-on-surface-variant mt-4 leading-tight">
-        By confirming, you authorize the transfer of ownership to the selected institution under the G.S.E.I. Framework.
-      </p>
-    </section>
-  </main>
-  <!-- BottomNavBar -->
-  <nav
-    class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-[#e6f6ff]/90 backdrop-blur-lg rounded-t-xl shadow-[0px_-4px_24px_rgba(7,30,39,0.04)]">
-    <a class="flex flex-col items-center justify-center text-[#5c717b] hover:text-[#0d631b] transition-all" href="#">
-      <span class="material-symbols-outlined">grid_view</span>
-      <span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider">Dashboard</span>
-    </a>
-    <a class="flex flex-col items-center justify-center bg-[#d6e3ff] text-[#00468c] rounded-full px-5 py-1 scale-110"
-      href="#">
-      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">volunteer_activism</span>
-      <span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider">Donations</span>
-    </a>
-    <a class="flex flex-col items-center justify-center text-[#5c717b] hover:text-[#0d631b] transition-all" href="#">
-      <span class="material-symbols-outlined">receipt_long</span>
-      <span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider">Ledger</span>
-    </a>
-    <a class="flex flex-col items-center justify-center text-[#5c717b] hover:text-[#0d631b] transition-all" href="#">
-      <span class="material-symbols-outlined">person</span>
-      <span class="font-['Inter'] text-[11px] font-semibold uppercase tracking-wider">Account</span>
-    </a>
-  </nav>
-  <!-- Visual Decor (Minimalistic organic shapes for Living Ledger theme) -->
-  <div class="fixed top-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
-  <div class="fixed bottom-40 -left-20 w-48 h-48 bg-secondary/5 rounded-full blur-3xl pointer-events-none"></div>
-</body>
+<body class="text-on-surface min-h-screen flex overflow-x-hidden">
 
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity lg:hidden"></div>
+
+  <div id="drawer-overlay" class="fixed inset-0 bg-black/30 backdrop-blur-sm z-[80] hidden transition-opacity" onclick="closeDrawer()"></div>
+
+  <aside id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-[#f8fbff] z-[70] border-r border-gray-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-xl lg:shadow-none">
+    <div class="p-6 pb-8 flex justify-between items-center">
+      <div>
+        <h2 class="font-black text-2xl text-green-800 tracking-tight">G.S.E.I.</h2>
+        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Gestão de TI</p>
+      </div>
+      <button id="close-menu-btn" class="material-symbols-outlined text-gray-500 hover:text-red-500 lg:hidden">close</button>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+      <p class="px-4 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Principal</p>
+      
+      <a href="Dashboard.html" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors group">
+        <span class="material-symbols-outlined text-[22px] group-hover:fill-1">grid_view</span>
+        <span class="font-semibold text-sm">Dashboard</span>
+      </a>
+
+      <a href="Inventario.html" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors group">
+        <span class="material-symbols-outlined text-[22px] group-hover:fill-1">inventory_2</span>
+        <span class="font-semibold text-sm">Inventário</span>
+      </a>
+
+      <p class="px-4 py-2 mt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Processos</p>
+
+      <a href="Triagem.html" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors group">
+        <span class="material-symbols-outlined text-[22px] group-hover:fill-1">fact_check</span>
+        <span class="font-semibold text-sm">Triagem</span>
+      </a>
+
+      <a href="Doacoes.html" class="flex items-center gap-4 px-4 py-3 bg-[#e6eeff] text-[#1a56db] rounded-lg transition-colors group">
+        <span class="material-symbols-outlined text-[22px] filled-icon">volunteer_activism</span>
+        <span class="font-bold text-sm">Doações</span>
+      </a>
+
+      <a href="Descarte.html" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors group">
+        <span class="material-symbols-outlined text-[22px] group-hover:fill-1">delete_forever</span>
+        <span class="font-semibold text-sm">Descarte</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-gray-200 mt-auto bg-white/50">
+      <div class="flex items-center gap-3 mb-4 px-2">
+        <img src="https://i.pravatar.cc/150?img=11" alt="Marcus Chen" class="w-10 h-10 rounded-full border border-gray-300 object-cover"/>
+        <div class="overflow-hidden">
+          <p class="text-sm font-bold text-gray-800 truncate">Marcus Chen</p>
+          <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider truncate">Gestor de Ativos</p>
+        </div>
+      </div>
+      <a href="Login.html" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+        <span class="font-bold text-sm">Sair do Sistema</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="lg:ml-64 flex flex-col min-h-screen w-full">
+
+    <header class="sticky top-0 w-full z-40 bg-white/80 backdrop-blur flex justify-between items-center px-4 md:px-8 py-4 border-b border-gray-200 shadow-sm">
+      <div class="flex items-center gap-4">
+        <button id="menu-btn" class="lg:hidden w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition" aria-label="Abrir menu">
+          <span class="material-symbols-outlined text-green-800">menu</span>
+        </button>
+        <h1 class="font-black text-green-800 text-xl hidden sm:block">Aprovação de Doações</h1>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <div class="hidden md:flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full w-[300px]">
+          <span class="material-symbols-outlined text-gray-400 text-sm">search</span>
+          <input type="text" placeholder="Buscar instituição ou protocolo..." class="bg-transparent border-none focus:ring-0 text-sm w-full outline-none text-gray-700"/>
+        </div>
+        <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 text-gray-500 transition relative">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 w-full max-w-7xl mx-auto space-y-8 pb-12">
+      
+      <section class="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
+        <div>
+          <h3 class="text-3xl md:text-4xl font-extrabold text-on-surface tracking-tighter mb-2">Painel de Análise</h3>
+          <p class="text-sm font-medium text-on-surface-variant">Gerencie e avalie as solicitações de instituições parceiras.</p>
+        </div>
+        <button class="bg-white border border-gray-200 text-gray-600 px-6 py-3 rounded-xl font-bold text-sm shadow-sm flex items-center justify-center gap-2 hover:bg-gray-50 transition-all w-full sm:w-auto">
+          <span class="material-symbols-outlined text-sm">download</span>
+          Exportar Relatório
+        </button>
+      </section>
+      
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-surface-container-lowest p-6 rounded-[2rem] shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 border border-gray-100">
+          <div class="flex justify-between items-start">
+            <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+              <span class="material-symbols-outlined">assignment</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Solicitações</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-on-surface">128</p>
+            <p class="text-xs font-medium text-on-surface-variant">Registradas no sistema</p>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest p-6 rounded-[2rem] shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 border border-gray-100">
+          <div class="flex justify-between items-start">
+            <div class="p-3 bg-green-50 text-green-600 rounded-xl">
+              <span class="material-symbols-outlined">verified</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aprovadas</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-on-surface">84</p>
+            <p class="text-xs font-medium text-on-surface-variant">Instituições atendidas</p>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest p-6 rounded-[2rem] shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 border border-gray-100">
+          <div class="flex justify-between items-start">
+            <div class="p-3 bg-yellow-50 text-yellow-600 rounded-xl">
+              <span class="material-symbols-outlined">hourglass_empty</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pendentes</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-on-surface">19</p>
+            <p class="text-xs font-medium text-on-surface-variant">Aguardando análise técnica</p>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest p-6 rounded-[2rem] shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 border border-gray-100">
+          <div class="flex justify-between items-start">
+            <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
+              <span class="material-symbols-outlined">inventory_2</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Itens Doados</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-on-surface">342</p>
+            <p class="text-xs font-medium text-on-surface-variant">Equipamentos entregues</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2 bg-surface-container-lowest border border-gray-100 rounded-3xl p-6 sm:p-8 flex flex-col gap-6 shadow-[0_12_32px_rgba(7,30,39,0.04)]">
+          <div class="flex justify-between items-center">
+            <div>
+              <h4 class="text-xl font-bold text-on-surface">Volume de Doações</h4>
+              <p class="text-xs font-medium text-on-surface-variant">Equipamentos doados por mês (2024)</p>
+            </div>
+            <select class="bg-gray-50 border-none text-xs font-bold rounded-lg py-2 px-3 text-gray-600 outline-none">
+                <option>Este Ano</option>
+            </select>
+          </div>
+
+          <div class="relative h-56 w-full flex items-end justify-between gap-2 sm:gap-4 px-2 sm:px-4 overflow-x-auto scrollbar-hide">
+            <div class="flex-1 bg-green-200 rounded-t-lg relative group transition-all hover:bg-green-300 min-w-[30px]" style="height: 30%;">
+                <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">Jan</span>
+            </div>
+            <div class="flex-1 bg-green-200 rounded-t-lg relative group transition-all hover:bg-green-300 min-w-[30px]" style="height: 45%;">
+                <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">Fev</span>
+            </div>
+            <div class="flex-1 bg-green-200 rounded-t-lg relative group transition-all hover:bg-green-300 min-w-[30px]" style="height: 20%;">
+                <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">Mar</span>
+            </div>
+            <div class="flex-1 bg-primary/80 rounded-t-lg relative group transition-all hover:bg-primary min-w-[30px]" style="height: 80%;">
+                <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded">124</div>
+                <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-800">Abr</span>
+            </div>
+            <div class="flex-1 bg-green-200 rounded-t-lg relative group transition-all hover:bg-green-300 min-w-[30px]" style="height: 50%;">
+                <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">Mai</span>
+            </div>
+            <div class="flex-1 bg-green-200 rounded-t-lg relative group transition-all hover:bg-green-300 min-w-[30px]" style="height: 65%;">
+                <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">Jun</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest border border-gray-100 rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-center shadow-[0_12_32px_rgba(7,30,39,0.04)]">
+            <h4 class="text-lg font-bold text-on-surface mb-6 w-full text-left">Top Categorias</h4>
+            
+            <div class="relative w-48 h-48 rounded-full shadow-inner"
+                 style="background: conic-gradient(#16a34a 0% 50%, #3b82f6 50% 75%, #f59e0b 75% 90%, #8b5cf6 90% 100%);">
+              <div class="absolute inset-8 bg-white rounded-full flex flex-col items-center justify-center shadow-sm">
+                <span class="text-[10px] font-bold text-gray-400 uppercase">Total</span>
+                <span class="text-2xl font-black text-gray-800">342</span>
+              </div>
+            </div>
+  
+            <div class="mt-6 grid grid-cols-2 gap-3 text-[11px] font-semibold w-full">
+              <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-green-600"></span> Notebooks (50%)</div>
+              <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Monitores (25%)</div>
+              <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span> Desktops (15%)</div>
+              <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> Outros (10%)</div>
+            </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-[2rem] shadow-[0_12_32px_rgba(7,30,39,0.06)] border border-gray-100 overflow-hidden">
+        
+        <div class="p-6 border-b border-gray-100 bg-gray-50/50 flex flex-wrap gap-4 items-center">
+            <div class="flex-1 min-w-[200px] relative">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+                <input type="text" placeholder="Buscar instituição..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none">
+            </div>
+            <select class="py-2.5 px-4 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 outline-none bg-white">
+                <option>Status: Todos</option>
+                <option>Pendentes</option>
+                <option>Em Análise</option>
+                <option>Aprovados</option>
+            </select>
+            <select class="py-2.5 px-4 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 outline-none bg-white">
+                <option>Prioridade: Todas</option>
+                <option>Alta</option>
+                <option>Média</option>
+                <option>Baixa</option>
+            </select>
+            <button class="bg-white border border-gray-200 py-2.5 px-4 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
+                Aplicar
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-gray-100">
+                  <th class="px-6 py-5">Instituição</th>
+                  <th class="px-6 py-5">Itens Solicitados</th>
+                  <th class="px-6 py-5">Data</th>
+                  <th class="px-6 py-5">Prioridade</th>
+                  <th class="px-6 py-5">Status</th>
+                  <th class="px-6 py-5 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-50 text-sm">
+                
+                <tr class="hover:bg-blue-50/30 transition-colors">
+                  <td class="px-6 py-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
+                            <span class="material-symbols-outlined text-[20px]">school</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-800">Escola Municipal Nova Era</p>
+                            <p class="text-[11px] text-gray-400 font-medium">CNPJ: 12.345.678/0001-90</p>
+                        </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-5">
+                    <p class="font-bold text-gray-700">15 Equipamentos</p>
+                    <p class="text-[11px] text-gray-400 font-medium">Notebooks, Monitores...</p>
+                  </td>
+                  <td class="px-6 py-5 text-gray-500 font-medium">10/05/2024</td>
+                  <td class="px-6 py-5">
+                    <span class="flex items-center gap-1 text-red-600 font-bold text-xs">
+                        <span class="material-symbols-outlined text-[14px]">local_fire_department</span> Alta
+                    </span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-md text-[10px] font-black uppercase tracking-wider">Pendente</span>
+                  </td>
+                  <td class="px-6 py-5 text-right">
+                    <button onclick="openDrawer()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs transition shadow-sm">
+                        Analisar
+                    </button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-blue-50/30 transition-colors">
+                  <td class="px-6 py-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
+                            <span class="material-symbols-outlined text-[20px]">volunteer_activism</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-800">ONG Tech Future</p>
+                            <p class="text-[11px] text-gray-400 font-medium">CNPJ: 98.765.432/0001-10</p>
+                        </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-5">
+                    <p class="font-bold text-gray-700">5 Equipamentos</p>
+                    <p class="text-[11px] text-gray-400 font-medium">Desktops</p>
+                  </td>
+                  <td class="px-6 py-5 text-gray-500 font-medium">08/05/2024</td>
+                  <td class="px-6 py-5">
+                    <span class="flex items-center gap-1 text-orange-500 font-bold text-xs">
+                        <span class="material-symbols-outlined text-[14px]">drag_handle</span> Média
+                    </span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-md text-[10px] font-black uppercase tracking-wider">Aprovado</span>
+                  </td>
+                  <td class="px-6 py-5 text-right">
+                    <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg font-bold text-xs transition">
+                        Ver Detalhes
+                    </button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-blue-50/30 transition-colors">
+                  <td class="px-6 py-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
+                            <span class="material-symbols-outlined text-[20px]">diversity_1</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-800">Associação Esperança</p>
+                            <p class="text-[11px] text-gray-400 font-medium">CNPJ: 45.123.987/0001-55</p>
+                        </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-5">
+                    <p class="font-bold text-gray-700">2 Equipamentos</p>
+                    <p class="text-[11px] text-gray-400 font-medium">Notebooks</p>
+                  </td>
+                  <td class="px-6 py-5 text-gray-500 font-medium">11/05/2024</td>
+                  <td class="px-6 py-5">
+                    <span class="flex items-center gap-1 text-green-600 font-bold text-xs">
+                        <span class="material-symbols-outlined text-[14px]">stat_minus_1</span> Baixa
+                    </span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-md text-[10px] font-black uppercase tracking-wider">Em Análise</span>
+                  </td>
+                  <td class="px-6 py-5 text-right">
+                    <button onclick="openDrawer()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs transition shadow-sm">
+                        Continuar
+                    </button>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <aside id="drawer" class="fixed top-0 right-0 w-full md:w-[500px] h-full bg-white z-[90] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col border-l border-gray-200">
+    
+    <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+        <div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Protocolo #SOL-8892</p>
+            <h2 class="text-xl font-black text-gray-800 mt-1">Análise de Solicitação</h2>
+        </div>
+        <button onclick="closeDrawer()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500 transition">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-6 space-y-8">
+        
+        <div>
+            <h4 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">domain</span> Dados da Instituição
+            </h4>
+            <div class="bg-surface-container-lowest border border-gray-100 rounded-2xl p-5 space-y-3 shadow-sm">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase">Nome / Razão Social</p>
+                    <p class="text-sm font-bold text-gray-800">Escola Municipal Nova Era</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase">CNPJ</p>
+                        <p class="text-sm font-medium text-gray-700">12.345.678/0001-90</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase">Telefone</p>
+                        <p class="text-sm font-medium text-gray-700">(15) 3222-8899</p>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase">Responsável / E-mail</p>
+                    <p class="text-sm font-medium text-gray-700">Diretora Marta Silva • contato@novaera.edu.br</p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">inventory_2</span> Equipamentos Solicitados
+                </h4>
+                <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-[9px] font-black uppercase tracking-wider">Alta Prioridade</span>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex justify-between items-center p-3 border border-gray-100 rounded-xl bg-gray-50">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-gray-400">laptop_mac</span>
+                        <span class="text-sm font-bold text-gray-700">Notebooks (i5 ou superior)</span>
+                    </div>
+                    <span class="text-sm font-black text-gray-800">10 un</span>
+                </div>
+                <div class="flex justify-between items-center p-3 border border-gray-100 rounded-xl bg-gray-50">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-gray-400">desktop_windows</span>
+                        <span class="text-sm font-bold text-gray-700">Monitores (21" +)</span>
+                    </div>
+                    <span class="text-sm font-black text-gray-800">05 un</span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Motivo da Solicitação</p>
+                <p class="text-sm text-gray-600 bg-gray-50 p-4 rounded-xl italic border border-gray-100">
+                    "Estamos montando um novo laboratório de informática para atender 120 crianças do ensino fundamental. Nossas máquinas atuais queimaram em uma queda de energia."
+                </p>
+            </div>
+        </div>
+
+        <div>
+            <h4 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">history</span> Histórico
+            </h4>
+            <div class="relative border-l-2 border-gray-100 ml-3 space-y-6 pb-4">
+                <div class="relative pl-6">
+                    <div class="absolute w-3 h-3 bg-yellow-400 rounded-full -left-[7px] top-1 ring-4 ring-white"></div>
+                    <p class="text-sm font-bold text-gray-800">Aguardando Análise Técnica</p>
+                    <p class="text-xs text-gray-500">Status atual</p>
+                </div>
+                <div class="relative pl-6">
+                    <div class="absolute w-3 h-3 bg-gray-300 rounded-full -left-[7px] top-1 ring-4 ring-white"></div>
+                    <p class="text-sm font-bold text-gray-800">Solicitação Recebida</p>
+                    <p class="text-xs text-gray-500">10/05/2024 às 14:32 pelo Portal Institucional</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="p-6 border-t border-gray-100 bg-white grid grid-cols-2 gap-3">
+        <button class="col-span-2 py-3 rounded-xl bg-gray-100 text-gray-600 font-bold text-sm hover:bg-gray-200 transition">
+            Solicitar mais Informações
+        </button>
+        <button class="py-3 rounded-xl bg-red-50 text-red-600 font-bold text-sm hover:bg-red-100 transition border border-red-100">
+            Negar Pedido
+        </button>
+        <button class="py-3 rounded-xl bg-green-600 text-white font-bold text-sm hover:bg-green-700 transition shadow-md shadow-green-600/20">
+            Aprovar Doação
+        </button>
+    </div>
+  </aside>
+
+  <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const closeMenuBtn = document.getElementById("close-menu-btn");
+    const sidebar = document.getElementById("sidebar");
+    const sidebarOverlay = document.getElementById("sidebar-overlay");
+
+    const drawer = document.getElementById("drawer");
+    const drawerOverlay = document.getElementById("drawer-overlay");
+
+    // Lógica do Menu Sidebar Mobile
+    const toggleMenu = () => {
+      sidebar.classList.toggle("-translate-x-full");
+      sidebarOverlay.classList.toggle("hidden");
+    };
+
+    menuBtn.addEventListener("click", toggleMenu);
+    closeMenuBtn.addEventListener("click", toggleMenu);
+    sidebarOverlay.addEventListener("click", toggleMenu);
+
+    // Lógica do Drawer (Painel de Análise)
+    const openDrawer = () => {
+        drawer.classList.remove("translate-x-full");
+        drawerOverlay.classList.remove("hidden");
+    };
+
+    const closeDrawer = () => {
+        drawer.classList.add("translate-x-full");
+        drawerOverlay.classList.add("hidden");
+    };
+  </script>
+
+</body>
 </html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>G.S.E.I. - Inventário</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "inverse-primary": "#88d982",
+          "on-background": "#071e27",
+          "on-secondary-fixed": "#001b3d",
+          "on-primary-container": "#cbffc2",
+          "on-secondary": "#ffffff",
+          "tertiary-fixed-dim": "#75d5e2",
+          "tertiary-container": "#007984",
+          "tertiary-fixed": "#92f1fe",
+          "secondary-container": "#64a1ff",
+          "on-error": "#ffffff",
+          "inverse-surface": "#1e333c",
+          "error-container": "#ffdad6",
+          "outline": "#707a6c",
+          "tertiary": "#005e67",
+          "surface-container-highest": "#cfe6f2",
+          "secondary": "#005db7",
+          "background": "#f3faff",
+          "error": "#ba1a1a",
+          "on-secondary-container": "#003670",
+          "surface": "#f3faff",
+          "surface-container": "#dbf1fe",
+          "inverse-on-surface": "#dff4ff",
+          "primary": "#0d631b",
+          "on-primary-fixed": "#002204",
+          "on-primary-fixed-variant": "#005312",
+          "primary-fixed": "#a3f69c",
+          "on-surface": "#071e27",
+          "surface-container-low": "#e6f6ff",
+          "on-tertiary": "#ffffff",
+          "surface-variant": "#cfe6f2",
+          "outline-variant": "#bfcaba",
+          "on-error-container": "#93000a",
+          "primary-container": "#2e7d32",
+          "on-secondary-fixed-variant": "#00468c",
+          "secondary-fixed-dim": "#a9c7ff",
+          "primary-fixed-dim": "#88d982",
+          "on-surface-variant": "#40493d",
+          "on-tertiary-fixed-variant": "#004f56",
+          "surface-tint": "#1b6d24",
+          "on-tertiary-fixed": "#001f23",
+          "on-primary": "#ffffff",
+          "on-tertiary-container": "#cdf8ff",
+          "surface-container-lowest": "#ffffff",
+          "surface-dim": "#c7dde9",
+          "surface-container-high": "#d5ecf8",
+          "surface-bright": "#f3faff",
+          "secondary-fixed": "#d6e3ff"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "fontFamily": {
+          "headline": ["Manrope"],
+          "display": ["Manrope"],
+          "body": ["Inter"],
+          "label": ["Inter"]
+        }
+      },
+    },
+  }
+</script>
+
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .filled-icon { font-variation-settings: 'FILL' 1; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+</head>
+
+<body class="bg-[#f3faff] text-[#071e27] min-h-screen">
+
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity lg:hidden"></div>
+
+  <aside id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-[#f8fbff] z-[70] border-r border-gray-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-xl lg:shadow-none">
+    <div class="p-6 pb-8 flex justify-between items-center">
+      <div>
+        <h2 class="font-black text-2xl text-green-800 tracking-tight">G.S.E.I.</h2>
+        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Gestão de TI</p>
+      </div>
+      <button id="close-menu-btn" class="material-symbols-outlined text-gray-500 hover:text-red-500 lg:hidden">close</button>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+      <p class="px-4 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Principal</p>
+      <a href="Dashboard.html" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors group">
+        <span class="material-symbols-outlined text-[22px]">grid_view</span>
+        <span class="font-semibold text-sm">Dashboard</span>
+      </a>
+
+      <a href="Inventario.html" class="flex items-center gap-4 px-4 py-3 bg-[#e6eeff] text-[#1a56db] rounded-lg transition-colors group">
+        <span class="material-symbols-outlined text-[22px] filled-icon">inventory_2</span>
+        <span class="font-bold text-sm">Inventário</span>
+      </a>
+
+      <p class="px-4 py-2 mt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Processos</p>
+      <a href="Triagem.html" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors group">
+        <span class="material-symbols-outlined text-[22px]">fact_check</span>
+        <span class="font-semibold text-sm">Triagem</span>
+      </a>
+      <a href="Doacoes.html" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors group">
+        <span class="material-symbols-outlined text-[22px]">volunteer_activism</span>
+        <span class="font-semibold text-sm">Doações</span>
+      </a>
+      <a href="Descarte.html" class="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition-colors group">
+        <span class="material-symbols-outlined text-[22px]">delete_forever</span>
+        <span class="font-semibold text-sm">Descarte</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-gray-200 mt-auto bg-white/50">
+      <div class="flex items-center gap-3 mb-4 px-2">
+        <img src="https://i.pravatar.cc/150?img=11" alt="Marcus Chen" class="w-10 h-10 rounded-full border border-gray-300 object-cover"/>
+        <div class="overflow-hidden">
+          <p class="text-sm font-bold text-gray-800 truncate">Marcus Chen</p>
+          <p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider truncate">Técnico de Triagem</p>
+        </div>
+      </div>
+      <a href="Login.html" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+        <span class="font-bold text-sm">Sair do Sistema</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="lg:ml-64 flex flex-col min-h-screen">
+    <header class="sticky top-0 w-full z-40 bg-white/80 backdrop-blur flex justify-between items-center px-4 md:px-8 py-4 border-b border-gray-200 shadow-sm">
+      <div class="flex items-center gap-4">
+        <button id="menu-btn" class="lg:hidden w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition">
+          <span class="material-symbols-outlined text-green-800">menu</span>
+        </button>
+        <h1 class="font-black text-green-800 text-xl hidden sm:block">Inventário de Ativos</h1>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <div class="hidden md:flex items-center gap-2 bg-[#f0f5f9] px-4 py-2 rounded-full w-[300px] lg:w-[400px]">
+          <span class="material-symbols-outlined text-gray-400 text-sm">search</span>
+          <input type="text" placeholder="Buscar equipamento por ID, Modelo ou Lote..." class="bg-transparent border-none focus:ring-0 text-sm w-full outline-none text-gray-700"/>
+        </div>
+        <span class="material-symbols-outlined text-gray-500 cursor-pointer hover:text-gray-800 transition">notifications</span>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 w-full max-w-7xl mx-auto space-y-8 pb-12">
+      
+      <section class="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
+        <div>
+          <h3 class="text-3xl md:text-4xl font-extrabold text-on-surface tracking-tighter mb-2">Gestão Geral</h3>
+          <p class="text-sm font-medium text-on-surface-variant">Controle de entrada, alocação e manutenção de hardware.</p>
+        </div>
+        <button class="bg-gradient-to-r from-primary to-primary-container text-white px-6 py-3 rounded-xl font-bold text-sm shadow-md flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95 w-full sm:w-auto">
+          <span class="material-symbols-outlined text-sm">add_circle</span>
+          Cadastrar Novo Item
+        </button>
+      </section>
+
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 hover:border-b-2 hover:border-primary transition duration-300 ease-in-out hover:-translate-y-1">
+          <div class="flex justify-between items-start">
+            <div class="p-3 bg-secondary-fixed rounded-lg text-on-secondary-fixed-variant">
+              <span class="material-symbols-outlined">devices</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Geral</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-on-surface">1.248</p>
+            <p class="text-xs font-medium text-on-surface-variant">Itens patrimoniados</p>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 hover:border-b-2 hover:border-primary transition duration-300 ease-in-out hover:-translate-y-1">
+          <div class="flex justify-between items-start">
+            <div class="p-3 bg-primary-fixed rounded-lg text-on-primary-fixed-variant">
+              <span class="material-symbols-outlined">person_check</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Alocados</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-on-surface">892</p>
+            <p class="text-xs font-medium text-on-surface-variant">Em uso nos setores</p>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 hover:border-b-2 hover:border-primary transition duration-300 ease-in-out hover:-translate-y-1">
+          <div class="flex justify-between items-start">
+            <div class="p-3 bg-tertiary-fixed-dim rounded-lg text-on-tertiary-fixed-variant">
+              <span class="material-symbols-outlined">inventory</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Disponíveis</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-on-surface">215</p>
+            <p class="text-xs font-medium text-on-surface-variant">Prontos para triagem</p>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 hover:border-b-2 hover:border-primary transition duration-300 ease-in-out hover:-translate-y-1">
+          <div class="flex justify-between items-start">
+            <div class="p-3 bg-error-container rounded-lg text-on-error-container">
+              <span class="material-symbols-outlined">build</span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Reparo</span>
+          </div>
+          <div>
+            <p class="text-3xl font-black text-on-surface">42</p>
+            <p class="text-xs font-medium text-on-surface-variant">Aguardando manutenção</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="bg-surface-container-lowest rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] overflow-hidden border border-gray-100">
+        
+        <div class="p-6 border-b border-gray-50 bg-gray-50/50">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <select class="bg-white border-gray-200 rounded-xl text-sm font-semibold text-gray-600 focus:ring-primary focus:border-primary">
+              <option>Todos os Status</option>
+              <option>Em Uso</option>
+              <option>Em Estoque</option>
+              <option>Manutenção</option>
+            </select>
+            <select class="bg-white border-gray-200 rounded-xl text-sm font-semibold text-gray-600 focus:ring-primary focus:border-primary">
+              <option>Todos os Setores</option>
+              <option>TI</option>
+              <option>Recursos Humanos</option>
+              <option>Financeiro</option>
+              <option>Operações</option>
+            </select>
+            <select class="bg-white border-gray-200 rounded-xl text-sm font-semibold text-gray-600 focus:ring-primary focus:border-primary">
+              <option>Tipo de Equipamento</option>
+              <option>Notebook</option>
+              <option>Desktop</option>
+              <option>Monitor</option>
+            </select>
+            <button class="bg-surface-container text-primary font-black text-xs uppercase tracking-widest rounded-xl py-3 hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-sm">filter_list</span>
+              Aplicar Filtros
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-gray-50">
+                <th class="px-6 py-4">Equipamento</th>
+                <th class="px-6 py-4">ID Patrimônio</th>
+                <th class="px-6 py-4">Setor</th>
+                <th class="px-6 py-4">Status</th>
+                <th class="px-6 py-4 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+              
+              <tr class="hover:bg-gray-50/80 transition-colors group">
+                <td class="px-6 py-4 flex items-center gap-4">
+                  <div class="p-2 bg-secondary-fixed text-on-secondary-fixed-variant rounded-lg">
+                    <span class="material-symbols-outlined text-[20px]">laptop_mac</span>
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-on-surface">Notebook Dell Latitude 5420</p>
+                    <p class="text-[10px] font-medium text-on-surface-variant">Core i5 • 16GB RAM • L-2023-B</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-sm font-bold text-gray-600">INV-4092</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-500">Tecnologia (TI)</td>
+                <td class="px-6 py-4">
+                  <span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-lg text-[10px] font-bold uppercase tracking-wide">Em Uso</span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <button class="text-gray-400 hover:text-primary transition-colors p-2">
+                    <span class="material-symbols-outlined">edit_document</span>
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-gray-50/80 transition-colors group">
+                <td class="px-6 py-4 flex items-center gap-4">
+                  <div class="p-2 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-lg">
+                    <span class="material-symbols-outlined text-[20px]">desktop_windows</span>
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-on-surface">Monitor HP 27" 4K</p>
+                    <p class="text-[10px] font-medium text-on-surface-variant">Série V27 • L-2024-A</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-sm font-bold text-gray-600">INV-5104</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-400 italic">Almoxarifado</td>
+                <td class="px-6 py-4">
+                  <span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-lg text-[10px] font-bold uppercase tracking-wide">Estoque</span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <button class="text-gray-400 hover:text-primary transition-colors p-2">
+                    <span class="material-symbols-outlined">edit_document</span>
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-gray-50/80 transition-colors group">
+                <td class="px-6 py-4 flex items-center gap-4">
+                  <div class="p-2 bg-error-container text-on-error-container rounded-lg">
+                    <span class="material-symbols-outlined text-[20px]">dns</span>
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-on-surface">Desktop ThinkCentre</p>
+                    <p class="text-[10px] font-medium text-on-surface-variant">Core i7 • 32GB RAM • L-2022-C</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-sm font-bold text-gray-600">INV-3021</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-500">Financeiro</td>
+                <td class="px-6 py-4">
+                  <span class="px-3 py-1 bg-error-container text-on-error-container rounded-lg text-[10px] font-bold uppercase tracking-wide">Manutenção</span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <button class="text-gray-400 hover:text-primary transition-colors p-2">
+                    <span class="material-symbols-outlined">edit_document</span>
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-6 bg-gray-50/50 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-gray-50">
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Mostrando 1-4 de 1.248 ativos</p>
+          <div class="flex items-center gap-2">
+            <button class="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-white transition-colors">
+              <span class="material-symbols-outlined text-sm">chevron_left</span>
+            </button>
+            <button class="w-10 h-10 rounded-xl bg-primary text-white font-bold text-xs shadow-md">1</button>
+            <button class="w-10 h-10 rounded-xl border border-gray-200 text-gray-600 font-bold text-xs hover:bg-white transition-colors">2</button>
+            <button class="w-10 h-10 rounded-xl border border-gray-200 text-gray-600 font-bold text-xs hover:bg-white transition-colors">3</button>
+            <button class="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:bg-white transition-colors">
+              <span class="material-symbols-outlined text-sm">chevron_right</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const menuBtn = document.getElementById("menu-btn");
+      const closeBtn = document.getElementById("close-menu-btn");
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebar-overlay");
+
+      const toggleMenu = () => {
+        sidebar.classList.toggle("-translate-x-full");
+        overlay.classList.toggle("hidden");
+      };
+
+      menuBtn.addEventListener("click", toggleMenu);
+      closeBtn.addEventListener("click", toggleMenu);
+      overlay.addEventListener("click", toggleMenu);
+    });
+  </script>
+</body>
+</html>
