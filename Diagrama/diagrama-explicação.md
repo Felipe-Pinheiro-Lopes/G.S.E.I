@@ -1,32 +1,28 @@
-# Alterar o status do equipamento 
+# Ir para doação
+
 
 ## Ator:
 Técnico de Informática
 
 ## Descrição:
-Atualizar a situação que se encontra o equipamento
-(Recuperado, Descartado, Vendido)
+Decide qual o fim do equipamento
+(Descartado, Doado)
 
 ## Pré-condições:
 Ter o equipamento cadastrado;
-O técnico autenticado;
-
+O técnico ser autenticado;
 
 ## Fluxo Principal:
-Técnico avalia a situação;
+Técnico avalia a situação e conserta o equipamento ou deleta seus arquivos para descarte;
 Técnico valida o status do equipamento;
 
 ## Fluxos Alternativos:
 **1-** 
-    Usuário faz login;
-    Login falha;
-    Usuário refaz a informação informada errôneamente;
+    Técnico é incapaz de consertar o equipamento mas mesmo assim o libera para doação;
 
 **2-**
-    equipamento precisa ser descartado;
-    criptografa unidade de armazenamento;
-    Técnico de Triagem atualiza o sistema;
-    Unidades de armazenamento do equipamento são criptografadas e retiradas;
+    Equipamento não tem seus arquivos devidamente deletados;
+    É enviado para descarte mesmo assim;
 
 
 ## Fluxos de Exceção:
@@ -35,8 +31,8 @@ Técnico valida o status do equipamento;
     Sistema não envia o token da chamada para o técnico;
 
 **2-**
-    equipamento passa por vários processos;
-    Técnico de Triagem não atualiza o sistema;
+    Equipamento passa por vários processos;
+    Técnico não atualiza o sistema;
 
 ## Pós-condições:
-equipamento retorna ao usuário reformado e funcionando bem.
+Equipamento é liberado para doação, em lotes, ou é tratado como sucata.

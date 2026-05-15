@@ -32,7 +32,10 @@ skinparam package {
 package "G.S.E.I - Gestão Sustentável de Equipamentos" {
 
   ' Técnico de Informática
+  usecase "Confirmar retirada" as UC01
   usecase "Cadastrar equipamento" as UC02
+  usecase "Ir para doação" as UC11
+  usecase "Ir para descarte" as UC12
   usecase "Definir destino final" as UC03
 
   ' Entidade Beneficiária
@@ -41,10 +44,10 @@ package "G.S.E.I - Gestão Sustentável de Equipamentos" {
   usecase "Solicitar o equipamento" as UC06
 
   ' Usuário da instituição
-  usecase "Abrir a chamada" as UC07
+  usecase "Abrir o chamado" as UC07
 
   ' ADM
-  usecase "Confirmar retirada" as UC08
+  usecase "Fazer a doação" as UC08
   usecase "Aprovar entidade beneficiária" as UC09
   usecase "Aprovar doação" as UC10
 
@@ -61,6 +64,9 @@ package "G.S.E.I - Gestão Sustentável de Equipamentos" {
   ADM -- UC08
   ADM -- UC09
   ADM -- UC10
+
+  UC03 .> UC11 : <<extend>>
+  UC02 .> UC12 : <<extend>>
 }
 
 @enduml
