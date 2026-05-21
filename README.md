@@ -1,34 +1,42 @@
-# G.S.E.I (Gestão Sustentável de Equipamentos de Informática)
+# G.S.E.I - Gestão Sustentável de Equipamentos de Informática
 
-Solução para reaproveitamento seguro e sustentável de equipamentos de informática obsoletos na Petrobras, garantindo segurança da informação, conformidade regulatória, capacitação de colaboradores e responsabilidade socioambiental.
+## Visão Geral
+Sistema para reaproveitamento seguro de equipamentos de informática obsoletos da Petrobras, com foco em sustentabilidade, segurança da informação e responsabilidade social.
 
-## Conceito Completo
-O conceito detalhado do projeto está disponível em [CONCEITO_PROJETO.md](./CONCEITO_PROJETO.md).
+## Acesso Administrativo
+- **Email**: admin@petrobras.com.br
+- **Senha**: Admin@123
 
 ## Estrutura do Projeto
-- `API/`: Backend .NET 10 C# (ASP.NET Core, EF Core, PostgreSQL, JWT, Swagger)
-- `Bd/`: Scripts e diagramas de schema PostgreSQL
-- `front-end/`: Frontend Next.js 16 React (TypeScript, Tailwind)
+- `API/`: Backend .NET 10 com EF Core e PostgreSQL
+- `front-end/`: Frontend Next.js 16 com TypeScript
+- `Bd/`: Scripts e diagramas do banco de dados
+- `stitch-screens/`: Protótipos HTML das telas
 
-## Branches (Gitflow)
-main, develop, Release, Feature, Hotfix
-
-## Como Executar
-### Frontend (diretório `front-end/`)
+## Instalação e Execução
+### Backend
 ```bash
-npm run dev  # localhost:3000
-npm run build
-npm run start
-npm run lint
-```
-
-### Backend (diretório `API/`)
-```bash
+cd API
+dotnet restore
 dotnet run
-dotnet build
-dotnet ef database update  # requer ferramenta dotnet-ef
 ```
 
-## Links Úteis
-- [GitHub Project](https://github.com/Felipe-Pinheiro-Lopes/G.S.E.I/projects)
-- [Documentação do Next.js 16](front-end/node_modules/next/dist/docs/) (atenção para breaking changes)
+### Frontend
+```bash
+cd front-end
+npm install
+npm run dev
+```
+
+## Funcionalidades
+- Gestão completa do ciclo de vida de equipamentos de TI
+- Triagem e avaliação técnica
+- Eliminação segura de dados (Data Wiping)
+- Doações para instituições parceiras
+- Capacitação e treinamentos
+- Relatórios e auditoria completa
+
+## Tecnologias
+- Backend: ASP.NET Core, Entity Framework Core, PostgreSQL, JWT
+- Frontend: Next.js, TypeScript, Tailwind CSS
+- Banco: PostgreSQL com extensões avançadas

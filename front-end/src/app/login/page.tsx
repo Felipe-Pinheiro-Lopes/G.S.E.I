@@ -4,8 +4,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { setCookie } from 'nookies';
-import { api } from '@/src/services/api';
-import Image from 'next/image';
+import { api } from '@/services/api';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -20,27 +19,47 @@ export default function LoginPage() {
     setCarregando(true);
 
     try {
-      // Chama o endpoint de login que configuramos no Back
-      const response = await api.post('/User/login', {
+      // Chama o endpoint de login do Back-end (.NET)
+      const response = await api.post('/auth/login', {
         email,
         senha
       });
 
-      const { token, user } = response.data;
+      const data = response.data;
 
-      // Salva o Token e o Nome nos Cookies por 1 hora (3600 seg)
+      // Suporta tanto camelCase (padrão do .NET) quanto PascalCase
+      const token = data.token || data.Token;
+      let nome = data.nome || data.Nome;
+      let role = data.role || data.Role;
+      const instituicaoId = data.instituicaoId || data.InstituicaoId;
+      const fotoUrl = data.fotoUrl || data.FotoUrl;
+
+      // Limpa valores inválidos vindos do backend (evita salvar "undefined" literal)
+      const clean = (val: any) => (val && val !== 'undefined' && val !== 'null' && String(val).trim() !== '') ? String(val) : undefined;
+      nome = clean(nome);
+      role = clean(role);
+
+      // Salva o Token e informações do usuário nos Cookies por 1 hora
       setCookie(undefined, 'gesi.token', token, { maxAge: 3600, path: '/' });
-      setCookie(undefined, 'gesi.userName', user, { maxAge: 3600, path: '/' });
+      if (nome) setCookie(undefined, 'gesi.userName', nome, { maxAge: 3600, path: '/' });
+      if (role) setCookie(undefined, 'gesi.role', role, { maxAge: 3600, path: '/' });
+      if (fotoUrl) setCookie(undefined, 'gesi.userPhoto', fotoUrl, { maxAge: 3600, path: '/' });
+      if (instituicaoId) setCookie(undefined, 'gesi.instituicaoId', String(instituicaoId), { maxAge: 3600, path: '/' });
+      if (data.userId) setCookie(undefined, 'gesi.userId', String(data.userId), { maxAge: 3600, path: '/' });
 
       // Configura o Axios para usar o novo token nas próximas chamadas
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
-      // Redireciona para a tela de dashboard/usuários
-      router.push('/usuarios');
+      // Redireciona para o Dashboard
+      router.push('/Screens/Dashboard');
 
     } catch (err: any) {
-      console.error(err);
-      setErro(err.response?.data?.message || 'Falha na conexão com o servidor.');
+      console.error('Erro no login:', err);
+      const msg = err.response?.data?.message 
+        || err.response?.data?.title 
+        || err.message 
+        || 'Falha na conexão com o servidor. Verifique se o backend está rodando em http://localhost:5145';
+      setErro(msg);
     } finally {
       setCarregando(false);
     }

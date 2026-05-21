@@ -6,7 +6,6 @@ import { parseCookies } from 'nookies';
 const cookies = parseCookies();
 
 export const api = axios.create({
-  // PEGAR O IP DA SUA INSTÂNCIA ORACLE CLOUD
   baseURL: 'http://localhost:5145/api',
 });
 
