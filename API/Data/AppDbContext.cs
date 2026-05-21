@@ -1,16 +1,44 @@
-using Microsoft.EntityFrameworkCore;
 using API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
-    public DbSet<User> Users { get; set; } // Mude de Usuarios para User
+    public DbSet<Equipamento> Equipamentos { get; set; }
+    public DbSet<Instituicao> Instituicoes { get; set; }
+    public DbSet<Solicitacao> Solicitacoes { get; set; }
+    public DbSet<ItemSolicitacao> ItensSolicitacao { get; set; }
+    public DbSet<Triagem> Triagens { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>().ToTable("Users");
+        base.OnModelCreating(modelBuilder);
+
+        // Indexes and relationships
+        modelBuilder.Entity<Equipamento>()
+            .HasIndex(e => e.Codigo)
+            .IsUnique();
+
+        modelBuilder.Entity<Solicitacao>()
+            .HasOne<Instituicao>()
+            .WithMany()
+            .HasForeignKey(s => s.InstituicaoId);
+
+        modelBuilder.Entity<ItemSolicitacao>()
+            .HasOne<Solicitacao>()
+            .WithMany()
+            .HasForeignKey(i => i.SolicitacaoId);
+
+        modelBuilder.Entity<ItemSolicitacao>()
+            .HasOne<Equipamento>()
+            .WithMany()
+            .HasForeignKey(i => i.EquipamentoId);
+
+        modelBuilder.Entity<Triagem>()
+            .HasOne<Equipamento>()
+            .WithMany()
+            .HasForeignKey(t => t.EquipamentoId);
     }
 }

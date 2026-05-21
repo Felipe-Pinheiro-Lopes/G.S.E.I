@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260519194146_InitialGsei")]
+    partial class InitialGsei
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,9 +57,6 @@ namespace API.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Tipo")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -147,10 +147,6 @@ namespace API.Migrations
                     b.Property<int>("InstituicaoId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Prioridade")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Protocolo")
                         .HasColumnType("text");
 
@@ -220,9 +216,6 @@ namespace API.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FotoUrl")
                         .HasColumnType("text");
 
                     b.Property<int?>("InstituicaoId")
