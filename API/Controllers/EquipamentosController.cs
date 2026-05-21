@@ -13,17 +13,26 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<EquipamentoDto>>> GetAll([FromQuery] string? status = null)
     {
-        var query = db.Equipamentos.AsQueryable();
-        if (!string.IsNullOrEmpty(status))
-            query = query.Where(e => e.Status == status);
+        try
+        {
+            var query = db.Equipamentos.AsQueryable();
+            if (!string.IsNullOrEmpty(status))
+                query = query.Where(e => e.Status == status);
 
-        var equipamentos = await query
-            .Select(e => new EquipamentoDto(
-                e.Id, e.Codigo, e.Modelo, e.Especificacoes, e.Status, e.Lote, e.Tipo,
-                e.InstituicaoId, e.AprovadoPor, e.LaudoDescarte))
-            .ToListAsync();
+            var equipamentos = await query
+                .Select(e => new EquipamentoDto(
+                    e.Id, e.Codigo, e.Modelo, e.Especificacoes, e.Status, e.Lote, e.Tipo,
+                    e.InstituicaoId, e.AprovadoPor, e.LaudoDescarte))
+                .ToListAsync();
 
-        return equipamentos;
+            return equipamentos;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[EQUIPAMENTOS ERROR - GetAll] {ex.GetType().Name}: {ex.Message}");
+            Console.WriteLine(ex.StackTrace);
+            throw;
+        }
     }
 
     [HttpPost]

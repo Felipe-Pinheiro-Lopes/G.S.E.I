@@ -16,7 +16,9 @@ public class DashboardController(AppDbContext context) : ControllerBase
     [HttpGet("kpis")]
     public async Task<ActionResult<DashboardKpisDto>> GetKpis()
     {
-        var total = await context.Equipamentos.CountAsync();
+        try
+        {
+            var total = await context.Equipamentos.CountAsync();
 
         var emTriagem = await context.Equipamentos
             .CountAsync(e => e.Status == "EmTriagem" || e.Status == "Em Triagem" || e.Status == "EmAnalise");
@@ -34,9 +36,11 @@ public class DashboardController(AppDbContext context) : ControllerBase
         var pecasFaltantes = 142;
 
         // Processados no turno (evitando problema de timezone do PostgreSQL)
-        var today = DateTime.UtcNow.Date;
+        var now = DateTime.UtcNow;
+        var today = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc);
+        var tomorrow = today.AddDays(1);
         var triagensHoje = await context.Triagens
-            .CountAsync(t => t.DataTriagem >= today && t.DataTriagem < today.AddDays(1));
+            .CountAsync(t => t.DataTriagem >= today && t.DataTriagem < tomorrow);
         var processadosTurno = $"{triagensHoje}/25";
 
         var aguardandoSanitizacao = await context.Equipamentos
@@ -52,6 +56,13 @@ public class DashboardController(AppDbContext context) : ControllerBase
             processadosTurno,
             aguardandoSanitizacao
         );
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DASHBOARD ERROR - KPIs] {ex.GetType().Name}: {ex.Message}");
+            Console.WriteLine(ex.StackTrace);
+            throw; // re-lança para manter o 500 (útil para debug)
+        }
     }
 
     /// <summary>
@@ -119,16 +130,18 @@ public class DashboardController(AppDbContext context) : ControllerBase
         var atualizacoes = new List<UltimaAtualizacaoDto>();
 
         // Últimas doações aprovadas
+        // Usamos Select para evitar erro caso as colunas AprovadoPor/LaudoDescarte ainda não existam no banco remoto
         var ultimasDoacoes = await context.Equipamentos
             .Where(e => e.Status == "DoacaoAprovada" || e.Status == "Doação Aprovada")
             .OrderByDescending(e => e.DataEntrada)
             .Take(2)
+            .Select(e => e.Modelo)
             .ToListAsync();
 
-        foreach (var eq in ultimasDoacoes)
+        foreach (var modelo in ultimasDoacoes)
         {
             atualizacoes.Add(new UltimaAtualizacaoDto(
-                $"{eq.Modelo} doado",
+                $"{modelo} doado",
                 "Instituição receptora",
                 "Recentemente",
                 "volunteer_activism"
