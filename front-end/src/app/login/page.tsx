@@ -43,7 +43,14 @@ export default function LoginPage() {
       setCookie(undefined, 'gesi.token', token, { maxAge: 3600, path: '/' });
       if (nome) setCookie(undefined, 'gesi.userName', nome, { maxAge: 3600, path: '/' });
       if (role) setCookie(undefined, 'gesi.role', role, { maxAge: 3600, path: '/' });
-      if (fotoUrl) setCookie(undefined, 'gesi.userPhoto', fotoUrl, { maxAge: 3600, path: '/' });
+      if (fotoUrl) {
+        setCookie(undefined, 'gesi.userPhoto', fotoUrl, { maxAge: 3600, path: '/' });
+        try {
+          localStorage.setItem('gesi.userPhoto', fotoUrl);
+        } catch {
+          // ignore quota errors
+        }
+      }
       if (instituicaoId) setCookie(undefined, 'gesi.instituicaoId', String(instituicaoId), { maxAge: 3600, path: '/' });
       if (data.userId) setCookie(undefined, 'gesi.userId', String(data.userId), { maxAge: 3600, path: '/' });
 

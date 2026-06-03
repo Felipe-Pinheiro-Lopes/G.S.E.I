@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
-import { api } from '@/services/api';
+import { api, listFromResponse } from '@/services/api';
 import ChecklistItem from '@/components/ChecklistItem';
 import DestinationOption from '@/components/DestinationOption';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
@@ -51,8 +51,8 @@ export default function TriagemPage() {
   const carregarFila = async () => {
     try {
       const res = await api.get<Equipamento[]>('/Equipamentos', { params: { status: 'EmTriagem' } });
-      // Garante que não haja duplicatas
-      const unicos = res.data.filter((eq, index, self) => 
+      const lista = listFromResponse<Equipamento>(res.data);
+      const unicos = lista.filter((eq, index, self) =>
         index === self.findIndex(e => e.id === eq.id)
       );
       setFila(unicos);
@@ -64,7 +64,8 @@ export default function TriagemPage() {
   const carregarEmAndamento = async () => {
     try {
       const res = await api.get<Equipamento[]>('/Equipamentos', { params: { status: 'EmAnalise' } });
-      let unicos = res.data.filter((eq, index, self) => 
+      const lista = listFromResponse<Equipamento>(res.data);
+      let unicos = lista.filter((eq, index, self) =>
         index === self.findIndex(e => e.id === eq.id)
       );
 
@@ -99,7 +100,8 @@ export default function TriagemPage() {
   const carregarFinalizados = async () => {
     try {
       const res = await api.get<Equipamento[]>('/Triagem/finalizados');
-      const unicos = res.data.filter((eq, index, self) => 
+      const lista: Equipamento[] = Array.isArray(res.data) ? res.data : (res.data as any)?.itens ?? [];
+      const unicos = lista.filter((eq: Equipamento, index: number, self: Equipamento[]) =>
         index === self.findIndex(e => e.id === eq.id)
       );
       setFinalizados(unicos);

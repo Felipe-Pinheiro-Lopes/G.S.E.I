@@ -47,7 +47,9 @@ export default function Sidebar({
     destroyCookie(null, 'gesi.userName', { path: '/' });
     destroyCookie(null, 'gesi.role', { path: '/' });
     destroyCookie(null, 'gesi.userPhoto', { path: '/' });
+    clearStoredPhoto();
     destroyCookie(null, 'gesi.instituicaoId', { path: '/' });
+    clearStoredPhoto();
 
     // Redireciona para a página de login correta
     router.replace('/login');
@@ -130,13 +132,13 @@ export default function Sidebar({
       <div className="p-4 border-t border-gray-200 mt-auto bg-white/50">
         <div className="flex items-center gap-3 mb-4 px-2">
           <img 
-            src={userPhoto || "https://i.pravatar.cc/150?img=11"} 
+            src={userPhoto || getStoredPhoto() || "https://i.pravatar.cc/150?img=11"} 
             alt={userName}
             suppressHydrationWarning
             onClick={() => {
               setProfileData({
                 name: userName || '',
-                photo: userPhoto || '',
+                photo: userPhoto || getStoredPhoto() || '',
                 newPassword: '',
                 confirmPassword: ''
               });
@@ -270,46 +272,39 @@ export default function Sidebar({
                   setSavingProfile(true);
                   setProfileMessage('');
 
-                  try {
-                    const cookies = parseCookies();
-                    const userId = cookies['gesi.userId'] ? parseInt(cookies['gesi.userId']) : undefined;
+                   try {
+                     const cookies = parseCookies();
+                     const userId = cookies['gesi.userId'] ? parseInt(cookies['gesi.userId']) : undefined;
 
-                    if (!userId) {
-                      // Fallback: atualiza apenas localmente via cookies
-                      setCookie(null, 'gesi.userName', profileData.name, { path: '/' });
-                      if (profileData.photo) setCookie(null, 'gesi.userPhoto', profileData.photo, { path: '/' });
-                      setProfileMessage("Perfil atualizado localmente (login com ID necessário para backend completo).");
-                      setTimeout(() => setShowProfileModal(false), 1500);
-                      return;
-                    }
+                      const payload: any = {
+                        Nome: profileData.name,
+                      };
 
-                    const payload: any = {
-                      Nome: profileData.name,
-                    };
+                      if (profileData.photo) {
+                        payload.FotoUrl = profileData.photo;
+                      }
 
-                    if (profileData.photo) {
-                      payload.FotoUrl = profileData.photo;
-                    }
+                      if (profileData.newPassword) {
+                        payload.NovaSenha = profileData.newPassword;
+                      }
 
-                    if (profileData.newPassword) {
-                      payload.NovaSenha = profileData.newPassword;
-                    }
+                     if (userId) {
+                       await api.put(`/Users/${userId}`, payload, {
+                         headers: { 'Content-Type': 'application/json' },
+                       });
+                     }
 
-                    await api.put(`/Users/${userId}`, payload);
-
-                    // Atualiza cookies para refletir imediatamente
-                    setCookie(null, 'gesi.userName', profileData.name, { path: '/' });
-                    if (profileData.photo) {
-                      setCookie(null, 'gesi.userPhoto', profileData.photo, { path: '/' });
-                    }
+                      setCookie(null, 'gesi.userName', profileData.name, { path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: true });
+                      if (profileData.photo) {
+                        setStoredPhoto(profileData.photo);
+                      }
 
                     setProfileMessage("Perfil atualizado com sucesso!");
                     
                     // Fecha o modal após 1.2s
-                    setTimeout(() => {
-                      setShowProfileModal(false);
-                      window.location.reload(); // força atualização da UI
-                    }, 1200);
+                     setTimeout(() => {
+                       setShowProfileModal(false);
+                     }, 1200);
 
                   } catch (error) {
                     console.error("Erro ao salvar perfil:", error);

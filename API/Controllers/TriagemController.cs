@@ -28,19 +28,33 @@ public class TriagemController(AppDbContext db) : ControllerBase
 
         db.Triagens.Add(triagem);
 
-        // Update equipamento status based on destino
-        // "Doacao" now goes to an intermediate state so it can be approved + assigned to an institution in the Doações screen
+        var oldStatus = await db.Equipamentos
+            .Where(e => e.Id == dto.EquipamentoId)
+            .Select(e => e.Status)
+            .FirstOrDefaultAsync();
+
         string novoStatus = dto.Destino switch
         {
             "Reuso" => "EmEstoque",
-            "Doacao" => "AguardandoDoacao",      // waits for institution assignment + approval
-            "Descarte" => "AguardandoDescarte",  // waits for final confirmation + laudo in Descarte screen
+            "Doacao" => "AguardandoDoacao",
+            "Descarte" => "AguardandoDescarte",
             _ => "EmTriagem"
         };
 
         await db.Database.ExecuteSqlRawAsync(
-            "UPDATE \"Equipamentos\" SET \"Status\" = {0} WHERE \"Id\" = {1}", 
+            "UPDATE \"Equipamentos\" SET \"Status\" = {0} WHERE \"Id\" = {1}",
             novoStatus, dto.EquipamentoId);
+
+        db.Movimentacoes.Add(new Movimentacao(
+            Id: 0,
+            EquipamentoId: dto.EquipamentoId,
+            TipoMovimentacao: "Triagem_Finalizada",
+            DataHora: DateTime.UtcNow,
+            StatusAnterior: oldStatus,
+            StatusNovo: novoStatus,
+            Descricao: $"Triagem finalizada: destino = {dto.Destino}. Laudo: {dto.LaudoTecnico}",
+            Responsavel: "Sistema"
+        ));
 
         await db.SaveChangesAsync();
         return Ok(triagem);
@@ -113,10 +127,25 @@ public class TriagemController(AppDbContext db) : ControllerBase
 
         db.Triagens.Add(triagem);
 
-        // Atualiza o status do equipamento
+        var oldStatus = await db.Equipamentos
+            .Where(e => e.Id == dto.EquipamentoId)
+            .Select(e => e.Status)
+            .FirstOrDefaultAsync();
+
         await db.Database.ExecuteSqlRawAsync(
             "UPDATE \"Equipamentos\" SET \"Status\" = {0} WHERE \"Id\" = {1}",
             "EmAnalise", dto.EquipamentoId);
+
+        db.Movimentacoes.Add(new Movimentacao(
+            Id: 0,
+            EquipamentoId: dto.EquipamentoId,
+            TipoMovimentacao: "Triagem_Inicio",
+            DataHora: DateTime.UtcNow,
+            StatusAnterior: oldStatus,
+            StatusNovo: "EmAnalise",
+            Descricao: $"Início de triagem por {dto.TecnicoResponsavel}",
+            Responsavel: dto.TecnicoResponsavel
+        ));
 
         await db.SaveChangesAsync();
         return Ok(triagem);
@@ -174,10 +203,10 @@ public class TriagemController(AppDbContext db) : ControllerBase
         {
             var descartados = await db.Equipamentos.CountAsync(e => e.Status == "Descartado");
             var total = descartados + await db.Triagens.CountAsync(t => t.Destino == "Descarte");
-            if (total == 0) total = 374;
+            if (total == 0) return new List<object> { new { label = "Descartado (0%)", percent = 0, color = "#15803d" }, new { label = "Aguardando (0%)", percent = 0, color = "#facc15" } };
 
             var aguardando = Math.Max(0, total - descartados);
-            var pctDesc = total > 0 ? Math.Round((double)descartados / total * 100) : 95;
+            var pctDesc = total > 0 ? Math.Round((double)descartados / total * 100) : 0;
 
             return new List<object> {
                 new { label = $"Descartado ({pctDesc}%)", percent = (int)pctDesc, color = "#15803d" },
@@ -192,13 +221,18 @@ public class TriagemController(AppDbContext db) : ControllerBase
     }
 
     [HttpGet("descarte/itens")]
-    public async Task<ActionResult<List<object>>> GetDescarteItens()
+    public async Task<ActionResult<object>> GetDescarteItens([FromQuery] int pagina = 1, [FromQuery] int porPagina = 10)
     {
         try
         {
-            // Itens que vieram da Triagem (Destino=Descarte) ou já finalizados como Descartado
-            var itens = await db.Equipamentos
+            var query = db.Equipamentos
                 .Where(e => e.Status == "Descartado" || e.Status == "AguardandoDescarte")
+                .OrderByDescending(e => e.DataEntrada);
+
+            var total = await query.CountAsync();
+            var itens = await query
+                .Skip((pagina - 1) * porPagina)
+                .Take(porPagina)
                 .Select(e => new {
                     id = e.Id,
                     descricao = e.Modelo,
@@ -210,16 +244,20 @@ public class TriagemController(AppDbContext db) : ControllerBase
                     tipo = e.Tipo ?? "Equipamento",
                     laudo = e.LaudoDescarte ?? ""
                 })
-                .OrderByDescending(x => x.data)
-                .Take(100)
                 .ToListAsync();
 
-            return itens.Cast<object>().ToList();
+            return Ok(new {
+                itens,
+                total,
+                pagina,
+                porPagina,
+                totalPaginas = (int)Math.Ceiling(total / (double)porPagina)
+            });
         }
         catch (Exception ex)
         {
             Console.WriteLine($"[Descarte Itens Error] {ex}");
-            return new List<object>();
+            return Ok(new { itens = new List<object>(), total = 0, pagina, porPagina, totalPaginas = 0 });
         }
     }
 }

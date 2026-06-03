@@ -11,7 +11,7 @@ namespace API.Controllers;
 public class EquipamentosController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<EquipamentoDto>>> GetAll([FromQuery] string? status = null)
+    public async Task<ActionResult<object>> GetAll([FromQuery] string? status = null, [FromQuery] int pagina = 1, [FromQuery] int porPagina = 10)
     {
         try
         {
@@ -19,13 +19,17 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
             if (!string.IsNullOrEmpty(status))
                 query = query.Where(e => e.Status == status);
 
-            var equipamentos = await query
+            var total = await query.CountAsync();
+            var itens = await query
+                .OrderByDescending(e => e.DataEntrada)
+                .Skip((pagina - 1) * porPagina)
+                .Take(porPagina)
                 .Select(e => new EquipamentoDto(
                     e.Id, e.Codigo, e.Modelo, e.Especificacoes, e.Status, e.Lote, e.Tipo,
                     e.InstituicaoId, e.AprovadoPor, e.LaudoDescarte))
                 .ToListAsync();
 
-            return equipamentos;
+            return Ok(new { itens, total, pagina, porPagina, totalPaginas = (int)Math.Ceiling(total / (double)porPagina) });
         }
         catch (Exception ex)
         {
@@ -36,22 +40,42 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Equipamento>> Create(Equipamento equipamento)
+    public async Task<ActionResult<EquipamentoDto>> Create(EquipamentoCreateDto dto)
     {
+        var equipamento = new Equipamento(
+            Id: 0,
+            Codigo: dto.Codigo,
+            Modelo: dto.Modelo,
+            Especificacoes: dto.Especificacoes ?? "",
+            Status: "EmEstoque",
+            Lote: dto.Lote ?? "",
+            DataEntrada: DateTime.UtcNow,
+            Tipo: dto.Tipo ?? "Equipamento"
+        );
+
         db.Equipamentos.Add(equipamento);
         await db.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetAll), new { id = equipamento.Id }, equipamento);
+
+        db.Movimentacoes.Add(new Movimentacao(
+            Id: 0,
+            EquipamentoId: equipamento.Id,
+            TipoMovimentacao: "Entrada",
+            DataHora: DateTime.UtcNow,
+            StatusNovo: equipamento.Status,
+            Descricao: $"Equipamento {equipamento.Codigo} cadastrado",
+            Responsavel: "Sistema"
+        ));
+        await db.SaveChangesAsync();
+
+        return Ok(new EquipamentoDto(
+            equipamento.Id, equipamento.Codigo, equipamento.Modelo,
+            equipamento.Especificacoes, equipamento.Status, equipamento.Lote,
+            equipamento.Tipo, equipamento.InstituicaoId, equipamento.AprovadoPor,
+            equipamento.LaudoDescarte));
     }
 
-    [HttpPut("{id}/status")]
-    public async Task<IActionResult> UpdateStatus(int id, [FromBody] string novoStatus)
-    {
-        var eq = await db.Equipamentos.FindAsync(id);
-        if (eq == null) return NotFound();
-
-        await db.Database.ExecuteSqlRawAsync("UPDATE \"Equipamentos\" SET \"Status\" = {0} WHERE \"Id\" = {1}", novoStatus, id);
-        return NoContent();
-    }
+    // Removido PUT /{id}/status conforme plano — mudanças de status devem ser feitas via Triagem
+    // [From: PLANO_IMPLEMENTACAO_MELHORIAS.md B-7]
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
@@ -99,6 +123,8 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
         var eq = await db.Equipamentos.FindAsync(id);
         if (eq == null) return NotFound();
 
+        var oldStatus = eq.Status;
+
         await db.Database.ExecuteSqlRawAsync(@"
             UPDATE ""Equipamentos"" 
             SET ""Status"" = {0}, 
@@ -110,6 +136,19 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
             dto.AprovadoPor,
             id);
 
+        var instituicao = await db.Instituicoes.FindAsync(dto.InstituicaoId);
+        db.Movimentacoes.Add(new Movimentacao(
+            Id: 0,
+            EquipamentoId: id,
+            TipoMovimentacao: "DoacaoAprovada",
+            DataHora: DateTime.UtcNow,
+            StatusAnterior: oldStatus,
+            StatusNovo: "DoacaoAprovada",
+            Descricao: $"Doação aprovada para instituição: {instituicao?.Nome ?? dto.InstituicaoId.ToString()}",
+            Responsavel: dto.AprovadoPor
+        ));
+        await db.SaveChangesAsync();
+
         return NoContent();
     }
 
@@ -117,22 +156,67 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
     /// Registra o descarte de um equipamento (laudo + responsável).
     /// Usado pela tela de Descarte.
     /// </summary>
+    [HttpPost("{id}/cancelar-doacao")]
+    public async Task<IActionResult> CancelarDoacao(int id)
+    {
+        var eq = await db.Equipamentos.FindAsync(id);
+        if (eq == null) return NotFound();
+
+        var oldStatus = eq.Status;
+        await db.Database.ExecuteSqlRawAsync(@"
+            UPDATE ""Equipamentos""
+            SET ""Status"" = {0}, ""InstituicaoId"" = NULL, ""AprovadoPor"" = NULL
+            WHERE ""Id"" = {1}",
+            "AguardandoDoacao", id);
+
+        db.Movimentacoes.Add(new Movimentacao(
+            Id: 0,
+            EquipamentoId: id,
+            TipoMovimentacao: "StatusAlterado",
+            DataHora: DateTime.UtcNow,
+            StatusAnterior: oldStatus,
+            StatusNovo: "AguardandoDoacao",
+            Descricao: $"Cancelamento de doação. Revertido de '{oldStatus}' para 'AguardandoDoacao'",
+            Responsavel: "Sistema"
+        ));
+
+        await db.SaveChangesAsync();
+        return NoContent();
+    }
+
     [HttpPost("{id}/registrar-descarte")]
     public async Task<IActionResult> RegistrarDescarte(int id, [FromBody] RegistrarDescarteDto dto)
     {
         var eq = await db.Equipamentos.FindAsync(id);
         if (eq == null) return NotFound();
 
+        var oldStatus = eq.Status;
+        var laudoFinal = string.IsNullOrWhiteSpace(eq.LaudoDescarte)
+            ? dto.LaudoDescarte
+            : eq.LaudoDescarte;
+
         await db.Database.ExecuteSqlRawAsync(@"
             UPDATE ""Equipamentos"" 
             SET ""Status"" = {0}, 
                 ""LaudoDescarte"" = {1}, 
-                ""AprovadoPor"" = {2}   -- reutilizamos o campo como 'Responsável pelo Descarte'
+                ""AprovadoPor"" = {2}   
             WHERE ""Id"" = {3}",
             dto.NovoStatus ?? "Descartado",
-            dto.LaudoDescarte,
+            laudoFinal,
             dto.Responsavel,
             id);
+
+        db.Movimentacoes.Add(new Movimentacao(
+            Id: 0,
+            EquipamentoId: id,
+            TipoMovimentacao: "Descartado",
+            DataHora: DateTime.UtcNow,
+            StatusAnterior: oldStatus,
+            StatusNovo: dto.NovoStatus ?? "Descartado",
+            Descricao: $"Descarte registrado. Laudo: {laudoFinal}",
+            Responsavel: dto.Responsavel
+        ));
+        await db.SaveChangesAsync();
 
         return NoContent();
     }

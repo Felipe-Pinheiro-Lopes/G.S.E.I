@@ -12,3 +12,11 @@ public record EquipamentoDto(
     string? AprovadoPor = null,
     string? LaudoDescarte = null
 );
+
+public record EquipamentoCreateDto(
+    string Codigo,
+    string Modelo,
+    string? Especificacoes = null,
+    string? Lote = null,
+    string? Tipo = null
+);

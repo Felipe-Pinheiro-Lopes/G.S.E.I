@@ -34,11 +34,12 @@ export default function RecentUpdates({ items, onLogCompleto }: RecentUpdatesPro
           </div>
         )) : <p className="text-gray-400">Nenhuma atualização recente.</p>}
         
-        <a href="#log1" className="block w-full mt-8" onClick={(e) => { if (onLogCompleto) { e.preventDefault(); onLogCompleto(); } }}>
-          <button className="w-full py-3 bg-[#e6f6ff] text-[#0d631b] font-black text-xs uppercase tracking-widest rounded-xl hover:bg-[#dbf1fe] transition-colors">
-            Log completo
-          </button>
-        </a>
+        <button
+          onClick={onLogCompleto}
+          className="w-full mt-8 py-3 bg-[#e6f6ff] text-[#0d631b] font-black text-xs uppercase tracking-widest rounded-xl hover:bg-[#dbf1fe] transition-colors"
+        >
+          Log completo
+        </button>
       </div>
     </div>
   );

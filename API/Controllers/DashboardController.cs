@@ -32,10 +32,8 @@ public class DashboardController(AppDbContext context) : ControllerBase
         var filaTriagem = await context.Equipamentos
             .CountAsync(e => e.Status == "EmTriagem" || e.Status == "Em Triagem" || e.Status == "EmAnalise");
 
-        // Placeholder até termos uma tabela de Peças
-        var pecasFaltantes = 142;
+        var pecasFaltantes = 0;
 
-        // Processados no turno (evitando problema de timezone do PostgreSQL)
         var now = DateTime.UtcNow;
         var today = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc);
         var tomorrow = today.AddDays(1);
@@ -105,18 +103,6 @@ public class DashboardController(AppDbContext context) : ControllerBase
             .Select(kv => new ParetoDefeitoDto(kv.Key, kv.Value))
             .ToList();
 
-        if (result.Count == 0)
-        {
-            // Fallback amigável com dados que refletem o seed inicial
-            result = new List<ParetoDefeitoDto>
-            {
-                new("Defeito Irreparável", 2),
-                new("Obsoleto", 1),
-                new("Tela Quebrada", 0),
-                new("Bateria Viciada", 0)
-            };
-        }
-
         return result;
     }
 
@@ -170,16 +156,6 @@ public class DashboardController(AppDbContext context) : ControllerBase
         }
 
         // Se não tiver dados reais, retorna alguns exemplos
-        if (atualizacoes.Count == 0)
-        {
-            atualizacoes.AddRange(new List<UltimaAtualizacaoDto>
-            {
-                new("50 Laptops doados", "Para Amor Inclusivo", "2 horas atrás", "volunteer_activism"),
-                new("Ferramentas que chegaram", "32 lotes", "5 horas atrás", "inventory_2"),
-                new("Porcentagem descartados", "45% Descartados / 55% Doados", "10 dias", "build_circle")
-            });
-        }
-
         return atualizacoes.Take(4).ToList();
     }
 
@@ -209,5 +185,133 @@ public class DashboardController(AppDbContext context) : ControllerBase
         )).ToList();
 
         return result;
+    }
+
+    [HttpGet("movimentacoes")]
+    public async Task<ActionResult<MovimentacaoPaginadaDto>> GetMovimentacoes([FromQuery] MovimentacaoFiltroDto filtro)
+    {
+        try
+        {
+            var query = context.Movimentacoes.AsQueryable();
+
+            if (filtro.EquipamentoId.HasValue)
+                query = query.Where(m => m.EquipamentoId == filtro.EquipamentoId.Value);
+
+            if (!string.IsNullOrWhiteSpace(filtro.TipoMovimentacao))
+                query = query.Where(m => m.TipoMovimentacao == filtro.TipoMovimentacao);
+
+            if (filtro.DataInicio.HasValue)
+            {
+                var inicio = DateTime.SpecifyKind(filtro.DataInicio.Value, DateTimeKind.Utc);
+                query = query.Where(m => m.DataHora >= inicio);
+            }
+
+            if (filtro.DataFim.HasValue)
+            {
+                var fim = DateTime.SpecifyKind(filtro.DataFim.Value.Date.AddDays(1), DateTimeKind.Utc);
+                query = query.Where(m => m.DataHora < fim);
+            }
+
+            var total = await query.CountAsync();
+            var pagina = filtro.Pagina > 0 ? filtro.Pagina : 1;
+            var porPagina = filtro.PorPagina > 0 ? filtro.PorPagina : 20;
+
+            var itens = await query
+                .OrderByDescending(m => m.DataHora)
+                .Skip((pagina - 1) * porPagina)
+                .Take(porPagina)
+                .Join(context.Equipamentos,
+                    m => m.EquipamentoId,
+                    e => e.Id,
+                    (m, e) => new MovimentacaoDto(
+                        m.Id,
+                        m.EquipamentoId,
+                        e.Codigo,
+                        m.TipoMovimentacao,
+                        m.StatusAnterior,
+                        m.StatusNovo,
+                        m.Descricao,
+                        m.Responsavel,
+                        m.DataHora
+                    ))
+                .ToListAsync();
+
+            return new MovimentacaoPaginadaDto(itens, total, pagina, porPagina, (int)Math.Ceiling(total / (double)porPagina));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DASHBOARD ERROR - Movimentacoes] {ex}");
+            return new MovimentacaoPaginadaDto(new List<MovimentacaoDto>(), 0, 1, 20, 0);
+        }
+    }
+
+    [HttpGet("movimentacoes/exportar")]
+    public async Task<IActionResult> ExportarMovimentacoes([FromQuery] MovimentacaoFiltroDto filtro)
+    {
+        try
+        {
+            var query = context.Movimentacoes.AsQueryable();
+
+            if (filtro.EquipamentoId.HasValue)
+                query = query.Where(m => m.EquipamentoId == filtro.EquipamentoId.Value);
+
+            if (!string.IsNullOrWhiteSpace(filtro.TipoMovimentacao))
+                query = query.Where(m => m.TipoMovimentacao == filtro.TipoMovimentacao);
+
+            if (filtro.DataInicio.HasValue)
+            {
+                var inicio = DateTime.SpecifyKind(filtro.DataInicio.Value, DateTimeKind.Utc);
+                query = query.Where(m => m.DataHora >= inicio);
+            }
+
+            if (filtro.DataFim.HasValue)
+            {
+                var fim = DateTime.SpecifyKind(filtro.DataFim.Value.Date.AddDays(1), DateTimeKind.Utc);
+                query = query.Where(m => m.DataHora < fim);
+            }
+
+            var dados = await query
+                .OrderByDescending(m => m.DataHora)
+                .Join(context.Equipamentos,
+                    m => m.EquipamentoId,
+                    e => e.Id,
+                    (m, e) => new {
+                        m.Id,
+                        CodigoEquipamento = e.Codigo,
+                        m.TipoMovimentacao,
+                        m.StatusAnterior,
+                        m.StatusNovo,
+                        m.Descricao,
+                        m.Responsavel,
+                        m.DataHora
+                    })
+                .ToListAsync();
+
+            var csv = new System.Text.StringBuilder();
+            csv.AppendLine("Id,CodigoEquipamento,TipoMovimentacao,StatusAnterior,StatusNovo,Descricao,Responsavel,DataHora");
+            foreach (var item in dados)
+            {
+                var linha = string.Join(",", new object?[]
+                {
+                    item.Id,
+                    $"\"{item.CodigoEquipamento}\"",
+                    $"\"{item.TipoMovimentacao}\"",
+                    $"\"{item.StatusAnterior ?? ""}\"",
+                    $"\"{item.StatusNovo ?? ""}\"",
+                    $"\"{(item.Descricao ?? "").Replace("\"", "\"\"")}\"",
+                    $"\"{item.Responsavel ?? ""}\"",
+                    item.DataHora.ToString("yyyy-MM-dd HH:mm:ss")
+                });
+                csv.AppendLine(linha);
+            }
+
+            var bytes = System.Text.Encoding.UTF8.GetBytes(csv.ToString());
+            return File(bytes, "text/csv", $"movimentacoes_{DateTime.UtcNow:yyyyMMdd_HHmmss}.csv");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DASHBOARD ERROR - ExportarMovimentacoes] {ex}");
+            return StatusCode(500, "Erro ao gerar CSV.");
+        }
     }
 }

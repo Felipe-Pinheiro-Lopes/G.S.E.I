@@ -31,7 +31,6 @@ export function useCurrentUser(): CurrentUser {
     const photo = cookies['gesi.userPhoto'];
     const userId = cookies['gesi.userId'];
 
-    // Normaliza valores vindos de cookies (evita "undefined" literal)
     const clean = (val?: string) => {
       if (!val || val === 'undefined' || val === 'null' || val.trim() === '') {
         return undefined;
@@ -46,13 +45,13 @@ export function useCurrentUser(): CurrentUser {
     const finalName = cleanName ?? "Usuário";
     const finalRawRole = cleanRole ?? "Internal";
     const finalRole = (cleanRole === "Internal" || cleanRole === "Admin") ? "Administrador" : (cleanRole ?? "Administrador");
+    const finalPhoto = cleanPhoto;
 
     setUser({
       name: finalName,
       role: finalRole,
-      photo: cleanPhoto,
       rawRole: finalRawRole,
-      id: userId ? parseInt(userId) : undefined
+      photo: finalPhoto,
     });
   }, []);
 

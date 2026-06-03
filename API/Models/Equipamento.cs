@@ -2,14 +2,29 @@ namespace API.Models;
 
 public record Equipamento(
     int Id,
-    string Codigo, // e.g. EQ-1024
+    string Codigo,
     string Modelo,
     string Especificacoes,
     string Lote,
-    string Status, // EmEstoque, EmTriagem, AguardandoDoacao, DoacaoAprovada, Descartado, etc.
+    string Status,
     DateTime DataEntrada,
     int? InstituicaoId = null,
-    string? Tipo = null, // Notebook, Computador, Monitor, Periférico, Peças
-    string? AprovadoPor = null,           // Técnico que aprovou a doação
-    string? LaudoDescarte = null          // Laudo simples para descarte (reutilizado)
-);
+    string? Tipo = null,
+    string? AprovadoPor = null,
+    string? LaudoDescarte = null
+)
+{
+    public static Equipamento Create(
+        string codigo, string modelo, string? especificacoes,
+        string lote, string status, DateTime dataEntrada,
+        int? instituicaoId = null, string? tipo = null,
+        string? aprovadoPor = null, string? laudoDescarte = null)
+    {
+        return new Equipamento(
+            Id: 0, Codigo: codigo, Modelo: modelo,
+            Especificacoes: especificacoes ?? "", Lote: lote,
+            Status: status, DataEntrada: dataEntrada,
+            InstituicaoId: instituicaoId, Tipo: tipo,
+            AprovadoPor: aprovadoPor, LaudoDescarte: laudoDescarte);
+    }
+}

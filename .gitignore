@@ -43,6 +43,7 @@ build/
 # Kilo and Base de Conhecimento
 .kilo/
 Base_de_Conhecimento/
+AGENTS.md
 
 # Temporary files
 *.tmp

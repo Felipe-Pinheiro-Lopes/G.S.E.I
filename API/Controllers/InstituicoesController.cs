@@ -25,12 +25,30 @@ public class InstituicoesController(AppDbContext db) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Instituicao>> Create(Instituicao inst)
+    public async Task<ActionResult<API.Models.Instituicao>> Create([FromBody] API.DTOs.InstituicaoCreateDto dto)
     {
-        var nova = inst with { DataCadastro = DateTime.UtcNow };
-        db.Instituicoes.Add(nova);
-        await db.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetById), new { id = nova.Id }, nova);
+        try
+        {
+            var nova = new API.Models.Instituicao(
+                Id: 0,
+                Nome: dto.Nome,
+                Cnpj: dto.Cnpj,
+                Responsavel: dto.Responsavel,
+                Telefone: dto.Telefone,
+                Email: dto.Email,
+                DataCadastro: DateTime.UtcNow
+            );
+
+            db.Instituicoes.Add(nova);
+            await db.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetById), new { id = nova.Id }, nova);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Instituicoes ERROR - Create] {ex.GetType().Name}: {ex.Message}");
+            if (ex.InnerException != null) Console.WriteLine(ex.InnerException.Message);
+            return StatusCode(500, "Erro ao cadastrar instituição.");
+        }
     }
 
     [HttpPut("{id}")]

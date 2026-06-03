@@ -3,6 +3,8 @@ using API.DTOs;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace API.Controllers;
 
@@ -23,7 +25,8 @@ public class UsersController(AppDbContext db) : ControllerBase
     {
         var user = await db.Users.FindAsync(id);
         if (user == null) return NotFound();
-        return new { user.Id, user.Nome, user.Email, user.Role, user.InstituicaoId };
+        return new { user.Id, user.Nome, user.Email, user.Role, user.InstituicaoId,
+                     user.FotoUrl };
     }
 
     [HttpPut("{id}")]
@@ -32,26 +35,30 @@ public class UsersController(AppDbContext db) : ControllerBase
         var user = await db.Users.FindAsync(id);
         if (user == null) return NotFound();
 
-        string sql = @"UPDATE ""Users"" SET ""Nome"" = {0}, ""FotoUrl"" = {1}";
-
-        var parameters = new List<object> { dto.Nome, dto.FotoUrl };
-
-        // Se veio nova senha, atualiza também (idealmente faria hash aqui)
-        if (!string.IsNullOrWhiteSpace(dto.NovaSenha))
+        if (!string.IsNullOrWhiteSpace(dto.Nome))
         {
-            // TODO: Melhorar com hash real (igual ao AuthController)
-            sql += @", ""SenhaHash"" = {2}";
-            parameters.Add(dto.NovaSenha); // por enquanto texto simples para demo
+            user.Nome = dto.Nome;
+            db.Entry(user).Property(u => u.Nome).IsModified = true;
         }
 
-        sql += @" WHERE ""Id"" = {3}";
-        parameters.Add(id);
+        if (!string.IsNullOrWhiteSpace(dto.FotoUrl))
+        {
+            user.FotoUrl = dto.FotoUrl;
+            db.Entry(user).Property(u => u.FotoUrl).IsModified = true;
+        }
 
-        await db.Database.ExecuteSqlRawAsync(sql, parameters.ToArray());
+        if (!string.IsNullOrWhiteSpace(dto.NovaSenha))
+        {
+            using var sha = SHA256.Create();
+            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(dto.NovaSenha));
+            user.SenhaHash = Convert.ToBase64String(bytes);
+            db.Entry(user).Property(u => u.SenhaHash).IsModified = true;
+        }
+
+        await db.SaveChangesAsync();
 
         return NoContent();
     }
-
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

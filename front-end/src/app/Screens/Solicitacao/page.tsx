@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import Sidebar from '@/components/Sidebar';
@@ -32,7 +32,6 @@ export default function SolicitacaoPage() {
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
-            {/* Form */}
             <div className="xl:col-span-1 space-y-6">
               <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
                 <h3 className="text-lg font-bold text-gray-800 mb-5 flex items-center gap-2">
@@ -67,7 +66,6 @@ export default function SolicitacaoPage() {
               </div>
             </div>
 
-            {/* Available Items Table */}
             <div className="xl:col-span-2 space-y-6">
               <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100 bg-white">
@@ -114,7 +112,6 @@ export default function SolicitacaoPage() {
         </main>
       </div>
 
-      {/* Success Modal */}
       {showModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60">
           <div className="bg-white rounded-[32px] w-full max-w-md p-8 text-center">
