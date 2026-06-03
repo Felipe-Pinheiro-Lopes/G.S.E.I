@@ -24,49 +24,43 @@ skinparam package {
   FontColor #33691e
 }
 
-  actor "Técnico de Informática" as Tecnico
-  actor "Usuário da instituição" as usuario
-  actor "Entidade Beneficiária" as Entidade
   actor "Administrador" as ADM
 
 package "G.S.E.I - Gestão Sustentável de Equipamentos" {
 
-  ' Técnico de Informática
-  usecase "Confirmar retirada" as UC01
-  usecase "Cadastrar equipamento" as UC02
-  usecase "Ir para doação" as UC11
-  usecase "Ir para descarte" as UC12
-  usecase "Definir destino final" as UC03
+  usecase "Visualizar dashboard" as UC02
+  usecase "Cadastrar equipamento" as UC03
+  usecase "Gerir status" as UC08
+  usecase "Definir destino final" as UC05
+  usecase "Ir para descarte" as UC11
+  usecase "Gerar relatórios" as UC14
+  usecase "Definir destino final" as UC04
+  usecase "Cadastrar entidade beneficiária no sistema" as UC04
+  usecase "Checar inventário" as UC10
+  usecase "Acessar logs" as UC06
+  usecase "Buscar produtos" as UC07
+  usecase "Acessar controle de triagem" as UC09
+  usecase "Filtrar equipamentos" as UC12
+  usecase "Analisar doações" as UC13
 
-  ' Entidade Beneficiária
-  usecase "Cadastrar no sistema" as UC04
-  usecase "Pesquisar equipamentos" as UC05
-  usecase "Solicitar o equipamento" as UC06
-
-  ' Usuário da instituição
-  usecase "Abrir o chamado" as UC07
-
-  ' ADM
-  usecase "Fazer a doação" as UC08
-  usecase "Aprovar entidade beneficiária" as UC09
-  usecase "Aprovar doação" as UC10
-
-  ' Actor associations
-  Tecnico -- UC02
-  Tecnico -- UC03
-
-  Entidade -- UC04
-  Entidade -- UC05
-  Entidade -- UC06
-
-  usuario -- UC07
-
-  ADM -- UC08
-  ADM -- UC09
+  ADM -- UC02
   ADM -- UC10
+  ADM -- UC04
+  ADM -- UC05
+  ADM -- UC09
+  ADM -- UC13
 
-  UC03 .> UC11 : <<extend>>
-  UC02 .> UC12 : <<extend>>
+  UC10 .> UC03 : <<extend>>
+  UC10 .> UC08 : <<extend>>
+
+  UC02 .> UC06 : <<extend>>
+  UC02 .> UC07 : <<extend>>
+
+  UC05 .> UC11 : <<extend>>
+
+  UC09 .> UC12 : <<extend>>
+
+  UC05 .> UC14 : <<extend>>
 }
 
 @enduml
