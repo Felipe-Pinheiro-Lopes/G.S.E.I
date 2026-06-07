@@ -1,37 +1,37 @@
 using API.Data;
 using API.DTOs;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class TriagemController(AppDbContext db) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> RealizarTriagem(RealizarTriagemDto dto)
     {
-        var triagem = new Triagem(
-            0,
-            dto.EquipamentoId,
-            JsonSerializer.Serialize(dto.Checklist),
-            dto.LaudoTecnico,
-            dto.Destino,
-            DateTime.UtcNow,
-            "Técnico" // TODO: from auth
-        );
+        var triagem = new Triagem
+        {
+            EquipamentoId = dto.EquipamentoId,
+            ChecklistJson = JsonSerializer.Serialize(dto.Checklist),
+            LaudoTecnico = dto.LaudoTecnico,
+            Destino = dto.Destino,
+            DataTriagem = DateTime.UtcNow,
+            TecnicoResponsavel = "Técnico" // TODO: from auth claims
+        };
 
         db.Triagens.Add(triagem);
 
-        var oldStatus = await db.Equipamentos
-            .Where(e => e.Id == dto.EquipamentoId)
-            .Select(e => e.Status)
-            .FirstOrDefaultAsync();
+        var equipamento = await db.Equipamentos.FindAsync(dto.EquipamentoId);
+        if (equipamento == null) return NotFound("Equipamento não encontrado.");
+
+        var oldStatus = equipamento.Status;
 
         string novoStatus = dto.Destino switch
         {
@@ -41,20 +41,18 @@ public class TriagemController(AppDbContext db) : ControllerBase
             _ => "EmTriagem"
         };
 
-        await db.Database.ExecuteSqlRawAsync(
-            "UPDATE \"Equipamentos\" SET \"Status\" = {0} WHERE \"Id\" = {1}",
-            novoStatus, dto.EquipamentoId);
+        equipamento.Status = novoStatus;
 
-        db.Movimentacoes.Add(new Movimentacao(
-            Id: 0,
-            EquipamentoId: dto.EquipamentoId,
-            TipoMovimentacao: "Triagem_Finalizada",
-            DataHora: DateTime.UtcNow,
-            StatusAnterior: oldStatus,
-            StatusNovo: novoStatus,
-            Descricao: $"Triagem finalizada: destino = {dto.Destino}. Laudo: {dto.LaudoTecnico}",
-            Responsavel: "Sistema"
-        ));
+        db.Movimentacoes.Add(new Movimentacao
+        {
+            EquipamentoId = dto.EquipamentoId,
+            TipoMovimentacao = "Triagem_Finalizada",
+            DataHora = DateTime.UtcNow,
+            StatusAnterior = oldStatus,
+            StatusNovo = novoStatus,
+            Descricao = $"Triagem finalizada: destino = {dto.Destino}. Laudo: {dto.LaudoTecnico}",
+            Responsavel = "Sistema"
+        });
 
         await db.SaveChangesAsync();
         return Ok(triagem);
@@ -114,41 +112,67 @@ public class TriagemController(AppDbContext db) : ControllerBase
     [HttpPost("iniciar")]
     public async Task<IActionResult> IniciarAndamento(IniciarAndamentoDto dto)
     {
-        // Registra o início da triagem (reivindicação do equipamento)
-        var triagem = new Triagem(
-            0,
-            dto.EquipamentoId,
-            "[]", // checklist vazio no início
-            "",   // laudo vazio
-            "EmAnalise",
-            DateTime.UtcNow,
-            dto.TecnicoResponsavel
-        );
+        var triagem = new Triagem
+        {
+            EquipamentoId = dto.EquipamentoId,
+            ChecklistJson = "[]",
+            LaudoTecnico = "",
+            Destino = "EmAnalise",
+            DataTriagem = DateTime.UtcNow,
+            TecnicoResponsavel = dto.TecnicoResponsavel
+        };
 
         db.Triagens.Add(triagem);
 
-        var oldStatus = await db.Equipamentos
-            .Where(e => e.Id == dto.EquipamentoId)
-            .Select(e => e.Status)
-            .FirstOrDefaultAsync();
+        var equipamento = await db.Equipamentos.FindAsync(dto.EquipamentoId);
+        if (equipamento == null) return NotFound("Equipamento não encontrado.");
 
-        await db.Database.ExecuteSqlRawAsync(
-            "UPDATE \"Equipamentos\" SET \"Status\" = {0} WHERE \"Id\" = {1}",
-            "EmAnalise", dto.EquipamentoId);
+        var oldStatus = equipamento.Status;
+        equipamento.Status = "EmAnalise";
 
-        db.Movimentacoes.Add(new Movimentacao(
-            Id: 0,
-            EquipamentoId: dto.EquipamentoId,
-            TipoMovimentacao: "Triagem_Inicio",
-            DataHora: DateTime.UtcNow,
-            StatusAnterior: oldStatus,
-            StatusNovo: "EmAnalise",
-            Descricao: $"Início de triagem por {dto.TecnicoResponsavel}",
-            Responsavel: dto.TecnicoResponsavel
-        ));
+        db.Movimentacoes.Add(new Movimentacao
+        {
+            EquipamentoId = dto.EquipamentoId,
+            TipoMovimentacao = "Triagem_Inicio",
+            DataHora = DateTime.UtcNow,
+            StatusAnterior = oldStatus,
+            StatusNovo = "EmAnalise",
+            Descricao = $"Início de triagem por {dto.TecnicoResponsavel}",
+            Responsavel = dto.TecnicoResponsavel
+        });
 
         await db.SaveChangesAsync();
         return Ok(triagem);
+    }
+
+    /// <summary>
+    /// Cancela/reverte uma triagem em andamento, devolvendo o equipamento para a fila de espera.
+    /// </summary>
+    [HttpPost("{id}/cancelar")]
+    public async Task<IActionResult> CancelarTriagem(int id)
+    {
+        var equipamento = await db.Equipamentos.FindAsync(id);
+        if (equipamento == null) return NotFound("Equipamento não encontrado.");
+
+        if (equipamento.Status != "EmAnalise")
+            return BadRequest("Apenas equipamentos 'EmAnalise' podem ser revertidos para a fila.");
+
+        var oldStatus = equipamento.Status;
+        equipamento.Status = "EmTriagem";
+
+        db.Movimentacoes.Add(new Movimentacao
+        {
+            EquipamentoId = id,
+            TipoMovimentacao = "Triagem_Cancelada",
+            DataHora = DateTime.UtcNow,
+            StatusAnterior = oldStatus,
+            StatusNovo = "EmTriagem",
+            Descricao = "Triagem cancelada. Equipamento retornado para fila de espera.",
+            Responsavel = "Sistema"
+        });
+
+        await db.SaveChangesAsync();
+        return NoContent();
     }
 
     // ==================== ENDPOINTS PARA TELA DE DESCARTE ====================
@@ -159,11 +183,11 @@ public class TriagemController(AppDbContext db) : ControllerBase
         try
         {
             var totalDescartado = await db.Equipamentos.CountAsync(e => e.Status == "Descartado");
-            var aguardando = await db.Triagens.CountAsync(t => t.Destino == "Descarte" && !db.Equipamentos.Any(e => e.Id == t.EquipamentoId && e.Status == "Descartado"));
-            var esteMes = await db.Equipamentos.CountAsync(e => e.Status == "Descartado" && e.DataEntrada.Month == DateTime.UtcNow.Month);
+            var aguardando = await db.Equipamentos.CountAsync(e => e.Status == "AguardandoDescarte");
+            var esteMes = await db.Equipamentos.CountAsync(e => e.Status == "Descartado" && e.DataEntrada.Month == DateTime.UtcNow.Month && e.DataEntrada.Year == DateTime.UtcNow.Year);
             var lotes = await db.Equipamentos.Where(e => e.Status == "Descartado").Select(e => e.Lote).Distinct().CountAsync();
 
-            return new { totalDescartado, aguardando = Math.Max(0, aguardando), esteMes, lotes };
+            return new { totalDescartado, aguardando, esteMes, lotes };
         }
         catch (Exception ex)
         {
@@ -202,10 +226,10 @@ public class TriagemController(AppDbContext db) : ControllerBase
         try
         {
             var descartados = await db.Equipamentos.CountAsync(e => e.Status == "Descartado");
-            var total = descartados + await db.Triagens.CountAsync(t => t.Destino == "Descarte");
+            var aguardando = await db.Equipamentos.CountAsync(e => e.Status == "AguardandoDescarte");
+            var total = descartados + aguardando;
             if (total == 0) return new List<object> { new { label = "Descartado (0%)", percent = 0, color = "#15803d" }, new { label = "Aguardando (0%)", percent = 0, color = "#facc15" } };
 
-            var aguardando = Math.Max(0, total - descartados);
             var pctDesc = total > 0 ? Math.Round((double)descartados / total * 100) : 0;
 
             return new List<object> {
@@ -258,6 +282,48 @@ public class TriagemController(AppDbContext db) : ControllerBase
         {
             Console.WriteLine($"[Descarte Itens Error] {ex}");
             return Ok(new { itens = new List<object>(), total = 0, pagina, porPagina, totalPaginas = 0 });
+        }
+    }
+
+    [HttpDelete("finalizados")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ClearFinalizados()
+    {
+        try
+        {
+            var finalizados = await db.Triagens
+                .Where(t => t.Destino == "Reuso" || t.Destino == "Doacao" || t.Destino == "Descarte")
+                .ToListAsync();
+
+            db.Triagens.RemoveRange(finalizados);
+            await db.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ClearFinalizados Error] {ex}");
+            return StatusCode(500, "Erro ao limpar histórico de triagens.");
+        }
+    }
+
+    [HttpDelete("finalizados/{equipamentoId}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteHistory(int equipamentoId)
+    {
+        try
+        {
+            var triagens = await db.Triagens
+                .Where(t => t.EquipamentoId == equipamentoId && (t.Destino == "Reuso" || t.Destino == "Doacao" || t.Destino == "Descarte"))
+                .ToListAsync();
+
+            db.Triagens.RemoveRange(triagens);
+            await db.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DeleteHistory Error] {ex}");
+            return StatusCode(500, "Erro ao deletar histórico do equipamento.");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
@@ -9,6 +9,7 @@ import ParetoChart from '@/components/ParetoChart';
 import RecentUpdates from '@/components/RecentUpdates';
 import { api } from '@/services/api';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { useRouter } from 'next/navigation';
 
 interface LogMovimentacao {
   id: number;
@@ -19,14 +20,14 @@ interface LogMovimentacao {
 }
 
 interface KpiData {
-  TotalInventario: number;
-  EmTriagem: number;
-  DoacoesAprovadas: number;
-  DescartesRealizados: number;
-  FilaTriagem: number;
-  PecasFaltantes: number;
-  ProcessadosTurno: string;
-  AguardandoSanitizacao: number;
+  totalInventario: number;
+  emTriagem: number;
+  doacoesAprovadas: number;
+  descartesRealizados: number;
+  filaTriagem: number;
+  pecasFaltantes: number;
+  processadosTurno: string;
+  aguardandoSanitizacao: number;
 }
 
 interface ParetoItem {
@@ -48,6 +49,7 @@ interface FrequenciaItem {
 }
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { name: currentUserName, role: currentUserRole, photo: currentUserPhoto } = useCurrentUser();
 
@@ -130,14 +132,36 @@ export default function DashboardPage() {
     await fetchLogs(startDate, endDate);
   };
 
-  const handleExportarLogs = () => {
-    if (!logStart || !logEnd) {
-      setLogMsg('Selecione o período antes de exportar.');
-      return;
+  const handleExportarLogs = async () => {
+    let start = logStart;
+    let end = logEnd;
+    if (!start || !end) {
+      const now = new Date();
+      const todayStr = now.toISOString().split('T')[0];
+      start = todayStr;
+      end = todayStr;
     }
-    const url = `/api/dashboard/movimentacoes/exportar?startDate=${encodeURIComponent(logStart)}&endDate=${encodeURIComponent(logEnd)}`;
-    window.open(url, '_blank');
-    setLogMsg('Exportação iniciada. Verifique seus downloads.');
+    setLogMsg('Exportando relatório...');
+    try {
+      const response = await api.get('/dashboard/movimentacoes/exportar', {
+        params: { startDate: start, endDate: end },
+        responseType: 'blob',
+      });
+      
+      const blob = new Blob([response.data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `movimentacoes_${start}_to_${end}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      setLogMsg('Exportação concluída com sucesso.');
+    } catch (error) {
+      console.error('Erro ao exportar logs:', error);
+      setLogMsg('Erro ao exportar logs.');
+    }
   };
 
   return (
@@ -149,6 +173,8 @@ export default function DashboardPage() {
         userName={currentUserName}
         userRole={currentUserRole}
         userPhoto={currentUserPhoto}
+        mobileOpen={sidebarOpen}
+        onMobileClose={() => setSidebarOpen(false)}
       />
 
       <div className="lg:ml-64 flex flex-col min-h-screen">
@@ -161,7 +187,7 @@ export default function DashboardPage() {
               <h3 className="text-3xl md:text-4xl font-extrabold text-[#071e27] tracking-tighter mb-2">Visão Geral</h3>
             </div>
             <button
-              onClick={() => window.location.href = '/Screens/Inventario'}
+              onClick={() => router.push('/Screens/Inventario')}
               className="bg-gradient-to-r from-[#0d631b] to-[#2e7d32] text-white px-6 py-3 rounded-xl font-bold text-sm shadow-md flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95 w-full sm:w-auto"
             >
               <span className="material-symbols-outlined text-sm">add_circle</span>
@@ -173,34 +199,38 @@ export default function DashboardPage() {
             <StatCard
               icon="devices"
               label="Fila de triagem"
-              value={loading ? '...' : (kpis?.FilaTriagem ?? 0)}
+              value={loading ? '...' : (kpis?.filaTriagem ?? 0)}
               sub="Equipamentos aguardando"
               iconBgClass="bg-[#d6e3ff] text-[#00468c]"
               hoverAccent={true}
+              onClick={() => router.push('/Screens/Triagem')}
             />
             <StatCard
               icon="pending_actions"
               label="Status de peças"
-              value={loading ? '...' : (kpis?.PecasFaltantes ?? 0)}
+              value={loading ? '...' : (kpis?.pecasFaltantes ?? 0)}
               sub="Peças faltantes, reposição"
               iconBgClass="bg-[#92f1fe] text-[#004f56]"
               hoverAccent={true}
+              onClick={() => router.push('/Screens/Inventario?status=AguardandoPecas')}
             />
             <StatCard
               icon="cached"
               label="Processados no turno"
-              value={loading ? '...' : (kpis?.ProcessadosTurno ?? '0/0')}
+              value={loading ? '...' : (kpis?.processadosTurno ?? '0/0')}
               sub="4h restantes no turno"
               iconBgClass="bg-[#a3f69c] text-[#005312]"
               hoverAccent={true}
+              onClick={() => router.push('/Screens/Triagem')}
             />
             <StatCard
               icon="handshake"
               label="Sanitização de Dados"
-              value={loading ? '...' : (kpis?.AguardandoSanitizacao ?? 0)}
+              value={loading ? '...' : (kpis?.aguardandoSanitizacao ?? 0)}
               sub="Aguardando formatação segura"
               iconBgClass="bg-[#007984] text-white"
               hoverAccent={true}
+              onClick={() => router.push('/Screens/Inventario?status=AguardandoFormatacao')}
             />
           </section>
 
@@ -231,7 +261,7 @@ export default function DashboardPage() {
               return (
                 <CategoriesDonut
                   segments={donutSegments}
-                  total={kpis?.TotalInventario ?? 0}
+                  total={kpis?.totalInventario ?? 0}
                   title="Frequência de Tipos Cadastrados"
                 />
               );
@@ -269,7 +299,7 @@ export default function DashboardPage() {
 
               <div className="p-5 bg-gray-50 flex flex-col sm:flex-row justify-end gap-3">
                 <button
-                  onClick={() => alert('Use o filtro de período no modal para gerar o documento CSV.')}
+                  onClick={handleExportarLogs}
                   className="w-full sm:w-auto px-5 py-2.5 text-sm font-bold text-gray-600 hover:bg-gray-200 rounded-xl transition-colors"
                 >
                   Exportar Relatório

@@ -1,18 +1,19 @@
 using API.Data;
 using API.DTOs;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UsersController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
+    [Authorize(Roles = "Admin,Internal")]
     public async Task<ActionResult<List<object>>> GetAll()
     {
         return await db.Users
@@ -36,30 +37,30 @@ public class UsersController(AppDbContext db) : ControllerBase
         if (user == null) return NotFound();
 
         if (!string.IsNullOrWhiteSpace(dto.Nome))
-        {
             user.Nome = dto.Nome;
-            db.Entry(user).Property(u => u.Nome).IsModified = true;
-        }
 
         if (!string.IsNullOrWhiteSpace(dto.FotoUrl))
-        {
             user.FotoUrl = dto.FotoUrl;
-            db.Entry(user).Property(u => u.FotoUrl).IsModified = true;
-        }
 
         if (!string.IsNullOrWhiteSpace(dto.NovaSenha))
+            user.SenhaHash = BCrypt.Net.BCrypt.HashPassword(dto.NovaSenha);
+
+        if (!string.IsNullOrWhiteSpace(dto.Email))
+            user.Email = dto.Email;
+
+        if (!string.IsNullOrWhiteSpace(dto.Role))
         {
-            using var sha = SHA256.Create();
-            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(dto.NovaSenha));
-            user.SenhaHash = Convert.ToBase64String(bytes);
-            db.Entry(user).Property(u => u.SenhaHash).IsModified = true;
+            user.Role = dto.Role;
+            user.InstituicaoId = dto.InstituicaoId;
         }
 
         await db.SaveChangesAsync();
 
         return NoContent();
     }
+
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Internal")]
     public async Task<IActionResult> Delete(int id)
     {
         var user = await db.Users.FindAsync(id);

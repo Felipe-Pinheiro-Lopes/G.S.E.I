@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
@@ -6,6 +6,26 @@ import { destroyCookie, setCookie } from 'nookies';
 import React, { useState } from 'react';
 import { api } from '@/services/api';
 import { parseCookies } from 'nookies';
+
+const STORAGE_PHOTO_KEY = 'gesi.userPhoto';
+function getUserPhoto(): string | undefined {
+    if (typeof window === 'undefined') return undefined;
+    try {
+        const fromCookie = parseCookies()['gesi.userPhoto'];
+        const fromLS = localStorage.getItem(STORAGE_PHOTO_KEY);
+        return fromCookie || fromLS || undefined;
+    } catch {
+        try { return localStorage.getItem(STORAGE_PHOTO_KEY) || undefined; } catch { return undefined; }
+    }
+}
+function setUserPhoto(value: string) {
+    if (typeof window === 'undefined') return;
+    try { localStorage.setItem(STORAGE_PHOTO_KEY, value); } catch {}
+}
+function clearUserPhoto() {
+    if (typeof window === 'undefined') return;
+    try { localStorage.removeItem(STORAGE_PHOTO_KEY); } catch {}
+}
 
 interface SidebarProps {
   userType?: 'internal' | 'institution';
@@ -43,13 +63,13 @@ export default function Sidebar({
 
   function handleLogout() {
     // Remove todos os cookies de autenticação
+    clearUserPhoto();
     destroyCookie(null, 'gesi.token', { path: '/' });
     destroyCookie(null, 'gesi.userName', { path: '/' });
     destroyCookie(null, 'gesi.role', { path: '/' });
     destroyCookie(null, 'gesi.userPhoto', { path: '/' });
-    clearStoredPhoto();
+    clearUserPhoto();
     destroyCookie(null, 'gesi.instituicaoId', { path: '/' });
-    clearStoredPhoto();
 
     // Redireciona para a página de login correta
     router.replace('/login');
@@ -110,6 +130,15 @@ export default function Sidebar({
               <span className={`material-symbols-outlined text-[22px] ${isActive('/Screens/Descarte') ? 'filled-icon' : ''}`}>delete_forever</span>
               <span className={`font-semibold text-sm ${isActive('/Screens/Descarte') ? 'font-bold' : ''}`}>Descarte</span>
             </Link>
+
+            <p className="px-4 py-2 mt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Administração</p>
+            <Link 
+              href="/Screens/Usuarios" 
+              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Usuarios') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-600 hover:bg-blue-50 hover:text-blue-800'}`}
+            >
+              <span className={`material-symbols-outlined text-[22px] ${isActive('/Screens/Usuarios') ? 'filled-icon' : ''}`}>group</span>
+              <span className={`font-semibold text-sm ${isActive('/Screens/Usuarios') ? 'font-bold' : ''}`}>Usuários</span>
+            </Link>
           </>
         ) : (
           <>
@@ -132,13 +161,13 @@ export default function Sidebar({
       <div className="p-4 border-t border-gray-200 mt-auto bg-white/50">
         <div className="flex items-center gap-3 mb-4 px-2">
           <img 
-            src={userPhoto || getStoredPhoto() || "https://i.pravatar.cc/150?img=11"} 
+            src={userPhoto || getUserPhoto() || "https://i.pravatar.cc/150?img=11"} 
             alt={userName}
             suppressHydrationWarning
             onClick={() => {
               setProfileData({
                 name: userName || '',
-                photo: userPhoto || getStoredPhoto() || '',
+                photo: userPhoto || getUserPhoto() || '',
                 newPassword: '',
                 confirmPassword: ''
               });
@@ -296,7 +325,7 @@ export default function Sidebar({
 
                       setCookie(null, 'gesi.userName', profileData.name, { path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: true });
                       if (profileData.photo) {
-                        setStoredPhoto(profileData.photo);
+                        setUserPhoto(profileData.photo);
                       }
 
                     setProfileMessage("Perfil atualizado com sucesso!");

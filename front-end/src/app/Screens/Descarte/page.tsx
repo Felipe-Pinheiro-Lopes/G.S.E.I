@@ -319,7 +319,7 @@ export default function DescartePage() {
               {selectedItem?.status === 'Descartado' ? 'Detalhes do Descarte' : 'Confirmar Descarte'}
             </h2>
           </div>
-          <button onClick={() => setDrawerOpen(false)} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200">
+          <button onClick={handleFecharDrawer} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200">
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
@@ -366,7 +366,7 @@ export default function DescartePage() {
         {selectedItem?.status !== 'Descartado' && (
           <div className="p-6 border-t bg-white flex gap-3">
             <button
-              onClick={() => setDrawerOpen(false)}
+              onClick={handleFecharDrawer}
               className="flex-1 py-3 text-sm font-bold border border-gray-300 rounded-2xl hover:bg-gray-50"
             >
               Cancelar

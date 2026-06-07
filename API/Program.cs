@@ -1,9 +1,10 @@
+using System.Text;
+using System.Text.Json;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +13,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // 2. Configuração do JWT
-// IMPORTANTE: Esta chave deve ser IGUAL à do seu TokenService
-var key = Encoding.ASCII.GetBytes("remember_remember_the_fifteenth_of_november");
+var secretKey = builder.Configuration["Jwt:Key"] ?? "remember_remember_the_fifteenth_of_november";
+var key = Encoding.ASCII.GetBytes(secretKey);
 builder.Services.AddAuthentication(x => {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -29,6 +30,9 @@ builder.Services.AddAuthentication(x => {
     };
 });
 
+// Registrar TokenService
+builder.Services.AddScoped<API.Services.TokenService>();
+
 // 3. Configuração do CORS (Ajustada para ser mais flexível no desenvolvimento)
 builder.Services.AddCors(options =>
 {
@@ -41,7 +45,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -64,17 +72,6 @@ builder.Services.AddSwaggerGen(c =>
             },
             new string[] {}
         }
-    });
-});
-
-// 1. ADICIONE ISSO AQUI (Antes do builder.Build())
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowLocalhost", policy =>
-    {
-        policy.WithOrigins("http://localhost:3000") // URL do seu Front-end
-              .AllowAnyMethod()
-              .AllowAnyHeader();
     });
 });
 
@@ -148,17 +145,28 @@ if (app.Environment.IsDevelopment())
     // Seed adicional de triagens com laudos variados para popular Pareto de Defeitos e histórico real no Dashboard
     if (db.Triagens.Count() < 6)
     {
-        var utcDate = (DateTime date) => DateTime.SpecifyKind(date, DateTimeKind.Utc);
+    }
 
-        db.Triagens.AddRange(
-            new API.Models.Triagem(3, 2, "[]", "Tela quebrada e display com manchas", "Descarte", utcDate(new DateTime(2025, 5, 1)), "Técnico Roberto"),
-            new API.Models.Triagem(4, 10, "[]", "Bateria viciada, não segura mais carga", "Reuso", utcDate(new DateTime(2025, 5, 2)), "Técnico Silva"),
-            new API.Models.Triagem(5, 3, "[]", "Placa-mãe em curto circuito após teste de stress", "Descarte", utcDate(new DateTime(2025, 5, 3)), "Técnico Ana"),
-            new API.Models.Triagem(6, 7, "[]", "Problemas de software e boot loop constante", "Doacao", utcDate(new DateTime(2025, 5, 4)), "Técnico Carlos")
+    if (!db.Users.Any())
+    {
+        var senhaHash = HashPassword("admin123");
+        db.Users.AddRange(
+            new API.Models.User
+            {
+                Nome = "Admin",
+                Email = "admin@gsei.gov.br",
+                SenhaHash = senhaHash,
+                Role = "Internal"
+            }
         );
         db.SaveChanges();
-        Console.WriteLine(">>> Triagens adicionais com laudos de defeitos inseridas para dados reais no Dashboard.");
+        Console.WriteLine(">>> Usuário admin seed criado (admin@gsei.gov.br / admin123).");
     }
+}
+
+static string HashPassword(string senha)
+{
+    return BCrypt.Net.BCrypt.HashPassword(senha);
 }
 
 // --- 4. ORDEM DOS MIDDLEWARES (CRUCIAL) ---

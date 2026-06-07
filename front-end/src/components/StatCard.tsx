@@ -14,6 +14,7 @@ interface StatCardProps {
   hoverAccent?: boolean;
   /** Additional classes for the root card */
   className?: string;
+  onClick?: () => void;
 }
 
 const colorClasses = {
@@ -31,16 +32,19 @@ export default function StatCard({
   color = 'blue',
   iconBgClass,
   hoverAccent = false,
-  className = ''
+  className = '',
+  onClick
 }: StatCardProps) {
   const iconBg = iconBgClass || colorClasses[color];
   const hoverClasses = hoverAccent 
     ? 'hover:border-b-2 hover:border-[#0d631b] hover:-translate-y-1 transition duration-300 ease-in-out' 
     : '';
+  const clickClasses = onClick ? 'cursor-pointer hover:shadow-md' : '';
 
   return (
     <div 
-      className={`bg-white p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 border border-gray-100 ${hoverClasses} ${className}`}
+      onClick={onClick}
+      className={`bg-white p-6 rounded-xl shadow-[0_12_32px_rgba(7,30,39,0.06)] flex flex-col gap-4 border border-gray-100 ${hoverClasses} ${clickClasses} ${className}`}
     >
       <div className="flex justify-between items-start">
         <div className={`p-3 rounded-lg ${iconBg}`}>

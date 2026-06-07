@@ -37,6 +37,7 @@ interface SolicitacaoRow {
 
 export default function DoacoesPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'aguardando' | 'realizadas'>('aguardando');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { name: currentUserName, role: currentUserRole, photo: currentUserPhoto } = useCurrentUser();
 
@@ -54,7 +55,7 @@ export default function DoacoesPage() {
   const [loadingDoacao, setLoadingDoacao] = useState(true);
   const [doacaoError, setDoacaoError] = useState(false);
 
-  const [kpis, setKpis] = useState<{ total: number; aprovadas: number; pendentes: number; itensDoados: number } | null>(null);
+  const [kpis, setKpis] = useState<{ total: number; aprovadas: number; pendentes: number; itensDoados: number }>({ total: 0, aprovadas: 0, pendentes: 0, itensDoados: 0 });
   const [volumeData, setVolumeData] = useState<Array<{month: string; height: number; value?: number; isHighlight?: boolean}>>([]);
   const [categorias, setCategorias] = useState<Array<{label: string; percent: number; color: string}>>([]);
   const [solicitacoes, setSolicitacoes] = useState<SolicitacaoRow[]>([]);
@@ -71,7 +72,13 @@ export default function DoacoesPage() {
           api.get('/solicitacoes'),
         ]);
 
-        setKpis(kpisRes.data as { total: number; aprovadas: number; pendentes: number; itensDoados: number });
+        const safeKpis = (kpisRes.data as { total: number; aprovadas: number; pendentes: number; itensDoados: number } | undefined | null) ?? { total: 0, aprovadas: 0, pendentes: 0, itensDoados: 0 };
+        setKpis({
+          total: Number(safeKpis.total) || 0,
+          aprovadas: Number(safeKpis.aprovadas) || 0,
+          pendentes: Number(safeKpis.pendentes) || 0,
+          itensDoados: Number(safeKpis.itensDoados) || 0,
+        });
 
         const mapped: SolicitacaoRow[] = listFromResponse<any>(solsRes.data).map((s: any) => ({
           id: s.id,
@@ -99,10 +106,25 @@ export default function DoacoesPage() {
         });
         setCategorias(cats);
 
+        const rawVol = listFromResponse<any>(volumeRes.data);
+        const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        const maxQtd = Math.max(...rawVol.map(v => Number(v.qtd) || 0), 1);
+        const mappedVol = months.map((m, index) => {
+          const matched = rawVol.find(v => Number(v.mes) === index + 1);
+          const qtd = matched ? Number(matched.qtd) : 0;
+          return {
+            month: m,
+            height: Math.round((qtd * 100) / maxQtd),
+            value: qtd,
+            isHighlight: index === new Date().getMonth(),
+          };
+        });
+        setVolumeData(mappedVol);
+
       } catch (e) {
         console.error('Erro ao carregar dados reais de doações:', e);
         setDashError(true);
-        setKpis(null);
+        setKpis({ total: 0, aprovadas: 0, pendentes: 0, itensDoados: 0 });
         setSolicitacoes([]);
         setVolumeData([]);
         setCategorias([]);
@@ -116,21 +138,21 @@ export default function DoacoesPage() {
   useEffect(() => {
     const fetchEquipamentosDoacao = async () => {
       setLoadingDoacao(true);
-    try {
-      const [equipRes, instRes] = await Promise.all([
-        api.get<EquipamentoDoacao[]>('/Equipamentos', { params: { status: 'AguardandoDoacao' } }),
-        api.get('/Instituicoes'),
-      ]);
+      try {
+        const targetStatus = activeTab === 'aguardando' ? 'AguardandoDoacao' : 'DoacaoAprovada';
+        const [equipRes, instRes] = await Promise.all([
+          api.get<EquipamentoDoacao[]>('/Equipamentos', { params: { status: targetStatus } }),
+          api.get('/Instituicoes'),
+        ]);
 
-      const equipData = listFromResponse<EquipamentoDoacao>(equipRes.data);
-      setEquipamentosDoacao(equipData);
-      const instList = listFromResponse<{ id: number; nome: string }>(instRes.data).map((i: any) => ({
-        id: i.id ?? i.Id,
-        nome: i.nome ?? i.Nome ?? 'Instituição',
-      }));
-      setInstituicoes(instList);
-      setDoacaoError(false);
-
+        const equipData = listFromResponse<EquipamentoDoacao>(equipRes.data);
+        setEquipamentosDoacao(equipData);
+        const instList = listFromResponse<{ id: number; nome: string }>(instRes.data).map((i: any) => ({
+          id: i.id ?? i.Id,
+          nome: i.nome ?? i.Nome ?? 'Instituição',
+        }));
+        setInstituicoes(instList);
+        setDoacaoError(false);
       } catch (e) {
         console.error('Erro ao carregar equipamentos para doação:', e);
         setDoacaoError(true);
@@ -141,7 +163,7 @@ export default function DoacoesPage() {
       }
     };
     fetchEquipamentosDoacao();
-  }, []);
+  }, [activeTab]);
 
   const handleNovoChange = (field: string, value: string) => {
     if (field === 'cnpj') value = mascaraCNPJ(value);
@@ -190,7 +212,7 @@ export default function DoacoesPage() {
         nome: i.nome || i.Nome || 'Instituição'
       }));
       setInstituicoes(instList);
-    } catch (e) {
+    } catch {
       alert("Erro ao cadastrar instituição.");
     } finally {
       setSalvandoInst(false);
@@ -280,17 +302,13 @@ export default function DoacoesPage() {
                 </div>
               </section>
 
-              {/* Stats Cards - dados reais ou vazio */}
-              {kpis ? (
-                <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <StatCard icon="assignment" label="Total Solicitações" value={kpis.total} sub="Registradas no sistema" color="blue" />
-                  <StatCard icon="verified" label="Aprovadas" value={kpis.aprovadas} sub="Instituições atendidas" color="green" />
-                  <StatCard icon="hourglass_empty" label="Pendentes" value={kpis.pendentes} sub="Aguardando análise técnica" color="yellow" />
-                  <StatCard icon="inventory_2" label="Itens Doados" value={kpis.itensDoados} sub="Equipamentos entregues" color="purple" />
-                </section>
-              ) : (
-                <p className="text-gray-500 text-sm">Nenhum dado de KPIs disponível.</p>
-              )}
+              {/* Stats Cards */}
+              <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <StatCard icon="assignment" label="Total Solicitações" value={kpis.total} sub="Registradas no sistema" color="blue" />
+                <StatCard icon="verified" label="Aprovadas" value={kpis.aprovadas} sub="Instituições atendidas" color="green" />
+                <StatCard icon="hourglass_empty" label="Pendentes" value={kpis.pendentes} sub="Aguardando análise técnica" color="yellow" />
+                <StatCard icon="inventory_2" label="Itens Doados" value={kpis.itensDoados} sub="Equipamentos entregues" color="purple" />
+              </section>
 
               {/* Charts */}
               <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -301,12 +319,16 @@ export default function DoacoesPage() {
                 />
               </section>
 
-              {/* Tabela Equipamentos Aguardando Aprovação */}
+              {/* Tabela Equipamentos */}
               <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                   <div>
-                    <h3 className="text-xl font-black text-[#071e27]">Equipamentos Aguardando Aprovação de Doação</h3>
-                    <p className="text-sm text-gray-600">Vindos da Triagem • Selecione a instituição e aprove</p>
+                    <h3 className="text-xl font-black text-[#071e27]">
+                      {activeTab === 'aguardando' ? 'Equipamentos Aguardando Aprovação de Doação' : 'Doações Realizadas'}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {activeTab === 'aguardando' ? 'Vindos da Triagem • Selecione a instituição e aprove' : 'Histórico de equipamentos doados pelo sistema'}
+                    </p>
                   </div>
                   <input
                     type="text"
@@ -315,6 +337,22 @@ export default function DoacoesPage() {
                     onChange={(e) => setSearchDoacao(e.target.value)}
                     className="px-4 py-2 border border-gray-300 rounded-xl w-72 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d631b]"
                   />
+                </div>
+
+                {/* Abas */}
+                <div className="flex gap-2 p-1 bg-slate-100 rounded-2xl w-fit mb-6 border border-slate-200">
+                  <button 
+                    onClick={() => { setActiveTab('aguardando'); }}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'aguardando' ? 'bg-white text-green-800 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                  >
+                    Aguardando Aprovação
+                  </button>
+                  <button 
+                    onClick={() => { setActiveTab('realizadas'); }}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'realizadas' ? 'bg-white text-green-800 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                  >
+                    Doações Realizadas
+                  </button>
                 </div>
 
                 {loadingDoacao ? (
@@ -328,11 +366,11 @@ export default function DoacoesPage() {
                         <tr className="border-b border-gray-200 text-left text-gray-500 font-bold uppercase tracking-widest text-xs">
                           <th className="py-3 px-4">Código</th>
                           <th className="py-3 px-4">Modelo</th>
-                          <th className="py-3 px-4">Especificações</th>
-                          <th className="py-3 px-4">Tipo</th>
-                          <th className="py-3 px-4">Lote</th>
+                          <th className="py-3 px-4 hidden md:table-cell">Especificações</th>
+                          <th className="py-3 px-4 hidden sm:table-cell">Tipo</th>
+                          <th className="py-3 px-4 hidden md:table-cell">Lote</th>
                           <th className="py-3 px-4">Instituição</th>
-                          <th className="py-3 px-4">Responsável</th>
+                          <th className="py-3 px-4 hidden lg:table-cell">Responsável</th>
                           <th className="py-3 px-4 text-right">Ações</th>
                         </tr>
                       </thead>
@@ -346,75 +384,98 @@ export default function DoacoesPage() {
                             <tr key={eq.id} className="border-b hover:bg-gray-50 transition-colors">
                               <td className="py-4 px-4 font-mono text-sm text-blue-700 font-bold">{eq.codigo}</td>
                               <td className="py-4 px-4 font-bold text-[#071e27] text-base">{eq.modelo}</td>
-                              <td className="py-4 px-4 text-gray-600 text-xs max-w-xs truncate">{eq.especificacoes}</td>
-                              <td className="py-4 px-4">
+                              <td className="py-4 px-4 text-gray-600 text-xs max-w-xs truncate hidden md:table-cell">{eq.especificacoes}</td>
+                              <td className="py-4 px-4 hidden sm:table-cell">
                                 <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
                                   {eq.tipo || 'N/A'}
                                 </span>
                               </td>
-                              <td className="py-4 px-4 text-sm text-gray-500">{eq.lote}</td>
+                              <td className="py-4 px-4 text-sm text-gray-500 hidden md:table-cell">{eq.lote}</td>
 
                               <td className="py-4 px-4">
-                                <div className="flex items-center gap-2">
-                                  <select
-                                    value={eq.instituicaoId || ''}
-                                    onChange={(e) => {
-                                      const novaInstId = parseInt(e.target.value);
-                                      setEquipamentosDoacao(prev =>
-                                        prev.map(item =>
-                                          item.id === eq.id ? { ...item, instituicaoId: novaInstId } : item
-                                        )
-                                      );
-                                    }}
-                                    className="text-xs border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#0d631b]"
-                                  >
-                                    <option value="">Selecione...</option>
-                                    {instituicoes.map(inst => (
-                                      <option key={inst.id} value={inst.id}>{inst.nome}</option>
-                                    ))}
-                                  </select>
-                                  <button
-                                    onClick={async () => {
-                                      if (!eq.instituicaoId) {
-                                        alert('Selecione uma instituição primeiro.');
-                                        return;
-                                      }
-                                      try {
-                                        await api.post(`/Equipamentos/${eq.id}/aprovar-doacao`, {
-                                          InstituicaoId: eq.instituicaoId,
-                                          AprovadoPor: currentUserName || 'Técnico GSEI'
-                                        });
-                                        alert('Doação aprovada com sucesso!');
-                                        setEquipamentosDoacao(prev => prev.filter(item => item.id !== eq.id));
-                                      } catch (error) {
-                                        console.error('Erro ao aprovar doação:', error);
-                                        alert('Falha ao aprovar. Tente novamente.');
-                                      }
-                                    }}
-                                    className="text-xs font-bold bg-[#0d631b] text-white px-3 py-1 rounded-lg hover:bg-green-800 transition"
-                                  >
-                                    Aprovar
-                                  </button>
-                                </div>
+                                {activeTab === 'aguardando' ? (
+                                  <div className="flex items-center gap-2">
+                                    <select
+                                      value={eq.instituicaoId || ''}
+                                      onChange={(e) => {
+                                        const novaInstId = parseInt(e.target.value);
+                                        setEquipamentosDoacao(prev =>
+                                          prev.map(item =>
+                                            item.id === eq.id ? { ...item, instituicaoId: novaInstId } : item
+                                          )
+                                        );
+                                      }}
+                                      className="text-xs border border-gray-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#0d631b]"
+                                    >
+                                      <option value="">Selecione...</option>
+                                      {instituicoes.map(inst => (
+                                        <option key={inst.id} value={inst.id}>{inst.nome}</option>
+                                      ))}
+                                    </select>
+                                    <button
+                                      onClick={async () => {
+                                        if (!eq.instituicaoId) {
+                                          alert('Selecione uma instituição primeiro.');
+                                          return;
+                                        }
+                                        try {
+                                          await api.post(`/Equipamentos/${eq.id}/aprovar-doacao`, {
+                                            InstituicaoId: eq.instituicaoId,
+                                            AprovadoPor: currentUserName || 'Técnico GSEI'
+                                          });
+                                          alert('Doação aprovada com sucesso!');
+                                          setEquipamentosDoacao(prev => prev.filter(item => item.id !== eq.id));
+                                        } catch (error) {
+                                          console.error('Erro ao aprovar doação:', error);
+                                          alert('Falha ao aprovar. Tente novamente.');
+                                        }
+                                      }}
+                                      className="text-xs font-bold bg-[#0d631b] text-white px-3 py-1 rounded-lg hover:bg-green-800 transition"
+                                    >
+                                      Aprovar
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <span className="font-bold text-green-700">
+                                    {instituicoes.find(i => i.id === eq.instituicaoId)?.nome || 'Instituição Vinculada'}
+                                  </span>
+                                )}
                               </td>
 
-                              <td className="py-4 px-4 text-sm text-gray-600 font-medium">
-                                {eq.aprovadoPor || '— (aguardando)'}
+                              <td className="py-4 px-4 text-sm text-gray-600 font-medium hidden lg:table-cell">
+                                {eq.aprovadoPor || (activeTab === 'aguardando' ? '— (aguardando)' : 'Técnico')}
                               </td>
 
                               <td className="py-4 px-4 text-right space-x-2">
                                 <button
-                                  onClick={() => setSelectedSolicitacao({ ...selectedSolicitacao!, id: eq.id })}
+                                  onClick={() => {
+                                    // Find matching solicitacao for this equipment or create a placeholder
+                                    const matched = solicitacoes.find(s => s.id === eq.id) || {
+                                      id: eq.id,
+                                      instituicao: instituicoes.find(i => i.id === eq.instituicaoId)?.nome || 'Não vinculada',
+                                      cnpj: '',
+                                      itens: '1 Equipamento',
+                                      itensDetalhe: eq.modelo,
+                                      data: new Date().toLocaleDateString('pt-BR'),
+                                      prioridade: 'Média',
+                                      status: eq.status,
+                                      protocolo: `EQ-${eq.codigo}`,
+                                    };
+                                    setSelectedSolicitacao(matched);
+                                    setDrawerOpen(true);
+                                  }}
                                   className="px-3 py-1 text-xs font-bold text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                 >
                                   Detalhes
                                 </button>
-                                <button
-                                  onClick={() => handleRemoverDoacao(eq.id)}
-                                  className="px-3 py-1 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                >
-                                  Cancelar
-                                </button>
+                                {activeTab === 'aguardando' && (
+                                  <button
+                                    onClick={() => handleRemoverDoacao(eq.id)}
+                                    className="px-3 py-1 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                  >
+                                    Cancelar
+                                  </button>
+                                )}
                               </td>
                             </tr>
                           ))}
@@ -513,9 +574,79 @@ export default function DoacoesPage() {
         </div>
 
           <div className="p-6 border-t border-gray-100 bg-white grid grid-cols-2 gap-3">
-            <Button variant="secondary" className="col-span-2">Solicitar mais Informações</Button>
-            <Button variant="danger" className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-100">Negar Pedido</Button>
-            <Button variant="primary" className="bg-green-600 hover:bg-green-700 shadow-md shadow-green-600/20">Aprovar Doação</Button>
+            <Button
+              variant="secondary"
+              className="col-span-2"
+              onClick={async () => {
+                if (!selectedSolicitacao) return;
+                try {
+                  await api.post(`/Solicitacoes/${selectedSolicitacao.id}/solicitar-info`);
+                  alert('Informações adicionais solicitadas com sucesso.');
+                  setDrawerOpen(false);
+                  setSelectedSolicitacao(null);
+                } catch (error) {
+                  console.error('Erro ao solicitar informações:', error);
+                  alert('Falha ao solicitar informações. Tente novamente.');
+                }
+              }}
+            >Solicitar mais Informações</Button>
+            <Button
+              variant="danger"
+              className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-100"
+              onClick={async () => {
+                if (!selectedSolicitacao) return;
+                if (!confirm('Tem certeza que deseja negar esta solicitação?')) return;
+                try {
+                  await api.post(`/Solicitacoes/${selectedSolicitacao.id}/negar`);
+                  alert('Solicitação negada.');
+                  setDrawerOpen(false);
+                  setSelectedSolicitacao(null);
+                  // Reload equipment list
+                  const equipRes = await api.get<EquipamentoDoacao[]>('/Equipamentos', { params: { status: 'AguardandoDoacao' } });
+                  setEquipamentosDoacao(listFromResponse<EquipamentoDoacao>(equipRes.data));
+                } catch (error) {
+                  console.error('Erro ao negar solicitação:', error);
+                  alert('Falha ao negar. Tente novamente.');
+                }
+              }}
+            >Negar Pedido</Button>
+            <Button
+              variant="primary"
+              className="bg-green-600 hover:bg-green-700 shadow-md shadow-green-600/20"
+              onClick={async () => {
+                if (!selectedSolicitacao) return;
+                try {
+                  await api.put(`/Solicitacoes/${selectedSolicitacao.id}/aprovar`);
+                  alert('Solicitação aprovada com sucesso!');
+                  setDrawerOpen(false);
+                  setSelectedSolicitacao(null);
+                  // Reload data
+                  const [kpisRes, solsRes] = await Promise.all([
+                    api.get('/solicitacoes/kpis'),
+                    api.get('/solicitacoes'),
+                  ]);
+                  const safeKpis = (kpisRes.data as { total: number; aprovadas: number; pendentes: number; itensDoados: number } | undefined | null) ?? { total: 0, aprovadas: 0, pendentes: 0, itensDoados: 0 };
+                  setKpis({
+                    total: Number(safeKpis.total) || 0,
+                    aprovadas: Number(safeKpis.aprovadas) || 0,
+                    pendentes: Number(safeKpis.pendentes) || 0,
+                    itensDoados: Number(safeKpis.itensDoados) || 0,
+                  });
+                  const mapped: SolicitacaoRow[] = listFromResponse<any>(solsRes.data).map((s: any) => ({
+                    id: s.id, instituicao: s.instituicaoNome || 'Instituição', cnpj: s.cnpj || '',
+                    itens: `${s.itensCount ?? 0} Equipamentos`, itensDetalhe: s.itensResumo || 'Diversos',
+                    data: new Date(s.dataSolicitacao).toLocaleDateString('pt-BR'),
+                    prioridade: s.prioridade || 'Média',
+                    status: s.status === 'Aprovada' ? 'Aprovado' : s.status,
+                    protocolo: s.protocolo,
+                  }));
+                  setSolicitacoes(mapped);
+                } catch (error) {
+                  console.error('Erro ao aprovar solicitação:', error);
+                  alert('Falha ao aprovar. Tente novamente.');
+                }
+              }}
+            >Aprovar Doação</Button>
           </div>
       </aside>
 

@@ -1,6 +1,7 @@
 using API.Data;
 using API.DTOs;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,22 +9,23 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class SolicitacoesController(AppDbContext db) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<SolicitacaoDto>> Criar(CriarSolicitacaoDto dto)
     {
-        var solicitacao = new Solicitacao(
-            0,
-            dto.InstituicaoId,
-            dto.ResponsavelRetirada,
-            dto.TelefoneContato,
-            dto.Finalidade,
-            "Pendente",
-            DateTime.UtcNow,
-            $"SOL-{DateTime.UtcNow:yyyyMMdd}-{Random.Shared.Next(1000, 9999)}",
-            "Média"
-        );
+        var solicitacao = new Solicitacao
+        {
+            InstituicaoId = dto.InstituicaoId,
+            ResponsavelRetirada = dto.ResponsavelRetirada,
+            TelefoneContato = dto.TelefoneContato,
+            Finalidade = dto.Finalidade,
+            Status = "Pendente",
+            DataSolicitacao = DateTime.UtcNow,
+            Protocolo = $"SOL-{DateTime.UtcNow:yyyyMMdd}-{Random.Shared.Next(1000, 9999)}",
+            Prioridade = "Média"
+        };
 
         db.Solicitacoes.Add(solicitacao);
         await db.SaveChangesAsync();
@@ -31,8 +33,12 @@ public class SolicitacoesController(AppDbContext db) : ControllerBase
         // Add selected equipment items
         foreach (var eqId in dto.EquipamentoIds)
         {
-            db.ItensSolicitacao.Add(new ItemSolicitacao(0, solicitacao.Id, eqId, 1));
-            // Optionally update equipamento status to 'Reservado'
+            db.ItensSolicitacao.Add(new ItemSolicitacao
+            {
+                SolicitacaoId = solicitacao.Id,
+                EquipamentoId = eqId,
+                QuantidadeSolicitada = 1
+            });
         }
         await db.SaveChangesAsync();
 
@@ -65,8 +71,78 @@ public class SolicitacoesController(AppDbContext db) : ControllerBase
         var sol = await db.Solicitacoes.FindAsync(id);
         if (sol == null) return NotFound();
 
-        // TODO: update status + business rules (triagem etc.)
-        await db.Database.ExecuteSqlRawAsync("UPDATE \"Solicitacoes\" SET \"Status\" = 'Aprovada' WHERE \"Id\" = {0}", id);
+        sol.Status = "Aprovada";
+        await db.SaveChangesAsync();
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Nega uma solicitação de doação e reverte os equipamentos vinculados.
+    /// </summary>
+    [HttpPost("{id}/negar")]
+    public async Task<IActionResult> Negar(int id)
+    {
+        var sol = await db.Solicitacoes.FindAsync(id);
+        if (sol == null) return NotFound();
+
+        var oldStatus = sol.Status;
+        sol.Status = "Negada";
+
+        // Revert linked equipment back to "AguardandoDoacao"
+        var itens = await db.ItensSolicitacao
+            .Where(i => i.SolicitacaoId == id)
+            .ToListAsync();
+
+        foreach (var item in itens)
+        {
+            var eq = await db.Equipamentos.FindAsync(item.EquipamentoId);
+            if (eq != null && eq.Status != "EmEstoque")
+            {
+                eq.Status = "AguardandoDoacao";
+                eq.InstituicaoId = null;
+                eq.AprovadoPor = null;
+            }
+        }
+
+        db.Movimentacoes.Add(new Movimentacao
+        {
+            EquipamentoId = itens.FirstOrDefault()?.EquipamentoId ?? 0,
+            TipoMovimentacao = "Solicitacao_Negada",
+            DataHora = DateTime.UtcNow,
+            StatusAnterior = oldStatus,
+            StatusNovo = "Negada",
+            Descricao = $"Solicitação {sol.Protocolo} negada.",
+            Responsavel = "Sistema"
+        });
+
+        await db.SaveChangesAsync();
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Solicita mais informações sobre uma solicitação de doação.
+    /// </summary>
+    [HttpPost("{id}/solicitar-info")]
+    public async Task<IActionResult> SolicitarInfo(int id)
+    {
+        var sol = await db.Solicitacoes.FindAsync(id);
+        if (sol == null) return NotFound();
+
+        var oldStatus = sol.Status;
+        sol.Status = "AguardandoInfo";
+
+        db.Movimentacoes.Add(new Movimentacao
+        {
+            EquipamentoId = 0,
+            TipoMovimentacao = "Solicitacao_AguardandoInfo",
+            DataHora = DateTime.UtcNow,
+            StatusAnterior = oldStatus,
+            StatusNovo = "AguardandoInfo",
+            Descricao = $"Informações adicionais solicitadas para {sol.Protocolo}.",
+            Responsavel = "Sistema"
+        });
+
+        await db.SaveChangesAsync();
         return NoContent();
     }
 
@@ -94,7 +170,6 @@ public class SolicitacoesController(AppDbContext db) : ControllerBase
     {
         try
         {
-            // Safer: fetch small set and group in memory to avoid EF translation issues on Postgres
             var solicitacoes = await db.Solicitacoes
                 .Where(s => s.DataSolicitacao.Year == ano && (s.Status == "Aprovada" || s.Status == "DoacaoAprovada"))
                 .ToListAsync();

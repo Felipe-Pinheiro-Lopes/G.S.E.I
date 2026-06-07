@@ -120,16 +120,16 @@ export default function DescarteTable({ items, onAction }: DescarteTableProps) {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[900px] text-sm text-left">
+        <table className="w-full text-sm text-left">
           <thead className="bg-white border-b border-gray-100 text-xs uppercase text-gray-400 font-bold tracking-wider">
             <tr>
-              <th className="px-6 py-4">Item</th>
+              <th className="px-6 py-4 hidden sm:table-cell">Item</th>
               <th className="px-6 py-4">Descrição</th>
               <th className="px-6 py-4">ID do Item</th>
-              <th className="px-6 py-4">Lote</th>
-              <th className="px-6 py-4">Data</th>
+              <th className="px-6 py-4 hidden md:table-cell">Lote</th>
+              <th className="px-6 py-4 hidden md:table-cell">Data</th>
               <th className="px-6 py-4">Status</th>
-              <th className="px-6 py-4">Responsável</th>
+              <th className="px-6 py-4 hidden lg:table-cell">Responsável</th>
               <th className="px-6 py-4 text-center">Ações</th>
             </tr>
           </thead>
@@ -141,21 +141,21 @@ export default function DescarteTable({ items, onAction }: DescarteTableProps) {
             )}
             {filtered.map((item, idx) => (
               <tr key={idx} className="hover:bg-blue-50/50 transition-colors group">
-                <td className="px-6 py-4">
+                <td className="px-6 py-4 hidden sm:table-cell">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-blue-600 group-hover:bg-blue-100 transition ${item.status === 'Aguardando' ? 'bg-gray-100 text-gray-600' : 'bg-blue-50'}`}>
                     <span className="material-symbols-outlined text-lg">{getIcon(item.tipo)}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4 font-bold text-gray-800">{item.descricao}</td>
                 <td className="px-6 py-4 text-gray-500 font-medium">{item.codigo}</td>
-                <td className="px-6 py-4 text-gray-500 font-medium">{item.lote}</td>
-                <td className="px-6 py-4 text-gray-500">{item.data}</td>
+                <td className="px-6 py-4 text-gray-500 font-medium hidden md:table-cell">{item.lote}</td>
+                <td className="px-6 py-4 text-gray-500 hidden md:table-cell">{item.data}</td>
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide ${getStatusClass(item.status)}`}>
                     {item.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-gray-600 font-medium">{item.responsavel}</td>
+                <td className="px-6 py-4 text-gray-600 font-medium hidden lg:table-cell">{item.responsavel}</td>
                 <td className="px-6 py-4 text-center">
                   <button
                     onClick={() => onAction?.(item)}

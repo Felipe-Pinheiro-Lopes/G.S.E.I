@@ -1,17 +1,13 @@
 namespace API.Models;
 
-public record User(
-    int Id,
-    string Nome,
-    string Email,
-    string SenhaHash,
-    string Role, // Internal, Instituicao
-    int? InstituicaoId = null
-)
+public class User
 {
-    /// <summary>
-    /// URL ou caminho da foto de perfil do usuário.
-    /// Preparado para implementação futura de troca de avatar/foto.
-    /// </summary>
-    public string? FotoUrl { get; init; }
+    public int Id { get; set; }
+    public string Nome { get; set; } = default!;
+    public string Email { get; set; } = default!;
+    public string SenhaHash { get; set; } = default!;
+    public string Role { get; set; } = default!;
+    public int? InstituicaoId { get; set; }
+
+    public string? FotoUrl { get; set; }
 }

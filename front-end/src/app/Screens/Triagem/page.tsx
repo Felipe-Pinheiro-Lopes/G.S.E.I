@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
@@ -65,7 +65,7 @@ export default function TriagemPage() {
     try {
       const res = await api.get<Equipamento[]>('/Equipamentos', { params: { status: 'EmAnalise' } });
       const lista = listFromResponse<Equipamento>(res.data);
-      let unicos = lista.filter((eq, index, self) =>
+      const unicos = lista.filter((eq, index, self) =>
         index === self.findIndex(e => e.id === eq.id)
       );
 
@@ -214,9 +214,7 @@ export default function TriagemPage() {
 
     setLoading(true);
     try {
-      await api.put(`/Equipamentos/${equipamentoSelecionado.id}/status`, JSON.stringify('EmTriagem'), {
-        headers: { 'Content-Type': 'application/json' }
-      });
+      await api.post(`/Triagem/${equipamentoSelecionado.id}/cancelar`);
 
       await Promise.all([carregarFila(), carregarEmAndamento()]);
 
@@ -228,6 +226,44 @@ export default function TriagemPage() {
     } catch (error) {
       console.error('Erro ao voltar para fila:', error);
       alert('Erro ao devolver o equipamento para a fila. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const limparTodoHistorico = async () => {
+    if (!confirm("Tem certeza de que deseja limpar TODO o histórico de triagens finalizadas? Esta ação não pode ser desfeita.")) {
+      return;
+    }
+    setLoading(true);
+    try {
+      await api.delete('/Triagem/finalizados');
+      alert('Histórico de triagens finalizadas limpo com sucesso!');
+      setEquipamentoSelecionado(null);
+      await carregarFinalizados();
+    } catch (error) {
+      console.error('Erro ao limpar histórico:', error);
+      alert('Falha ao limpar histórico. Verifique suas permissões.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const excluirHistoricoItem = async (equipamentoId: number | string) => {
+    if (!confirm("Deseja realmente excluir o histórico de triagem deste equipamento?")) {
+      return;
+    }
+    setLoading(true);
+    try {
+      await api.delete(`/Triagem/finalizados/${equipamentoId}`);
+      alert('Histórico do equipamento excluído!');
+      if (equipamentoSelecionado?.id === equipamentoId) {
+        setEquipamentoSelecionado(null);
+      }
+      await carregarFinalizados();
+    } catch (error) {
+      console.error('Erro ao excluir histórico do equipamento:', error);
+      alert('Falha ao excluir histórico. Verifique suas permissões.');
     } finally {
       setLoading(false);
     }
@@ -298,6 +334,8 @@ export default function TriagemPage() {
         userName={currentUserName} 
         userRole={currentUserRole} 
         userPhoto={currentUserPhoto}
+        mobileOpen={sidebarOpen}
+        onMobileClose={() => setSidebarOpen(false)}
       />
 
       <div className="lg:ml-64 flex flex-col min-h-screen">
@@ -532,46 +570,71 @@ export default function TriagemPage() {
                   )}
                </div>
              </section>
-           )}
+             )}
 
-           {/* Lista de Equipamentos */}
-           <section>
-             <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest px-2 mb-4">
-               {activeTab === 'fila' && 'Equipamentos na Fila'}
-               {activeTab === 'andamento' && 'Triagens em Andamento'}
-               {activeTab === 'finalizados' && 'Triagens Finalizadas'}
-             </h3>
-             
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-               {currentList.length > 0 ? currentList.map((item) => {
-                 const isSelected = equipamentoSelecionado?.id === item.id;
-                 return (
-                   <div 
-                     key={item.id} 
-                     onClick={() => selecionarEquipamento(item)}
-                     className={`p-5 rounded-2xl border cursor-pointer transition-all hover:shadow-md
-                       ${isSelected 
-                         ? 'border-primary bg-primary/5 shadow-md' 
-                         : 'bg-white border-gray-100'}`}
+             {/* Lista de Equipamentos */}
+             <section>
+               <div className="flex justify-between items-center mb-4">
+                 <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest px-2">
+                   {activeTab === 'fila' && 'Equipamentos na Fila'}
+                   {activeTab === 'andamento' && 'Triagens em Andamento'}
+                   {activeTab === 'finalizados' && 'Triagens Finalizadas'}
+                 </h3>
+                 {activeTab === 'finalizados' && currentUserRole === 'Administrador' && finalizados.length > 0 && (
+                   <button
+                     onClick={limparTodoHistorico}
+                     className="flex items-center gap-1 text-xs font-bold text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-xl border border-red-200 transition-colors"
                    >
-                     <div className="flex justify-between items-center">
-                       <div>
-                         <h4 className="font-bold text-on-surface">{item.codigo}</h4>
-                         <p className="text-sm text-gray-600">{item.modelo}</p>
+                     <span className="material-symbols-outlined text-sm">delete_sweep</span>
+                     Limpar Todo o Histórico
+                   </button>
+                 )}
+               </div>
+               
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 {currentList.length > 0 ? currentList.map((item) => {
+                   const isSelected = equipamentoSelecionado?.id === item.id;
+                   return (
+                     <div 
+                       key={item.id} 
+                       onClick={() => selecionarEquipamento(item)}
+                       className={`p-5 rounded-2xl border cursor-pointer transition-all hover:shadow-md
+                         ${isSelected 
+                           ? 'border-primary bg-primary/5 shadow-md' 
+                           : 'bg-white border-gray-100'}`}
+                     >
+                       <div className="flex justify-between items-center">
+                         <div>
+                           <h4 className="font-bold text-on-surface">{item.codigo}</h4>
+                           <p className="text-sm text-gray-600">{item.modelo}</p>
+                         </div>
+                         <div className="flex items-center gap-2">
+                           {isSelected && (
+                             <span className="px-3 py-1 text-xs font-bold bg-primary text-white rounded-full">
+                               Selecionado
+                             </span>
+                           )}
+                           {activeTab === 'finalizados' && currentUserRole === 'Administrador' && (
+                             <button
+                               onClick={(e) => {
+                                 e.stopPropagation();
+                                 excluirHistoricoItem(item.id);
+                               }}
+                               className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 transition"
+                               title="Excluir histórico deste equipamento"
+                             >
+                               <span className="material-symbols-outlined text-base">delete</span>
+                             </button>
+                           )}
+                         </div>
                        </div>
-                       {isSelected && (
-                         <span className="px-3 py-1 text-xs font-bold bg-primary text-white rounded-full">
-                           Em Análise
-                         </span>
-                       )}
                      </div>
-                   </div>
-                 );
-               }) : (
-                 <p className="text-gray-500 col-span-2">Nenhum equipamento nesta seção.</p>
-               )}
-             </div>
-           </section>
+                   );
+                 }) : (
+                   <p className="text-gray-500 col-span-2">Nenhum equipamento nesta seção.</p>
+                 )}
+               </div>
+             </section>
 
          </main>
       </div>

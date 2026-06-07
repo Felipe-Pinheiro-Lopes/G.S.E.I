@@ -1,5 +1,7 @@
 using API.Data;
+using API.DTOs;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +9,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class InstituicoesController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
@@ -25,19 +28,19 @@ public class InstituicoesController(AppDbContext db) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<API.Models.Instituicao>> Create([FromBody] API.DTOs.InstituicaoCreateDto dto)
+    public async Task<ActionResult<Instituicao>> Create([FromBody] InstituicaoCreateDto dto)
     {
         try
         {
-            var nova = new API.Models.Instituicao(
-                Id: 0,
-                Nome: dto.Nome,
-                Cnpj: dto.Cnpj,
-                Responsavel: dto.Responsavel,
-                Telefone: dto.Telefone,
-                Email: dto.Email,
-                DataCadastro: DateTime.UtcNow
-            );
+            var nova = new Instituicao
+            {
+                Nome = dto.Nome,
+                Cnpj = dto.Cnpj,
+                Responsavel = dto.Responsavel,
+                Telefone = dto.Telefone,
+                Email = dto.Email,
+                DataCadastro = DateTime.UtcNow
+            };
 
             db.Instituicoes.Add(nova);
             await db.SaveChangesAsync();
@@ -51,11 +54,22 @@ public class InstituicoesController(AppDbContext db) : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Atualiza dados da instituição preservando o DataCadastro original.
+    /// </summary>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Instituicao inst)
+    public async Task<IActionResult> Update(int id, [FromBody] InstituicaoUpdateDto dto)
     {
-        if (id != inst.Id) return BadRequest();
-        db.Entry(inst).State = EntityState.Modified;
+        var existing = await db.Instituicoes.FindAsync(id);
+        if (existing == null) return NotFound();
+
+        // Update only the editable fields — DataCadastro and Id are preserved
+        existing.Nome = dto.Nome ?? existing.Nome;
+        existing.Cnpj = dto.Cnpj ?? existing.Cnpj;
+        existing.Responsavel = dto.Responsavel ?? existing.Responsavel;
+        existing.Telefone = dto.Telefone ?? existing.Telefone;
+        existing.Email = dto.Email ?? existing.Email;
+
         await db.SaveChangesAsync();
         return NoContent();
     }

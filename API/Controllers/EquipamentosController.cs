@@ -1,6 +1,7 @@
 using API.Data;
 using API.DTOs;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class EquipamentosController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
@@ -42,29 +44,29 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<EquipamentoDto>> Create(EquipamentoCreateDto dto)
     {
-        var equipamento = new Equipamento(
-            Id: 0,
-            Codigo: dto.Codigo,
-            Modelo: dto.Modelo,
-            Especificacoes: dto.Especificacoes ?? "",
-            Status: "EmEstoque",
-            Lote: dto.Lote ?? "",
-            DataEntrada: DateTime.UtcNow,
-            Tipo: dto.Tipo ?? "Equipamento"
-        );
+        var equipamento = new Equipamento
+        {
+            Codigo = dto.Codigo,
+            Modelo = dto.Modelo,
+            Especificacoes = dto.Especificacoes ?? "",
+            Status = "EmEstoque",
+            Lote = dto.Lote ?? "",
+            DataEntrada = DateTime.UtcNow,
+            Tipo = dto.Tipo ?? "Equipamento"
+        };
 
         db.Equipamentos.Add(equipamento);
         await db.SaveChangesAsync();
 
-        db.Movimentacoes.Add(new Movimentacao(
-            Id: 0,
-            EquipamentoId: equipamento.Id,
-            TipoMovimentacao: "Entrada",
-            DataHora: DateTime.UtcNow,
-            StatusNovo: equipamento.Status,
-            Descricao: $"Equipamento {equipamento.Codigo} cadastrado",
-            Responsavel: "Sistema"
-        ));
+        db.Movimentacoes.Add(new Movimentacao
+        {
+            EquipamentoId = equipamento.Id,
+            TipoMovimentacao = "Entrada",
+            DataHora = DateTime.UtcNow,
+            StatusNovo = equipamento.Status,
+            Descricao = $"Equipamento {equipamento.Codigo} cadastrado",
+            Responsavel = "Sistema"
+        });
         await db.SaveChangesAsync();
 
         return Ok(new EquipamentoDto(
@@ -73,9 +75,6 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
             equipamento.Tipo, equipamento.InstituicaoId, equipamento.AprovadoPor,
             equipamento.LaudoDescarte));
     }
-
-    // Removido PUT /{id}/status conforme plano — mudanças de status devem ser feitas via Triagem
-    // [From: PLANO_IMPLEMENTACAO_MELHORIAS.md B-7]
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
@@ -90,26 +89,20 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Equipamento updatedEquipamento)
+    public async Task<IActionResult> Update(int id, [FromBody] EquipamentoUpdateDto dto)
     {
         var existing = await db.Equipamentos.FindAsync(id);
         if (existing == null)
             return NotFound();
 
-        // Como é um record, fazemos update via SQL bruto para simplicidade
-        await db.Database.ExecuteSqlRawAsync(@"
-            UPDATE ""Equipamentos"" 
-            SET ""Codigo"" = {0}, ""Modelo"" = {1}, ""Especificacoes"" = {2}, 
-                ""Lote"" = {3}, ""Status"" = {4}, ""Tipo"" = {5}
-            WHERE ""Id"" = {6}",
-            updatedEquipamento.Codigo,
-            updatedEquipamento.Modelo,
-            updatedEquipamento.Especificacoes,
-            updatedEquipamento.Lote,
-            updatedEquipamento.Status,
-            updatedEquipamento.Tipo,
-            id);
+        // Update only the editable fields, preserve DataEntrada, Status, InstituicaoId, etc.
+        existing.Codigo = dto.Codigo ?? existing.Codigo;
+        existing.Modelo = dto.Modelo ?? existing.Modelo;
+        existing.Especificacoes = dto.Especificacoes ?? existing.Especificacoes;
+        existing.Lote = dto.Lote ?? existing.Lote;
+        existing.Tipo = dto.Tipo ?? existing.Tipo;
 
+        await db.SaveChangesAsync();
         return NoContent();
     }
 
@@ -125,36 +118,28 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
 
         var oldStatus = eq.Status;
 
-        await db.Database.ExecuteSqlRawAsync(@"
-            UPDATE ""Equipamentos"" 
-            SET ""Status"" = {0}, 
-                ""InstituicaoId"" = {1}, 
-                ""AprovadoPor"" = {2}
-            WHERE ""Id"" = {3}",
-            "DoacaoAprovada",
-            dto.InstituicaoId,
-            dto.AprovadoPor,
-            id);
+        eq.Status = "DoacaoAprovada";
+        eq.InstituicaoId = dto.InstituicaoId;
+        eq.AprovadoPor = dto.AprovadoPor;
 
         var instituicao = await db.Instituicoes.FindAsync(dto.InstituicaoId);
-        db.Movimentacoes.Add(new Movimentacao(
-            Id: 0,
-            EquipamentoId: id,
-            TipoMovimentacao: "DoacaoAprovada",
-            DataHora: DateTime.UtcNow,
-            StatusAnterior: oldStatus,
-            StatusNovo: "DoacaoAprovada",
-            Descricao: $"Doação aprovada para instituição: {instituicao?.Nome ?? dto.InstituicaoId.ToString()}",
-            Responsavel: dto.AprovadoPor
-        ));
+        db.Movimentacoes.Add(new Movimentacao
+        {
+            EquipamentoId = id,
+            TipoMovimentacao = "DoacaoAprovada",
+            DataHora = DateTime.UtcNow,
+            StatusAnterior = oldStatus,
+            StatusNovo = "DoacaoAprovada",
+            Descricao = $"Doação aprovada para instituição: {instituicao?.Nome ?? dto.InstituicaoId.ToString()}",
+            Responsavel = dto.AprovadoPor
+        });
         await db.SaveChangesAsync();
 
         return NoContent();
     }
 
     /// <summary>
-    /// Registra o descarte de um equipamento (laudo + responsável).
-    /// Usado pela tela de Descarte.
+    /// Cancela a doação de um equipamento, revertendo seu status.
     /// </summary>
     [HttpPost("{id}/cancelar-doacao")]
     public async Task<IActionResult> CancelarDoacao(int id)
@@ -163,22 +148,20 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
         if (eq == null) return NotFound();
 
         var oldStatus = eq.Status;
-        await db.Database.ExecuteSqlRawAsync(@"
-            UPDATE ""Equipamentos""
-            SET ""Status"" = {0}, ""InstituicaoId"" = NULL, ""AprovadoPor"" = NULL
-            WHERE ""Id"" = {1}",
-            "AguardandoDoacao", id);
+        eq.Status = "AguardandoDoacao";
+        eq.InstituicaoId = null;
+        eq.AprovadoPor = null;
 
-        db.Movimentacoes.Add(new Movimentacao(
-            Id: 0,
-            EquipamentoId: id,
-            TipoMovimentacao: "StatusAlterado",
-            DataHora: DateTime.UtcNow,
-            StatusAnterior: oldStatus,
-            StatusNovo: "AguardandoDoacao",
-            Descricao: $"Cancelamento de doação. Revertido de '{oldStatus}' para 'AguardandoDoacao'",
-            Responsavel: "Sistema"
-        ));
+        db.Movimentacoes.Add(new Movimentacao
+        {
+            EquipamentoId = id,
+            TipoMovimentacao = "StatusAlterado",
+            DataHora = DateTime.UtcNow,
+            StatusAnterior = oldStatus,
+            StatusNovo = "AguardandoDoacao",
+            Descricao = $"Cancelamento de doação. Revertido de '{oldStatus}' para 'AguardandoDoacao'",
+            Responsavel = "Sistema"
+        });
 
         await db.SaveChangesAsync();
         return NoContent();
@@ -195,27 +178,20 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
             ? dto.LaudoDescarte
             : eq.LaudoDescarte;
 
-        await db.Database.ExecuteSqlRawAsync(@"
-            UPDATE ""Equipamentos"" 
-            SET ""Status"" = {0}, 
-                ""LaudoDescarte"" = {1}, 
-                ""AprovadoPor"" = {2}   
-            WHERE ""Id"" = {3}",
-            dto.NovoStatus ?? "Descartado",
-            laudoFinal,
-            dto.Responsavel,
-            id);
+        eq.Status = dto.NovoStatus ?? "Descartado";
+        eq.LaudoDescarte = laudoFinal;
+        eq.AprovadoPor = dto.Responsavel;
 
-        db.Movimentacoes.Add(new Movimentacao(
-            Id: 0,
-            EquipamentoId: id,
-            TipoMovimentacao: "Descartado",
-            DataHora: DateTime.UtcNow,
-            StatusAnterior: oldStatus,
-            StatusNovo: dto.NovoStatus ?? "Descartado",
-            Descricao: $"Descarte registrado. Laudo: {laudoFinal}",
-            Responsavel: dto.Responsavel
-        ));
+        db.Movimentacoes.Add(new Movimentacao
+        {
+            EquipamentoId = id,
+            TipoMovimentacao = "Descartado",
+            DataHora = DateTime.UtcNow,
+            StatusAnterior = oldStatus,
+            StatusNovo = dto.NovoStatus ?? "Descartado",
+            Descricao = $"Descarte registrado. Laudo: {laudoFinal}",
+            Responsavel = dto.Responsavel
+        });
         await db.SaveChangesAsync();
 
         return NoContent();

@@ -1,6 +1,7 @@
 using API.Data;
 using API.DTOs;
 using API.Models;
+using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -10,7 +11,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(AppDbContext db) : ControllerBase
+public class AuthController(AppDbContext db, TokenService tokenService) : ControllerBase
 {
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
@@ -19,8 +20,7 @@ public class AuthController(AppDbContext db) : ControllerBase
         if (user == null || !VerifyPassword(request.Senha, user.SenhaHash))
             return Unauthorized(new { message = "Email ou senha inválidos" });
 
-        // TODO: Generate real JWT token (use TokenService later)
-        var token = Guid.NewGuid().ToString();
+        var token = tokenService.GenerateToken(user);
 
         return new LoginResponse(token, user.Nome, user.Role, user.InstituicaoId, user.FotoUrl, user.Id);
     }
@@ -31,16 +31,16 @@ public class AuthController(AppDbContext db) : ControllerBase
         if (await db.Users.AnyAsync(u => u.Email == request.Email))
             return BadRequest("Email já cadastrado.");
 
-        var senhaHash = HashPassword(request.Senha);
+        var senhaHash = BCrypt.Net.BCrypt.HashPassword(request.Senha);
 
-        var novoUsuario = new User(
-            0,
-            request.Nome,
-            request.Email,
-            senhaHash,
-            request.Role,
-            request.InstituicaoId
-        );
+        var novoUsuario = new User
+        {
+            Nome = request.Nome,
+            Email = request.Email,
+            SenhaHash = senhaHash,
+            Role = request.Role,
+            InstituicaoId = request.InstituicaoId
+        };
 
         db.Users.Add(novoUsuario);
         await db.SaveChangesAsync();
@@ -48,15 +48,14 @@ public class AuthController(AppDbContext db) : ControllerBase
         return Ok(new { Message = "Usuário cadastrado com sucesso", Id = novoUsuario.Id });
     }
 
-    private static string HashPassword(string senha)
-    {
-        using var sha = SHA256.Create();
-        var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(senha));
-        return Convert.ToBase64String(bytes);
-    }
-
     private static bool VerifyPassword(string senha, string hash)
     {
+        if (hash.StartsWith("$2a$") || hash.StartsWith("$2b$") || hash.StartsWith("$2y$"))
+        {
+            return BCrypt.Net.BCrypt.Verify(senha, hash);
+        }
+
+        // Fallback para hashes legados SHA-256
         using var sha = SHA256.Create();
         var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(senha));
         return Convert.ToBase64String(bytes) == hash;
@@ -65,3 +64,4 @@ public class AuthController(AppDbContext db) : ControllerBase
 
 // DTO for registration
 public record RegisterRequest(string Nome, string Email, string Senha, string Role, int? InstituicaoId = null);
+

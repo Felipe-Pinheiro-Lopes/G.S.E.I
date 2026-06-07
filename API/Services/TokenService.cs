@@ -1,0 +1,34 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using API.Models;
+using Microsoft.IdentityModel.Tokens;
+
+namespace API.Services;
+
+public class TokenService(IConfiguration configuration)
+{
+    public string GenerateToken(User user)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var secretKey = configuration["Jwt:Key"] ?? "remember_remember_the_fifteenth_of_november";
+        var key = Encoding.ASCII.GetBytes(secretKey);
+        
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Nome),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim("instituicaoId", user.InstituicaoId?.ToString() ?? "")
+            }),
+            Expires = DateTime.UtcNow.AddDays(7),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+    }
+}

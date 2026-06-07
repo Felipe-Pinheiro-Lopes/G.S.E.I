@@ -20,3 +20,11 @@ public record EquipamentoCreateDto(
     string? Lote = null,
     string? Tipo = null
 );
+
+public record EquipamentoUpdateDto(
+    string? Codigo = null,
+    string? Modelo = null,
+    string? Especificacoes = null,
+    string? Lote = null,
+    string? Tipo = null
+);

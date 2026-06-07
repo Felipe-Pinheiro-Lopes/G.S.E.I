@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
@@ -31,6 +31,11 @@ export default function InventarioPage() {
   const [novoEquip, setNovoEquip] = useState({ codigo: '', modelo: '', especificacoes: '', lote: '', tipo: 'Notebook' as string });
   const [salvandoNovo, setSalvandoNovo] = useState(false);
 
+  // Edit modal state
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editEquip, setEditEquip] = useState<{ id: number; codigo: string; modelo: string; especificacoes: string; lote: string; tipo: string } | null>(null);
+  const [salvandoEdit, setSalvandoEdit] = useState(false);
+
   const fetchEquipamentos = async (status?: string) => {
     try {
       const params = status ? { status } : {};
@@ -47,6 +52,16 @@ export default function InventarioPage() {
   useEffect(() => {
     fetchEquipamentos(statusFilter || undefined);
   }, [statusFilter]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const statusParam = params.get('status');
+      if (statusParam) {
+        setStatusFilter(statusParam);
+      }
+    }
+  }, []);
 
   const activeStatuses = ['EmEstoque', 'EmTriagem', 'EmAnalise', 'AguardandoFormatacao'];
   const baseList = statusFilter
@@ -82,6 +97,8 @@ export default function InventarioPage() {
         userName={currentUserName}
         userRole={currentUserRole}
         userPhoto={currentUserPhoto}
+        mobileOpen={sidebarOpen}
+        onMobileClose={() => setSidebarOpen(false)}
       />
 
       <div className="lg:ml-64 flex flex-col min-h-screen">
@@ -138,9 +155,9 @@ export default function InventarioPage() {
                     <tr className="border-b border-gray-200 text-left text-gray-800 font-bold uppercase tracking-widest text-xs">
                       <th className="py-3 px-4">Código</th>
                       <th className="py-3 px-4">Modelo</th>
-                      <th className="py-3 px-4">Especificações</th>
-                      <th className="py-3 px-4">Tipo</th>
-                      <th className="py-3 px-4">Lote</th>
+                      <th className="py-3 px-4 hidden md:table-cell">Especificações</th>
+                      <th className="py-3 px-4 hidden sm:table-cell">Tipo</th>
+                      <th className="py-3 px-4 hidden md:table-cell">Lote</th>
                       <th className="py-3 px-4">Status</th>
                       <th className="py-3 px-4 text-right">Ações</th>
                     </tr>
@@ -151,13 +168,13 @@ export default function InventarioPage() {
                         <tr key={eq.id} className="border-b hover:bg-gray-50 transition-colors">
                           <td className="py-4 px-4 font-mono text-sm text-blue-700 font-bold">{eq.codigo}</td>
                           <td className="py-4 px-4 font-bold text-[#071e27] text-base">{eq.modelo}</td>
-                          <td className="py-4 px-4 text-gray-600 text-xs max-w-xs truncate">{eq.especificacoes}</td>
-                          <td className="py-4 px-4">
+                          <td className="py-4 px-4 text-gray-600 text-xs max-w-xs truncate hidden md:table-cell">{eq.especificacoes}</td>
+                          <td className="py-4 px-4 hidden sm:table-cell">
                             <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
                               {eq.tipo || 'N/A'}
                             </span>
                           </td>
-                          <td className="py-4 px-4 text-sm text-gray-500">{eq.lote}</td>
+                          <td className="py-4 px-4 text-sm text-gray-500 hidden md:table-cell">{eq.lote}</td>
                           <td className="py-4 px-4">
                             <span
                               className={`inline-block text-xs font-bold px-3 py-1 rounded-full ${
@@ -189,6 +206,23 @@ export default function InventarioPage() {
                           </td>
 
                           <td className="py-4 px-4 text-right space-x-2">
+                            <button
+                              onClick={() => {
+                                setEditEquip({
+                                  id: eq.id,
+                                  codigo: eq.codigo,
+                                  modelo: eq.modelo,
+                                  especificacoes: eq.especificacoes,
+                                  lote: eq.lote,
+                                  tipo: eq.tipo || 'Notebook',
+                                });
+                                setShowEditModal(true);
+                              }}
+                              className="px-3 py-2 text-xs font-bold text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            >
+                              <span className="material-symbols-outlined text-sm align-middle mr-1">edit</span>
+                              Editar
+                            </button>
                         <Button
                           onClick={() => handleEnviarParaTriagem(eq)}
                           className="px-3 py-2 text-xs font-bold text-white bg-green-700 hover:bg-green-800 rounded-lg transition-colors"
@@ -330,6 +364,122 @@ export default function InventarioPage() {
                 className="px-6 py-2.5 bg-gradient-to-r from-[#0d631b] to-[#2e7d32] text-white font-bold text-sm rounded-2xl shadow-md hover:opacity-90 disabled:opacity-60 flex items-center gap-2"
               >
                 {salvandoNovo ? 'Salvando...' : 'Cadastrar Equipamento'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Editar Equipamento */}
+      {showEditModal && editEquip && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
+            <div className="p-6 border-b flex justify-between items-center bg-gray-50/80">
+              <div>
+                <h3 className="text-xl font-black text-[#071e27]">Editar Equipamento</h3>
+                <p className="text-xs text-gray-500 mt-0.5">Atualize os dados do dispositivo</p>
+              </div>
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-500"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-[#333] mb-1.5">CÓDIGO</label>
+                  <input
+                    value={editEquip.codigo}
+                    onChange={(e) => setEditEquip({ ...editEquip, codigo: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#0d631b] text-[#0a0a0a]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#333] mb-1.5">MODELO *</label>
+                  <input
+                    value={editEquip.modelo}
+                    onChange={(e) => setEditEquip({ ...editEquip, modelo: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0d631b] text-[#0a0a0a]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#333] mb-1.5">ESPECIFICAÇÕES</label>
+                  <textarea
+                    value={editEquip.especificacoes}
+                    onChange={(e) => setEditEquip({ ...editEquip, especificacoes: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-sm resize-y focus:outline-none focus:ring-2 focus:ring-[#0d631b] text-[#0a0a0a]"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-[#333] mb-1.5">TIPO</label>
+                    <select
+                      value={editEquip.tipo}
+                      onChange={(e) => setEditEquip({ ...editEquip, tipo: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0d631b] text-[#0a0a0a]"
+                    >
+                      <option value="Notebook">Notebook</option>
+                      <option value="Computador">Computador / Desktop</option>
+                      <option value="Monitor">Monitor</option>
+                      <option value="Periférico">Periférico</option>
+                      <option value="Peças">Peças / Componentes</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-[#333] mb-1.5">LOTE</label>
+                    <input
+                      value={editEquip.lote}
+                      onChange={(e) => setEditEquip({ ...editEquip, lote: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0d631b] text-[#0a0a0a]"
+                    />
+                  </div>
+                </div>
+            </div>
+
+            <div className="p-5 bg-gray-50 flex justify-end gap-3">
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="px-5 py-2.5 text-sm font-bold text-gray-600 hover:bg-gray-200 rounded-2xl transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={async () => {
+                  if (!editEquip.modelo.trim()) {
+                    alert('Modelo é obrigatório.');
+                    return;
+                  }
+
+                  setSalvandoEdit(true);
+                  try {
+                    await api.put(`/Equipamentos/${editEquip.id}`, {
+                      codigo: editEquip.codigo.trim(),
+                      modelo: editEquip.modelo.trim(),
+                      especificacoes: editEquip.especificacoes.trim(),
+                      lote: editEquip.lote.trim(),
+                      tipo: editEquip.tipo,
+                    });
+                    setShowEditModal(false);
+                    alert('Equipamento atualizado com sucesso!');
+                    await fetchEquipamentos(statusFilter || undefined);
+                  } catch (error) {
+                    console.error('Erro ao atualizar equipamento:', error);
+                    alert('Falha ao atualizar. Tente novamente.');
+                  } finally {
+                    setSalvandoEdit(false);
+                  }
+                }}
+                disabled={salvandoEdit}
+                className="px-6 py-2.5 bg-gradient-to-r from-[#0d631b] to-[#2e7d32] text-white font-bold text-sm rounded-2xl shadow-md hover:opacity-90 disabled:opacity-60 flex items-center gap-2"
+              >
+                {salvandoEdit ? 'Salvando...' : 'Salvar Alterações'}
               </button>
             </div>
           </div>

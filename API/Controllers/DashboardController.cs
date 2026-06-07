@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
 using API.DTOs;
@@ -8,6 +9,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/dashboard")]
+[Authorize]
 public class DashboardController(AppDbContext context) : ControllerBase
 {
     /// <summary>
@@ -32,7 +34,8 @@ public class DashboardController(AppDbContext context) : ControllerBase
         var filaTriagem = await context.Equipamentos
             .CountAsync(e => e.Status == "EmTriagem" || e.Status == "Em Triagem" || e.Status == "EmAnalise");
 
-        var pecasFaltantes = 0;
+        var pecasFaltantes = await context.Equipamentos
+            .CountAsync(e => e.Status == "AguardandoPecas" || e.Status == "Aguardando Peças" || e.Tipo == "Peças" || e.Tipo == "Pecas");
 
         var now = DateTime.UtcNow;
         var today = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc);

@@ -17,7 +17,13 @@ export default function SolicitacaoPage() {
     <div className="bg-[#f3faff] text-[#071e27] min-h-screen">
       {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-[60] lg:hidden" onClick={() => setSidebarOpen(false)} />}
 
-      <Sidebar userType="institution" userName="Assoc. Filantrópica" userRole="ID: 98231" />
+      <Sidebar
+        userType="institution"
+        userName="Assoc. Filantrópica"
+        userRole="ID: 98231"
+        mobileOpen={sidebarOpen}
+        onMobileClose={() => setSidebarOpen(false)}
+      />
 
       <div className="lg:ml-64 flex flex-col min-h-screen">
         <Header 
@@ -81,8 +87,8 @@ export default function SolicitacaoPage() {
                     <thead className="bg-gray-50 text-[10px] uppercase text-gray-400 font-bold tracking-wider">
                       <tr>
                         <th className="px-6 py-4">Item / Modelo</th>
-                        <th className="px-6 py-4">ID</th>
-                        <th className="px-6 py-4">Lote</th>
+                        <th className="px-6 py-4 hidden sm:table-cell">ID</th>
+                        <th className="px-6 py-4 hidden md:table-cell">Lote</th>
                         <th className="px-6 py-4">Disponível</th>
                         <th className="px-6 py-4 text-center">Selecionar</th>
                       </tr>
@@ -97,8 +103,8 @@ export default function SolicitacaoPage() {
                             <p className="font-bold text-gray-800">{item.name}</p>
                             <p className="text-[11px] text-gray-500">{item.spec}</p>
                           </td>
-                          <td className="px-6 py-4 font-mono text-gray-500">{item.id}</td>
-                          <td className="px-6 py-4 text-gray-500 font-medium">{item.lote}</td>
+                          <td className="px-6 py-4 font-mono text-gray-500 hidden sm:table-cell">{item.id}</td>
+                          <td className="px-6 py-4 text-gray-500 font-medium hidden md:table-cell">{item.lote}</td>
                           <td className="px-6 py-4"><span className="px-2 py-1 bg-green-100 text-green-700 rounded-md font-bold text-[11px]">{item.qty}</span></td>
                           <td className="px-6 py-4 text-center"><input type="checkbox" className="w-5 h-5 rounded border-gray-300 text-green-700 focus:ring-green-600 cursor-pointer" /></td>
                         </tr>

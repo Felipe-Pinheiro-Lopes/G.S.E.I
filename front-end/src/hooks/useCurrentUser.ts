@@ -13,6 +13,7 @@ export interface CurrentUser {
   photo?: string;
   rawRole: string;    // Valor original do cookie (Admin, Internal, etc.)
   id?: number;
+  instituicaoId?: number;
 }
 
 export function useCurrentUser(): CurrentUser {
@@ -30,6 +31,7 @@ export function useCurrentUser(): CurrentUser {
     const role = cookies['gesi.role'];
     const photo = cookies['gesi.userPhoto'];
     const userId = cookies['gesi.userId'];
+    const instituicaoId = cookies['gesi.instituicaoId'];
 
     const clean = (val?: string) => {
       if (!val || val === 'undefined' || val === 'null' || val.trim() === '') {
@@ -52,6 +54,8 @@ export function useCurrentUser(): CurrentUser {
       role: finalRole,
       rawRole: finalRawRole,
       photo: finalPhoto,
+      id: userId ? parseInt(userId) : undefined,
+      instituicaoId: instituicaoId ? parseInt(instituicaoId) : undefined,
     });
   }, []);
 

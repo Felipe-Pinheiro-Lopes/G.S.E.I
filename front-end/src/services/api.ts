@@ -6,15 +6,17 @@ export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5145/api',
 });
 
-let authConfigured = false;
-const ensureAuth = () => {
-  if (typeof window === 'undefined' || authConfigured) return;
-  const cookies = parseCookies();
-  if (cookies['gesi.token']) {
-    api.defaults.headers['Authorization'] = `Bearer ${cookies['gesi.token']}`;
+// Axios request interceptor: attach JWT token from cookie on every request
+api.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const cookies = parseCookies();
+    const token = cookies['gesi.token'];
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
-  authConfigured = true;
-};
+  return config;
+});
 
 export const resolver = async <T>(request: Promise<{ data: T }>, fallback?: T): Promise<T> => {
   try {
