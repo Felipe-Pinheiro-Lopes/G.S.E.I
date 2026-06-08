@@ -1,4 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using API.Models;
@@ -11,7 +11,8 @@ public class TokenService(IConfiguration configuration)
     public string GenerateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var secretKey = configuration["Jwt:Key"] ?? "remember_remember_the_fifteenth_of_november";
+        var secretKey = configuration["Jwt:Key"]
+        ?? throw new InvalidOperationException("JWT Key não configurada. Defina em appsettings.");
         var key = Encoding.ASCII.GetBytes(secretKey);
         
         var tokenDescriptor = new SecurityTokenDescriptor
