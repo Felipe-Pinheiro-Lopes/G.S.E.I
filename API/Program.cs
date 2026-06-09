@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -98,10 +98,13 @@ if (builder.Environment.IsDevelopment()) {
 // Suporta proxy reverso apenas em produção
 if (!builder.Environment.IsDevelopment())
 {
-    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    var forwardedOptions = new ForwardedHeadersOptions
     {
         ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor
-    });
+    };
+    forwardedOptions.KnownIPNetworks.Clear();
+    forwardedOptions.KnownProxies.Clear();
+    app.UseForwardedHeaders(forwardedOptions);
 }
 
 // O CORS deve vir ANTES de Authentication e Authorization

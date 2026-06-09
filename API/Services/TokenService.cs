@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using API.Models;
@@ -6,8 +6,14 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace API.Services;
 
+/// <summary>
+/// Serviço responsável pela geração de tokens JWT seguros.
+/// </summary>
 public class TokenService(IConfiguration configuration)
 {
+    /// <summary>
+    /// Gera um token JWT contendo as claims de identificação, nome, email e nível de acesso do usuário.
+    /// </summary>
     public string GenerateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
