@@ -123,17 +123,17 @@ Administrador cadastra uma entidade que irá buscar os equipamentos disponíveis
 Administrador
 
 ## Descrição:
-Visualiza quais equipamentos estão no inventário e seus status (Em estoque, triagem, análise, doação aprovada, descartado, aguardando formatação).
+Cadastro de instituição e análise de gráficos.
 
 ## Pré-condições:
-Ter o equipamento cadastrado;
+Equipamento ter passado pela triagem;
 
 ## Fluxo Principal:
-Administrador busca equipamentos de acordo com a situação do equipamento.
+Aprovação de doações de lotes de equipamentos para instituições cadastradas
 
 ## Fluxos Alternativos:
 **1-** 
-    Modificar status dos equipamentos;
+    Nenhuma instituição está interessada
 
 **2-**
     Cadastra e apaga equipamentos;
