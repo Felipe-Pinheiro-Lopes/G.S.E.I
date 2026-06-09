@@ -25,6 +25,8 @@ O G.S.E.I gerencia todo o ciclo de vida de equipamentos de TI descontinuados:
 
 ## 🛠️ Stack Tecnológico
 
+[Link do projeto](https://github.com/users/Felipe-Pinheiro-Lopes/projects/2)
+
 ### Backend (.NET)
 * **ASP.NET Core 10** (Minimal APIs + Controllers)
 * Entity Framework Core 9 com PostgreSQL (Npgsql)
