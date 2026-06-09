@@ -4,13 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using API.Data;
 using API.DTOs;
 using API.Models;
+using Microsoft.Extensions.Logging;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Controller responsável por fornecer indicadores e movimentações para o Dashboard.
+/// </summary>
 [ApiController]
 [Route("api/dashboard")]
 [Authorize]
-public class DashboardController(AppDbContext context) : ControllerBase
+public class DashboardController(AppDbContext context, ILogger<DashboardController> logger) : ControllerBase
 {
     /// <summary>
     /// Retorna os principais indicadores (KPIs) do dashboard
@@ -60,8 +64,7 @@ public class DashboardController(AppDbContext context) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[DASHBOARD ERROR - KPIs] {ex.GetType().Name}: {ex.Message}");
-            Console.WriteLine(ex.StackTrace);
+            logger.LogError(ex, "[DASHBOARD ERROR - KPIs] {Message}", ex.Message);
             throw; // re-lança para manter o 500 (útil para debug)
         }
     }
@@ -190,6 +193,9 @@ public class DashboardController(AppDbContext context) : ControllerBase
         return result;
     }
 
+    /// <summary>
+    /// Retorna a lista de movimentações de forma paginada e filtrada.
+    /// </summary>
     [HttpGet("movimentacoes")]
     public async Task<ActionResult<MovimentacaoPaginadaDto>> GetMovimentacoes([FromQuery] MovimentacaoFiltroDto filtro)
     {
@@ -243,11 +249,14 @@ public class DashboardController(AppDbContext context) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[DASHBOARD ERROR - Movimentacoes] {ex}");
+            logger.LogError(ex, "[DASHBOARD ERROR - Movimentacoes]");
             return new MovimentacaoPaginadaDto(new List<MovimentacaoDto>(), 0, 1, 20, 0);
         }
     }
 
+    /// <summary>
+    /// Exporta as movimentações do sistema para um arquivo CSV.
+    /// </summary>
     [HttpGet("movimentacoes/exportar")]
     public async Task<IActionResult> ExportarMovimentacoes([FromQuery] MovimentacaoFiltroDto filtro)
     {
@@ -313,7 +322,7 @@ public class DashboardController(AppDbContext context) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[DASHBOARD ERROR - ExportarMovimentacoes] {ex}");
+            logger.LogError(ex, "[DASHBOARD ERROR - ExportarMovimentacoes]");
             return StatusCode(500, "Erro ao gerar CSV.");
         }
     }

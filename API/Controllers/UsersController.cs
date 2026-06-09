@@ -7,11 +7,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Controller responsável por gerenciar dados e perfis dos usuários do sistema.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 public class UsersController(AppDbContext db) : ControllerBase
 {
+    /// <summary>
+    /// Retorna a lista de todos os usuários cadastrados. Apenas para administradores e equipe interna.
+    /// </summary>
     [HttpGet]
     [Authorize(Roles = "Admin,Internal")]
     public async Task<ActionResult<List<object>>> GetAll()
@@ -21,6 +27,9 @@ public class UsersController(AppDbContext db) : ControllerBase
             .ToListAsync<object>();
     }
 
+    /// <summary>
+    /// Retorna as informações básicas de um usuário específico pelo seu ID.
+    /// </summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<object>> GetById(int id)
     {
@@ -30,6 +39,9 @@ public class UsersController(AppDbContext db) : ControllerBase
                      user.FotoUrl };
     }
 
+    /// <summary>
+    /// Atualiza os dados de perfil de um usuário existente.
+    /// </summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDto dto)
     {
@@ -59,6 +71,9 @@ public class UsersController(AppDbContext db) : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Remove um usuário do sistema. Apenas para administradores e equipe interna.
+    /// </summary>
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin,Internal")]
     public async Task<IActionResult> Delete(int id)

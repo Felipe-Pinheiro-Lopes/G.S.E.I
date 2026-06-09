@@ -4,14 +4,21 @@ using API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Controller responsável pela gestão e cadastro das instituições de caridade/destinatárias de doações.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class InstituicoesController(AppDbContext db) : ControllerBase
+public class InstituicoesController(AppDbContext db, ILogger<InstituicoesController> logger) : ControllerBase
 {
+    /// <summary>
+    /// Retorna a lista de todas as instituições parceiras ordenadas pelo cadastro mais recente.
+    /// </summary>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Instituicao>>> GetAll()
     {
@@ -20,6 +27,9 @@ public class InstituicoesController(AppDbContext db) : ControllerBase
             .ToListAsync();
     }
 
+    /// <summary>
+    /// Retorna os dados de uma instituição específica.
+    /// </summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<Instituicao>> GetById(int id)
     {
@@ -27,6 +37,9 @@ public class InstituicoesController(AppDbContext db) : ControllerBase
         return inst == null ? NotFound() : inst;
     }
 
+    /// <summary>
+    /// Cadastra uma nova instituição parceira no sistema.
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<Instituicao>> Create([FromBody] InstituicaoCreateDto dto)
     {
@@ -48,8 +61,8 @@ public class InstituicoesController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Instituicoes ERROR - Create] {ex.GetType().Name}: {ex.Message}");
-            if (ex.InnerException != null) Console.WriteLine(ex.InnerException.Message);
+            logger.LogError(ex, "[Instituicoes ERROR - Create] {Message}", ex.Message);
+            if (ex.InnerException != null) logger.LogError(ex.InnerException, "[Instituicoes Inner Error] {Message}", ex.InnerException.Message);
             return StatusCode(500, "Erro ao cadastrar instituição.");
         }
     }
@@ -74,6 +87,9 @@ public class InstituicoesController(AppDbContext db) : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Remove uma instituição do sistema.
+    /// </summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

@@ -5,14 +5,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Controller responsável pelas operações de triagem de equipamentos no sistema.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class TriagemController(AppDbContext db) : ControllerBase
+public class TriagemController(AppDbContext db, ILogger<TriagemController> logger) : ControllerBase
 {
+    /// <summary>
+    /// Finaliza a triagem de um equipamento, registrando o checklist, laudo e alterando o status final.
+    /// </summary>
     [HttpPost]
     public async Task<IActionResult> RealizarTriagem(RealizarTriagemDto dto)
     {
@@ -23,7 +30,7 @@ public class TriagemController(AppDbContext db) : ControllerBase
             LaudoTecnico = dto.LaudoTecnico,
             Destino = dto.Destino,
             DataTriagem = DateTime.UtcNow,
-            TecnicoResponsavel = "Técnico" // TODO: from auth claims
+            TecnicoResponsavel = User.Identity?.Name ?? "Técnico"
         };
 
         db.Triagens.Add(triagem);
@@ -58,6 +65,9 @@ public class TriagemController(AppDbContext db) : ControllerBase
         return Ok(triagem);
     }
 
+    /// <summary>
+    /// Retorna o histórico de triagens realizadas em um equipamento específico.
+    /// </summary>
     [HttpGet("historico/{equipamentoId}")]
     public async Task<ActionResult<List<Triagem>>> GetHistorico(int equipamentoId)
     {
@@ -90,6 +100,9 @@ public class TriagemController(AppDbContext db) : ControllerBase
         return result;
     }
 
+    /// <summary>
+    /// Retorna a lista de equipamentos que já tiveram sua triagem finalizada.
+    /// </summary>
     [HttpGet("finalizados")]
     public async Task<ActionResult<List<EquipamentoDto>>> GetFinalizados()
     {
@@ -109,6 +122,9 @@ public class TriagemController(AppDbContext db) : ControllerBase
         return equipamentos;
     }
 
+    /// <summary>
+    /// Registra o início de uma análise de triagem para um equipamento, mudando seu status para 'EmAnalise'.
+    /// </summary>
     [HttpPost("iniciar")]
     public async Task<IActionResult> IniciarAndamento(IniciarAndamentoDto dto)
     {
@@ -177,6 +193,9 @@ public class TriagemController(AppDbContext db) : ControllerBase
 
     // ==================== ENDPOINTS PARA TELA DE DESCARTE ====================
 
+    /// <summary>
+    /// Retorna as métricas (KPIs) relativas aos descartes de equipamentos.
+    /// </summary>
     [HttpGet("descarte/kpis")]
     public async Task<ActionResult<object>> GetDescarteKpis()
     {
@@ -191,11 +210,14 @@ public class TriagemController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Descarte KPIs Error] {ex}");
+            logger.LogError(ex, "[Descarte KPIs Error]");
             return new { totalDescartado = 0, aguardando = 0, esteMes = 0, lotes = 0 };
         }
     }
 
+    /// <summary>
+    /// Retorna o volume mensal de descartes para o ano informado.
+    /// </summary>
     [HttpGet("descarte/volume")]
     public async Task<ActionResult<List<object>>> GetDescarteVolume([FromQuery] int ano = 2025)
     {
@@ -215,11 +237,14 @@ public class TriagemController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Descarte Volume Error] {ex}");
+            logger.LogError(ex, "[Descarte Volume Error]");
             return new List<object>();
         }
     }
 
+    /// <summary>
+    /// Retorna a distribuição percentual do status dos descartes (Descartado vs Aguardando).
+    /// </summary>
     [HttpGet("descarte/status")]
     public async Task<ActionResult<List<object>>> GetDescarteStatus()
     {
@@ -239,11 +264,14 @@ public class TriagemController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Descarte Status Error] {ex}");
+            logger.LogError(ex, "[Descarte Status Error]");
             return new List<object> { new { label = "Descartado (100%)", percent = 100, color = "#15803d" } };
         }
     }
 
+    /// <summary>
+    /// Retorna itens de descarte paginados.
+    /// </summary>
     [HttpGet("descarte/itens")]
     public async Task<ActionResult<object>> GetDescarteItens([FromQuery] int pagina = 1, [FromQuery] int porPagina = 10)
     {
@@ -280,11 +308,14 @@ public class TriagemController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Descarte Itens Error] {ex}");
+            logger.LogError(ex, "[Descarte Itens Error]");
             return Ok(new { itens = new List<object>(), total = 0, pagina, porPagina, totalPaginas = 0 });
         }
     }
 
+    /// <summary>
+    /// Limpa todo o histórico de triagens com destino final. Requer papel 'Admin'.
+    /// </summary>
     [HttpDelete("finalizados")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ClearFinalizados()
@@ -301,11 +332,14 @@ public class TriagemController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[ClearFinalizados Error] {ex}");
+            logger.LogError(ex, "[ClearFinalizados Error]");
             return StatusCode(500, "Erro ao limpar histórico de triagens.");
         }
     }
 
+    /// <summary>
+    /// Exclui o histórico de triagem de um equipamento específico. Requer papel 'Admin'.
+    /// </summary>
     [HttpDelete("finalizados/{equipamentoId}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteHistory(int equipamentoId)
@@ -322,7 +356,7 @@ public class TriagemController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[DeleteHistory Error] {ex}");
+            logger.LogError(ex, "[DeleteHistory Error]");
             return StatusCode(500, "Erro ao deletar histórico do equipamento.");
         }
     }

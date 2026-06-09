@@ -4,14 +4,21 @@ using API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Controller responsável por gerenciar e controlar as solicitações de doações realizadas por instituições.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class SolicitacoesController(AppDbContext db) : ControllerBase
+public class SolicitacoesController(AppDbContext db, ILogger<SolicitacoesController> logger) : ControllerBase
 {
+    /// <summary>
+    /// Registra uma nova solicitação de doação e associa os equipamentos.
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<SolicitacaoDto>> Criar(CriarSolicitacaoDto dto)
     {
@@ -46,6 +53,9 @@ public class SolicitacoesController(AppDbContext db) : ControllerBase
         return new SolicitacaoDto(solicitacao.Id, inst?.Nome ?? "", dto.ResponsavelRetirada, solicitacao.Status, solicitacao.DataSolicitacao, solicitacao.Protocolo, solicitacao.Prioridade);
     }
 
+    /// <summary>
+    /// Retorna todas as solicitações de doações registradas no sistema.
+    /// </summary>
     [HttpGet]
     public async Task<ActionResult<List<SolicitacaoDto>>> Listar()
     {
@@ -65,6 +75,9 @@ public class SolicitacoesController(AppDbContext db) : ControllerBase
         return lista;
     }
 
+    /// <summary>
+    /// Aprova uma solicitação de doação pelo seu ID.
+    /// </summary>
     [HttpPut("{id}/aprovar")]
     public async Task<IActionResult> Aprovar(int id)
     {
@@ -146,6 +159,9 @@ public class SolicitacoesController(AppDbContext db) : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Retorna os indicadores de doações e solicitações.
+    /// </summary>
     [HttpGet("kpis")]
     public async Task<ActionResult<object>> GetKpis()
     {
@@ -160,11 +176,14 @@ public class SolicitacoesController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Doacoes KPIs Error] {ex}");
+            logger.LogError(ex, "[Doacoes KPIs Error]");
             return new { total = 0, aprovadas = 0, pendentes = 0, itensDoados = 0 };
         }
     }
 
+    /// <summary>
+    /// Retorna o volume de solicitações mensais aprovadas no ano informado.
+    /// </summary>
     [HttpGet("volume-mensal")]
     public async Task<ActionResult<List<object>>> GetVolumeMensal([FromQuery] int ano = 2025)
     {
@@ -184,11 +203,14 @@ public class SolicitacoesController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Doacoes Volume Error] {ex}");
+            logger.LogError(ex, "[Doacoes Volume Error]");
             return new List<object>();
         }
     }
 
+    /// <summary>
+    /// Retorna a distribuição por categorias dos itens doados.
+    /// </summary>
     [HttpGet("top-categorias")]
     public async Task<ActionResult<List<object>>> GetTopCategorias()
     {
@@ -212,7 +234,7 @@ public class SolicitacoesController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Doacoes Top Categorias Error] {ex}");
+            logger.LogError(ex, "[Doacoes Top Categorias Error]");
             return new List<object>();
         }
     }

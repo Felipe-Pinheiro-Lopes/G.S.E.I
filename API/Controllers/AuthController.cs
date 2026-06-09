@@ -9,10 +9,16 @@ using System.Text;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Controller responsável pela autenticação e registro de usuários.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController(AppDbContext db, TokenService tokenService) : ControllerBase
 {
+    /// <summary>
+    /// Autentica um usuário e retorna um token JWT válido.
+    /// </summary>
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
     {
@@ -25,6 +31,9 @@ public class AuthController(AppDbContext db, TokenService tokenService) : Contro
         return new LoginResponse(token, user.Nome, user.Role, user.InstituicaoId, user.FotoUrl, user.Id);
     }
 
+    /// <summary>
+    /// Cadastra um novo usuário no sistema com hash de senha seguro.
+    /// </summary>
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterRequest request)
     {

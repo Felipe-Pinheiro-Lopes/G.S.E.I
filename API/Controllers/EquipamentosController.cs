@@ -4,14 +4,21 @@ using API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Controller responsável pela gestão e controle dos equipamentos no estoque e fluxos relacionados.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class EquipamentosController(AppDbContext db) : ControllerBase
+public class EquipamentosController(AppDbContext db, ILogger<EquipamentosController> logger) : ControllerBase
 {
+    /// <summary>
+    /// Retorna todos os equipamentos com filtros de status e suporte a paginação.
+    /// </summary>
     [HttpGet]
     public async Task<ActionResult<object>> GetAll([FromQuery] string? status = null, [FromQuery] int pagina = 1, [FromQuery] int porPagina = 10)
     {
@@ -35,12 +42,14 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[EQUIPAMENTOS ERROR - GetAll] {ex.GetType().Name}: {ex.Message}");
-            Console.WriteLine(ex.StackTrace);
+            logger.LogError(ex, "[EQUIPAMENTOS ERROR - GetAll] {Message}", ex.Message);
             throw;
         }
     }
 
+    /// <summary>
+    /// Cria um novo equipamento no estoque e registra a movimentação de entrada.
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<EquipamentoDto>> Create(EquipamentoCreateDto dto)
     {
@@ -76,6 +85,9 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
             equipamento.LaudoDescarte));
     }
 
+    /// <summary>
+    /// Exclui um equipamento pelo seu identificador.
+    /// </summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -88,6 +100,9 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Atualiza as informações cadastrais de um equipamento.
+    /// </summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] EquipamentoUpdateDto dto)
     {
@@ -167,6 +182,9 @@ public class EquipamentosController(AppDbContext db) : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Registra o descarte do equipamento e adiciona laudo e técnico responsável.
+    /// </summary>
     [HttpPost("{id}/registrar-descarte")]
     public async Task<IActionResult> RegistrarDescarte(int id, [FromBody] RegistrarDescarteDto dto)
     {
