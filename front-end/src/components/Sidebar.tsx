@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { destroyCookie, setCookie } from 'nookies';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { api } from '@/services/api';
 import { parseCookies } from 'nookies';
 
@@ -58,6 +59,11 @@ export default function Sidebar({
   });
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileMessage, setProfileMessage] = useState('');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 
@@ -92,49 +98,49 @@ export default function Sidebar({
       <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
         {isInternal ? (
           <>
-            <p className="px-4 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Principal</p>
+            <p className="px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Principal</p>
             <Link 
               href="/Screens/Dashboard" 
-              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Dashboard') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-600 hover:bg-blue-50 hover:text-blue-800'}`}
+              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Dashboard') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-800 hover:bg-blue-50 hover:text-blue-800'}`}
             >
               <span className={`material-symbols-outlined text-[22px] ${isActive('/Screens/Dashboard') ? 'filled-icon' : ''}`}>grid_view</span>
               <span className={`font-semibold text-sm ${isActive('/Screens/Dashboard') ? 'font-bold' : ''}`}>Dashboard</span>
             </Link>
             <Link 
               href="/Screens/Inventario" 
-              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Inventario') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-600 hover:bg-blue-50 hover:text-blue-800'}`}
+              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Inventario') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-800 hover:bg-blue-50 hover:text-blue-800'}`}
             >
               <span className={`material-symbols-outlined text-[22px] ${isActive('/Screens/Inventario') ? 'filled-icon' : ''}`}>inventory_2</span>
               <span className={`font-semibold text-sm ${isActive('/Screens/Inventario') ? 'font-bold' : ''}`}>Inventário</span>
             </Link>
 
-            <p className="px-4 py-2 mt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Processos</p>
+            <p className="px-4 py-2 mt-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Processos</p>
             <Link 
               href="/Screens/Triagem" 
-              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Triagem') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-600 hover:bg-blue-50 hover:text-blue-800'}`}
+              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Triagem') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-800 hover:bg-blue-50 hover:text-blue-800'}`}
             >
               <span className={`material-symbols-outlined text-[22px] ${isActive('/Screens/Triagem') ? 'filled-icon' : ''}`}>fact_check</span>
               <span className={`font-semibold text-sm ${isActive('/Screens/Triagem') ? 'font-bold' : ''}`}>Triagem</span>
             </Link>
             <Link 
               href="/Screens/Doacoes" 
-              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Doacoes') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-600 hover:bg-blue-50 hover:text-blue-800'}`}
+              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Doacoes') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-800 hover:bg-blue-50 hover:text-blue-800'}`}
             >
               <span className={`material-symbols-outlined text-[22px] ${isActive('/Screens/Doacoes') ? 'filled-icon' : ''}`}>volunteer_activism</span>
               <span className={`font-semibold text-sm ${isActive('/Screens/Doacoes') ? 'font-bold' : ''}`}>Doações</span>
             </Link>
             <Link 
               href="/Screens/Descarte" 
-              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Descarte') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-600 hover:bg-blue-50 hover:text-blue-800'}`}
+              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Descarte') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-800 hover:bg-blue-50 hover:text-blue-800'}`}
             >
               <span className={`material-symbols-outlined text-[22px] ${isActive('/Screens/Descarte') ? 'filled-icon' : ''}`}>delete_forever</span>
               <span className={`font-semibold text-sm ${isActive('/Screens/Descarte') ? 'font-bold' : ''}`}>Descarte</span>
             </Link>
 
-            <p className="px-4 py-2 mt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Administração</p>
+            <p className="px-4 py-2 mt-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Administração</p>
             <Link 
               href="/Screens/Usuarios" 
-              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Usuarios') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-600 hover:bg-blue-50 hover:text-blue-800'}`}
+              className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors group ${isActive('/Screens/Usuarios') ? 'bg-[#e6eeff] text-[#1a56db]' : 'text-gray-800 hover:bg-blue-50 hover:text-blue-800'}`}
             >
               <span className={`material-symbols-outlined text-[22px] ${isActive('/Screens/Usuarios') ? 'filled-icon' : ''}`}>group</span>
               <span className={`font-semibold text-sm ${isActive('/Screens/Usuarios') ? 'font-bold' : ''}`}>Usuários</span>
@@ -146,11 +152,11 @@ export default function Sidebar({
               <span className="material-symbols-outlined text-[22px]">add_circle</span>
               <span className="font-bold text-sm">Nova Solicitação</span>
             </Link>
-            <Link href="/Screens/AcompanhamentoSolicitacao" className="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-green-50 hover:text-green-800 rounded-lg transition-colors">
+            <Link href="/Screens/AcompanhamentoSolicitacao" className="flex items-center gap-4 px-4 py-3 text-gray-800 hover:bg-green-50 hover:text-green-800 rounded-lg transition-colors">
               <span className="material-symbols-outlined text-[22px]">assignment</span>
               <span className="font-semibold text-sm">Minhas Solicitações</span>
             </Link>
-            <Link href="/Screens/Inf-Instituicao" className="flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-green-50 hover:text-green-800 rounded-lg transition-colors">
+            <Link href="/Screens/Inf-Instituicao" className="flex items-center gap-4 px-4 py-3 text-gray-800 hover:bg-green-50 hover:text-green-800 rounded-lg transition-colors">
               <span className="material-symbols-outlined text-[22px]">account_balance</span>
               <span className="font-semibold text-sm">Dados da Instituição</span>
             </Link>
@@ -161,7 +167,7 @@ export default function Sidebar({
       <div className="p-4 border-t border-gray-200 mt-auto bg-white/50">
         <div className="flex items-center gap-3 mb-4 px-2">
           <img 
-            src={userPhoto || getUserPhoto() || "https://i.pravatar.cc/150?img=11"} 
+            src={mounted ? (userPhoto || getUserPhoto() || "https://i.pravatar.cc/150?img=11") : "https://i.pravatar.cc/150?img=11"} 
             alt={userName}
             suppressHydrationWarning
             onClick={() => {
@@ -192,7 +198,7 @@ export default function Sidebar({
       </div>
 
       {/* Modal de Edição de Perfil */}
-      {showProfileModal && (
+      {showProfileModal && mounted && createPortal(
         <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/60 p-4">
           <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
             <div className="px-6 py-5 border-b flex justify-between items-center bg-gray-50">
@@ -244,7 +250,7 @@ export default function Sidebar({
                   type="text" 
                   value={profileData.name} 
                   onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#0d631b]" 
+                  className="w-full px-4 py-3 border text-gray-500 border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#0d631b]" 
                 />
               </div>
 
@@ -267,14 +273,14 @@ export default function Sidebar({
                   placeholder="Nova senha" 
                   value={profileData.newPassword}
                   onChange={(e) => setProfileData({ ...profileData, newPassword: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#0d631b] mb-3" 
+                  className="w-full px-4 py-3 border text-gray-500 border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#0d631b] mb-3" 
                 />
                 <input 
                   type="password" 
                   placeholder="Confirmar nova senha" 
                   value={profileData.confirmPassword}
                   onChange={(e) => setProfileData({ ...profileData, confirmPassword: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#0d631b]" 
+                  className="w-full px-4 py-3 border text-gray-500 border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#0d631b]" 
                 />
               </div>
 
@@ -326,6 +332,7 @@ export default function Sidebar({
                       setCookie(null, 'gesi.userName', profileData.name, { path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: true });
                       if (profileData.photo) {
                         setUserPhoto(profileData.photo);
+                        setCookie(null, 'gesi.userPhoto', profileData.photo, { path: '/', maxAge: 60 * 60 * 24 * 7, sameSite: true });
                       }
 
                     setProfileMessage("Perfil atualizado com sucesso!");
@@ -348,7 +355,8 @@ export default function Sidebar({
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </aside>
   );

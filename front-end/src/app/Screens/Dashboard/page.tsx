@@ -108,11 +108,20 @@ export default function DashboardPage() {
     setLogMsg(null);
     try {
       const params: any = {};
-      if (start) params.startDate = start;
-      if (end) params.endDate = end;
-      const res = await api.get<LogMovimentacao[]>('/dashboard/movimentacoes', { params });
-      setLogs(res.data || []);
-    } catch {
+      if (start) params.dataInicio = start;
+      if (end) params.dataFim = end;
+      const res = await api.get<any>('/dashboard/movimentacoes', { params });
+      const rawItens = res.data?.itens || [];
+      const mappedLogs: LogMovimentacao[] = rawItens.map((item: any) => ({
+        id: item.id,
+        timestamp: item.dataHora,
+        event_description: item.descricao || `${item.tipoMovimentacao} - Equipamento ${item.codigoEquipamento}`,
+        user_id: null,
+        user_name: item.responsavel || 'Sistema'
+      }));
+      setLogs(mappedLogs);
+    } catch (error) {
+      console.error('Erro ao buscar logs:', error);
       setLogError(true);
       setLogs([]);
     } finally {
@@ -144,7 +153,7 @@ export default function DashboardPage() {
     setLogMsg('Exportando relatório...');
     try {
       const response = await api.get('/dashboard/movimentacoes/exportar', {
-        params: { startDate: start, endDate: end },
+        params: { dataInicio: start, dataFim: end },
         responseType: 'blob',
       });
       
