@@ -1,4 +1,4 @@
-﻿# Plano de Trabalho - Desenvolvimento do Sistema
+# Plano de Trabalho - Desenvolvimento do Sistema
 **Responsavel:** Felipe  
 **Prazo:** 2 dias  
 **Professores:** Prof Andre (BD), Prof Gabriel (Front-end), Prof Cainã (Linguagem)
@@ -9,29 +9,29 @@ Ajustar o codigo do sistema para remover deficiencias tecnicas e implementar mel
 ## Tarefas
 
 ### 1. Seguranca e Configuracao (Prof Andre)
-- [ ] Remover hardcoded JWT Secret de `API/Program.cs`. Criar `appsettings.Development.json` com valor dummy e `appsettings.Production.json` com placeholder. Ler via `builder.Configuration["Jwt:Key"]` apenas, SEM fallback hardcoded.
-- [ ] Mover CORS `localhost:3000` para `appsettings.json`:  
+- [x] Remover hardcoded JWT Secret de `API/Program.cs`. Criar `appsettings.Development.json` com valor dummy e `appsettings.Production.json` com placeholder. Ler via `builder.Configuration["Jwt:Key"]` apenas, SEM fallback hardcoded.
+- [x] Mover CORS `localhost:3000` para `appsettings.json`:  
   ```json
   "Cors": { "AllowedOrigins": ["http://localhost:3000"] }
   ```  
   E ler em `Program.cs` via `builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()`.
-- [ ] Garantir que `X-Forwarded-Proto` seja tratado se houver proxy reverso (para nao quebrar HTTPS em prod).
+- [x] Garantir que `X-Forwarded-Proto` seja tratado se houver proxy reverso (para nao quebrar HTTPS em prod).
 
 ### 2. Front-end - Ajustes de Qualidade (Prof Gabriel)
-- [ ] **HTML Semantico**: auditar arquivos em `front-end/src/app/Screens/` e `front-end/src/components/`. Garantir uso de tags semanticas.
-- [ ] **Responsividade**: testar breakpoints mobile (sm, md, lg) em tabelas (`DescarteTable`, `SolicitacoesTable`) e graficos (`ParetoChart`, `CategoriesDonut`, `VolumeBarChart`). Ajustar classes Tailwind para `overflow-x-auto`, `w-full`, `min-w-*` conforme necessario.
-- [ ] **next.config.ts**: revisar e documentar configuracoes aplicadas (images.domains, output: standalone, compress, reactStrictMode).
+- [x] **HTML Semantico**: auditar arquivos em `front-end/src/app/Screens/` e `front-end/src/components/`. Garantir uso de tags semanticas.
+- [x] **Responsividade**: testar breakpoints mobile (sm, md, lg) em tabelas (`DescarteTable`, `SolicitacoesTable`) e graficos (`ParetoChart`, `CategoriesDonut`, `VolumeBarChart`). Ajustar classes Tailwind para `overflow-x-auto`, `w-full`, `min-w-*` conforme necessario.
+- [x] **next.config.ts**: revisar e documentar configuracoes aplicadas (images.domains, output: standalone, compress, reactStrictMode).
 
 ### 3. Codigo - Documentacao e Limpeza (Prof Cainã)
-- [ ] Remover TODO de `TriagemController.cs` linha 26: `TecnicoResponsavel = "Tecnico"` -> ler do `User.Claims` do `HttpContext`.
-- [ ] Adicionar XML summaries em Controllers e Services principais.
-- [ ] Inserir exemplos de codigo comentado em `docs/codigo-exemplos.md` mostrando: estrutura condicional, repeticao, modularizacao usadas no fluxo de triagem e aprovacao.
-- [ ] Garantir ausencia de `Console.WriteLine` para log em producao (substituir por ILogger).
+- [x] Remover TODO de `TriagemController.cs` linha 26: `TecnicoResponsavel = "Tecnico"` -> ler do `User.Claims` do `HttpContext`.
+- [x] Adicionar XML summaries em Controllers e Services principais.
+- [x] Inserir exemplos de codigo comentado em `docs/codigo-exemplos.md` mostrando: estrutura condicional, repeticao, modularizacao usadas no fluxo de triagem e aprovacao.
+- [x] Garantir ausencia de `Console.WriteLine` para log em producao (substituir por ILogger).
 
 ### 4. Integracoes e Deploy
-- [ ] Garantir que `dotnet build` passe sem erros/warnings criticos.
-- [ ] Garantir que `npm run build` no front-end complete sem erros.
-- [ ] Atualizar `README.md` (apos Ryan/Bianca finalizarem a versao expandida) com links para a Wiki.
+- [x] Garantir que `dotnet build` passe sem erros/warnings criticos.
+- [x] Garantir que `npm run build` no front-end complete sem erros.
+- [x] Atualizar `README.md` (apos Ryan/Bianca finalizarem a versao expandida) com links para a Wiki.
 
 ### 5. Entregas
 | Arquivo | Descricao |
