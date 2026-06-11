@@ -12,8 +12,8 @@
 - [ ] Validar login, fluxo de triagem, aprovacao de doacao e descarte em producao.
 
 ### Enrico
-- [ ] Validar que o dicionario de dados cobre todas as tabelas usadas pelo sistema atual.
-- [ ] Validar diagramas PNG estao legiveis e com resolucao minima 1920x1080.
+- [X] Validar que o dicionario de dados cobre todas as tabelas usadas pelo sistema atual.
+- [X] Validar diagramas PNG estao legiveis e com resolucao minima 1920x1080.
 
 ### Ryan & Bianca
 - [ ] Subir Wiki do GitHub com todas as paginas mapeadas no plano.
@@ -43,10 +43,10 @@
 - [ ] PRD acessivel no repositorio/Wiki
 
 ## Checklist Final do Prof Andre (Banco de Dados)
-- [ ] Dicionario de dados completo
-- [ ] Modelo Logico Relacional documentado
-- [ ] DER/MLD coerente com o codigo
-- [ ] Normalizacao ate 3FN documentada com justificativa
+- [X] Dicionario de dados completo
+- [X] Modelo Logico Relacional documentado
+- [X] DER/MLD coerente com o codigo
+- [X] Normalizacao ate 3FN documentada com justificativa
 - [ ] Scripts DDL ou Migrations aplicados no banco
 
 ## Checklist Final do Prof Gabriel (Front-end)
