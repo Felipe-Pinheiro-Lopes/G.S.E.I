@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G.S.E.I - Controle de Triagem</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1,h2,h3 { font-family: 'Manrope', sans-serif; }
+  </style>
+</head>
+<body class="bg-[#f3faff] text-[#071e27] min-h-screen">
+  <aside id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-[#f8fbff] z-[70] border-r border-gray-200 flex flex-col shadow-xl lg:shadow-none transform transition-transform duration-300 translate-x-0 lg:translate-x-0">
+    <div class="p-6 pb-8 flex justify-between items-center">
+      <div>
+        <h2 class="font-black text-2xl text-green-800 tracking-tight">G.S.E.I.</h2>
+        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Gestão de TI</p>
+      </div>
+      <button onclick="closeSidebar()" class="material-symbols-outlined text-gray-500 hover:text-red-500 lg:hidden">close</button>
+    </div>
+    <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+      <p class="px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Principal</p>
+      <a href="dashboard.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-gray-800 hover:bg-blue-50 hover:text-blue-800"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-semibold text-sm">Dashboard</span></a>
+      <a href="inventario.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-gray-800 hover:bg-blue-50 hover:text-blue-800"><span class="material-symbols-outlined text-[22px]">inventory_2</span><span class="font-semibold text-sm">Inventário</span></a>
+      <p class="px-4 py-2 mt-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Processos</p>
+      <a href="triagem.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors bg-[#e6eeff] text-[#1a56db]"><span class="material-symbols-outlined text-[22px]">fact_check</span><span class="font-semibold text-sm font-bold">Triagem</span></a>
+      <a href="doacoes.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-gray-800 hover:bg-blue-50 hover:text-blue-800"><span class="material-symbols-outlined text-[22px]">volunteer_activism</span><span class="font-semibold text-sm">Doações</span></a>
+      <a href="descarte.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-gray-800 hover:bg-blue-50 hover:text-blue-800"><span class="material-symbols-outlined text-[22px]">delete_forever</span><span class="font-semibold text-sm">Descarte</span></a>
+      <p class="px-4 py-2 mt-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Administração</p>
+      <a href="usuarios.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-gray-800 hover:bg-blue-50 hover:text-blue-800"><span class="material-symbols-outlined text-[22px]">group</span><span class="font-semibold text-sm">Usuários</span></a>
+    </nav>
+    <div class="p-4 border-t border-gray-200 mt-auto bg-white/50">
+      <div class="flex items-center gap-3 mb-4 px-2">
+        <img src="https://i.pravatar.cc/150?img=11" alt="Admin" class="w-10 h-10 rounded-full border border-gray-300 object-cover" />
+        <div class="overflow-hidden"><p class="text-sm font-bold text-gray-800 truncate">Administrador</p><p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider truncate">Administrador</p></div>
+      </div>
+      <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors text-left"><span class="material-symbols-outlined text-[20px]">logout</span><span class="font-bold text-sm">Sair do Sistema</span></button>
+    </div>
+  </aside>
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[60] lg:hidden hidden" onclick="closeSidebar()"></div>
+
+  <div class="lg:ml-64 flex flex-col min-h-screen">
+    <header class="sticky top-0 w-full z-40 bg-white/80 backdrop-blur flex justify-between items-center px-4 md:px-8 py-4 border-b border-gray-200 shadow-sm">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="lg:hidden w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition" aria-label="Abrir menu"><span class="material-symbols-outlined text-green-800">menu</span></button>
+        <h1 class="font-black text-green-800 text-xl hidden sm:block">Controle de Triagem</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="hidden md:flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full w-[300px]">
+          <span class="material-symbols-outlined text-gray-400 text-sm">search</span>
+          <input type="text" placeholder="Buscar..." class="bg-transparent border-none focus:ring-0 text-sm w-full outline-none text-gray-700" />
+        </div>
+        <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 text-gray-500 transition relative"><span class="material-symbols-outlined">notifications</span></button>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 max-w-5xl mx-auto space-y-8 pb-12">
+      <!-- Tabs -->
+      <section class="flex bg-surface-container-low p-1.5 rounded-2xl w-fit shadow-sm border border-gray-100">
+        <button onclick="switchTab('fila')" id="tab-fila" class="px-6 py-2.5 rounded-xl text-sm font-bold transition-all bg-white text-primary shadow-sm">Fila de Espera (3)</button>
+        <button onclick="switchTab('andamento')" id="tab-andamento" class="px-6 py-2.5 rounded-xl text-sm font-bold transition-all text-gray-500 hover:text-primary">Em Andamento (2)</button>
+        <button onclick="switchTab('finalizados')" id="tab-finalizados" class="px-6 py-2.5 rounded-xl text-sm font-bold transition-all text-gray-500 hover:text-primary">Finalizados (5)</button>
+      </section>
+
+      <!-- Formulário de Triagem -->
+      <section id="formTriagem" class="space-y-6 hidden">
+        <div class="flex justify-between items-end">
+          <div>
+            <h2 class="text-2xl font-black text-on-surface tracking-tight">Informações do Equipamento</h2>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Fila de Espera</p>
+          </div>
+          <button onclick="closeFormTriagem()" class="text-sm text-gray-500 hover:text-red-600">Fechar</button>
+        </div>
+        <div class="bg-white rounded-[32px] p-6 md:p-10 shadow-[0_12_32px_rgba(7,30,39,0.06)] border border-gray-100 space-y-10">
+          <div class="flex flex-col md:flex-row justify-between gap-6 pb-8 border-b border-gray-100">
+            <div class="flex items-center gap-6">
+              <div class="w-16 h-16 rounded-2xl bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center shadow-inner">
+                <span class="material-symbols-outlined text-3xl">laptop_mac</span>
+              </div>
+              <div>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Patrimônio G.S.E.I.</p>
+                <h3 class="text-3xl font-black text-on-surface">EQ-001</h3>
+                <p class="text-sm font-medium text-on-surface-variant">Dell Latitude 5520</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulário completo apenas em Em Andamento -->
+          <div id="formAndamento" class="hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div class="space-y-4">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-2"><span class="material-symbols-outlined text-sm">fact_check</span>Checklist de Entrada</h4>
+                <div class="space-y-3">
+                  <label onclick="toggleCheck(this)" class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+                    <input type="checkbox" class="w-6 h-6 rounded-lg border-gray-300 text-primary focus:ring-primary" />
+                    <span class="text-sm font-bold text-gray-700 group-hover:text-primary">Diagnóstico de Hardware</span>
+                  </label>
+                  <label onclick="toggleCheck(this)" class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+                    <input type="checkbox" class="w-6 h-6 rounded-lg border-gray-300 text-primary focus:ring-primary" />
+                    <span class="text-sm font-bold text-gray-700 group-hover:text-primary">Sanitização de Dados (Wipe)</span>
+                  </label>
+                  <label onclick="toggleCheck(this)" class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+                    <input type="checkbox" class="w-6 h-6 rounded-lg border-gray-300 text-primary focus:ring-primary" />
+                    <span class="text-sm font-bold text-gray-700 group-hover:text-primary">Inspeção Estética/Física</span>
+                  </label>
+                </div>
+              </div>
+              <div class="space-y-4">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-2"><span class="material-symbols-outlined text-sm">edit_note</span>Laudo Técnico</h4>
+                <textarea class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-5 text-sm font-medium focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition placeholder:text-gray-400" rows="6" placeholder="Descreva eventuais defeitos, peças faltantes ou observações..."></textarea>
+              </div>
+            </div>
+            <div class="space-y-6 pt-4">
+              <h4 class="text-xs font-bold uppercase tracking-widest text-center text-gray-400">Destino do Equipamento</h4>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <label onclick="selectDestino('Reuso', this)" class="relative flex flex-col p-5 border-2 rounded-[24px] cursor-pointer transition-all border-gray-100 hover:bg-green-50/50">
+                  <input type="radio" name="destino" class="absolute top-4 right-4" />
+                  <span class="material-symbols-outlined text-primary mb-3">settings_backup_restore</span>
+                  <p class="font-black text-on-surface">Reuso</p>
+                  <p class="text-[10px] font-medium text-gray-500 leading-tight mt-1">Aprovado para retornar ao inventário ativo.</p>
+                </label>
+                <label onclick="selectDestino('Doacao', this)" class="relative flex flex-col p-5 border-2 rounded-[24px] cursor-pointer transition-all border-gray-100 hover:bg-green-50/50">
+                  <input type="radio" name="destino" class="absolute top-4 right-4" />
+                  <span class="material-symbols-outlined text-primary mb-3">volunteer_activism</span>
+                  <p class="font-black text-on-surface">Doação</p>
+                  <p class="text-[10px] font-medium text-gray-500 leading-tight mt-1">Funcional, mas obsoleto para uso interno.</p>
+                </label>
+                <label onclick="selectDestino('Descarte', this)" class="relative flex flex-col p-5 border-2 rounded-[24px] cursor-pointer transition-all border-gray-100 hover:bg-green-50/50">
+                  <input type="radio" name="destino" class="absolute top-4 right-4" />
+                  <span class="material-symbols-outlined text-primary mb-3">delete_forever</span>
+                  <p class="font-black text-on-surface">Descarte</p>
+                  <p class="text-[10px] font-medium text-gray-500 leading-tight mt-1">Inoperante ou perigoso.</p>
+                </label>
+              </div>
+            </div>
+            <button class="w-full text-white py-5 rounded-[20px] font-black text-sm uppercase tracking-widest shadow-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50" style="background-color: #28782E">Finalizar e Salvar Triagem</button>
+            <button onclick="voltarParaFila()" class="w-full py-4 rounded-[20px] font-black text-sm uppercase tracking-widest border border-gray-300 text-gray-600 hover:bg-gray-50 active:scale-[0.98] transition-all mt-3">Voltar para Fila de Espera</button>
+          </div>
+
+          <!-- Opção fila -->
+          <div id="formFila" class="space-y-6 pt-4">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-center text-gray-400">Destinatário do Equipamento</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label onclick="selectDestino('EmAndamento', this)" class="relative flex flex-col p-5 border-2 rounded-[24px] cursor-pointer transition-all border-gray-100 hover:bg-green-50/50">
+                <input type="radio" name="destino" class="absolute top-4 right-4" />
+                <span class="material-symbols-outlined text-primary mb-3">pending_actions</span>
+                <p class="font-black text-on-surface">Em Andamento</p>
+                <p class="text-[10px] font-medium text-gray-500 leading-tight mt-1">Enviar para triagem técnica.</p>
+              </label>
+            </div>
+            <div class="flex flex-col md:flex-row gap-4">
+              <button class="flex-1 text-white py-5 rounded-[20px] font-black text-sm uppercase tracking-widest shadow-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50" style="background-color: #28782E">Enviar para Em Andamento</button>
+              <button onclick="closeFormTriagem()" class="flex-1 py-5 rounded-[20px] font-black text-sm uppercase tracking-widest border border-gray-300 text-gray-600 hover:bg-gray-50 active:scale-[0.98] transition-all">Cancelar</button>
+            </div>
+          </div>
+
+          <!-- Histórico Finalizados -->
+          <div id="formFinalizados" class="hidden space-y-6">
+            <div class="text-center"><p class="text-sm text-gray-500">Histórico completo de triagens realizadas neste equipamento</p></div>
+            <div class="space-y-4">
+              <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-primary">10/06/2026 14:30</span>
+                    <div class="text-sm font-semibold text-on-surface mt-1">Técnico: <span class="text-primary">João Silva</span></div>
+                  </div>
+                  <span class="px-3 py-1 text-xs font-bold bg-gray-200 text-gray-600 rounded-full">Doacao</span>
+                </div>
+                <div class="mb-3">
+                  <p class="text-xs font-bold uppercase text-gray-500 mb-1">Checklist realizado:</p>
+                  <ul class="text-sm text-gray-700 list-disc list-inside"><li>Diagnóstico de Hardware</li><li>Sanitização de Dados</li><li>Inspeção Estética/Física</li></ul>
+                </div>
+                <div>
+                  <p class="text-xs font-bold uppercase text-gray-500 mb-1">Laudo Técnico:</p>
+                  <p class="text-sm text-gray-800 whitespace-pre-wrap bg-white p-3 rounded-xl border">Equipamento em perfeito estado, aprovado para doação.</p>
+                </div>
+              </div>
+              <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-primary">08/06/2026 09:15</span>
+                    <div class="text-sm font-semibold text-on-surface mt-1">Técnico: <span class="text-primary">Maria Santos</span></div>
+                  </div>
+                  <span class="px-3 py-1 text-xs font-bold bg-gray-200 text-gray-600 rounded-full">Reuso</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Lista de Equipamentos -->
+      <section>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest px-2" id="listTitle">Equipamentos na Fila</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="equipList">
+          <div onclick="selecionarEquip(this)" class="p-5 rounded-2xl border cursor-pointer transition-all hover:shadow-md bg-white border-gray-100">
+            <div class="flex justify-between items-center">
+              <div><h4 class="font-bold text-on-surface">EQ-001</h4><p class="text-sm text-gray-600">Dell Latitude 5520</p></div>
+              <span class="px-3 py-1 text-xs font-bold bg-primary text-white rounded-full">Selecionado</span>
+            </div>
+          </div>
+          <div onclick="selecionarEquip(this)" class="p-5 rounded-2xl border cursor-pointer transition-all hover:shadow-md bg-white border-gray-100">
+            <div class="flex justify-between items-center">
+              <div><h4 class="font-bold text-on-surface">EQ-002</h4><p class="text-sm text-gray-600">Monitor Dell 22"</p></div>
+            </div>
+          </div>
+          <div onclick="selecionarEquip(this)" class="p-5 rounded-2xl border cursor-pointer transition-all hover:shadow-md bg-white border-gray-100">
+            <div class="flex justify-between items-center">
+              <div><h4 class="font-bold text-on-surface">EQ-003</h4><p class="text-sm text-gray-600">Desktop HP ProDesk</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../script/triagem.js"></script>
+</body>
+</html>

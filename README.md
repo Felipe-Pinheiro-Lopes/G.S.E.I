@@ -18,7 +18,7 @@ O G.S.E.I gerencia todo o ciclo de vida de equipamentos de TI descontinuados:
 
 ## 🔑 Credenciais de Acesso (Ambiente de Desenvolvimento)
 
-* **Email**: `admin@petrobras.com.br`
+* **Email**: `admin`
 * **Senha**: `Admin@123`
 
 ---
@@ -62,11 +62,12 @@ G.S.E.I/
 │   ├── src/services/             # api.ts (Instância configurada do Axios)
 │   ├── src/__tests/              # Testes unitários automatizados (Button, Login)
 │   └── next.config.ts            # Configurações de otimização de build
-├── docs/                         # Documentação técnica e acadêmica
-│   └── codigo-exemplos.md        # Exemplos comentados de loops, condicionais e modularização
-├── Bd/                           # Modelagem lógica e física do banco de dados
-├── Diagrama/                     # Diagramas de caso de uso e processos de triagem
-└── README.md                     # Documentação de introdução
+├── archive/                      # Documentação técnica e acadêmica
+│   └── diagram/                  # Arquivos dos diagramas brutos
+│   └── doc/                      # documentação do das partes do sistema
+│   └── img/                      # Imagens
+│   └── web/html/                 # Arquivos em html do Front-end para amostragem
+│   └── web/script/               # Arquivos em java-script do Front-end para amostragem
 ```
 
 ---

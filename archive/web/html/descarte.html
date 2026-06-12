@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G.S.E.I - Controle de Descarte</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1,h2,h3 { font-family: 'Manrope', sans-serif; }
+  </style>
+</head>
+<body class="bg-[#f3faff] text-[#071e27] min-h-screen">
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[60] lg:hidden hidden" onclick="closeSidebar()"></div>
+  <!-- Sidebar Internal -->
+  <aside id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-[#f8fbff] z-[70] border-r border-gray-200 flex flex-col shadow-xl lg:shadow-none transform transition-transform duration-300 translate-x-0 lg:translate-x-0">
+    <div class="p-6 pb-8 flex justify-between items-center">
+      <div>
+        <h2 class="font-black text-2xl text-green-800 tracking-tight">G.S.E.I.</h2>
+        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Gestão de TI</p>
+      </div>
+      <button onclick="closeSidebar()" class="material-symbols-outlined text-gray-500 hover:text-red-500 lg:hidden">close</button>
+    </div>
+    <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+      <p class="px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Principal</p>
+      <a href="dashboard.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-gray-800 hover:bg-blue-50 hover:text-blue-800"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-semibold text-sm">Dashboard</span></a>
+      <a href="inventario.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-gray-800 hover:bg-blue-50 hover:text-blue-800"><span class="material-symbols-outlined text-[22px]">inventory_2</span><span class="font-semibold text-sm">Inventário</span></a>
+      <p class="px-4 py-2 mt-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Processos</p>
+      <a href="triagem.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-gray-800 hover:bg-blue-50 hover:text-blue-800"><span class="material-symbols-outlined text-[22px]">fact_check</span><span class="font-semibold text-sm">Triagem</span></a>
+      <a href="doacoes.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-gray-800 hover:bg-blue-50 hover:text-blue-800"><span class="material-symbols-outlined text-[22px]">volunteer_activism</span><span class="font-semibold text-sm">Doações</span></a>
+      <a href="descarte.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors bg-[#e6eeff] text-[#1a56db]"><span class="material-symbols-outlined text-[22px]">delete_forever</span><span class="font-semibold text-sm font-bold">Descarte</span></a>
+      <p class="px-4 py-2 mt-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Administração</p>
+      <a href="usuarios.html" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors text-gray-800 hover:bg-blue-50 hover:text-blue-800"><span class="material-symbols-outlined text-[22px]">group</span><span class="font-semibold text-sm">Usuários</span></a>
+    </nav>
+    <div class="p-4 border-t border-gray-200 mt-auto bg-white/50">
+      <div class="flex items-center gap-3 mb-4 px-2">
+        <img src="https://i.pravatar.cc/150?img=11" alt="Admin" class="w-10 h-10 rounded-full border border-gray-300 object-cover" />
+        <div class="overflow-hidden"><p class="text-sm font-bold text-gray-800 truncate">Administrador</p><p class="text-[10px] text-gray-500 uppercase font-bold tracking-wider truncate">Administrador</p></div>
+      </div>
+      <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors text-left"><span class="material-symbols-outlined text-[20px]">logout</span><span class="font-bold text-sm">Sair do Sistema</span></button>
+    </div>
+  </aside>
+
+  <div class="lg:ml-64 flex flex-col min-h-screen">
+    <header class="sticky top-0 w-full z-40 bg-white/80 backdrop-blur flex justify-between items-center px-4 md:px-8 py-4 border-b border-gray-200 shadow-sm">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="lg:hidden w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition" aria-label="Abrir menu"><span class="material-symbols-outlined text-green-800">menu</span></button>
+        <h1 class="font-black text-green-800 text-xl hidden sm:block">Controle de Descarte</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="hidden md:flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full w-[300px]">
+          <span class="material-symbols-outlined text-gray-400 text-sm">search</span>
+          <input type="text" placeholder="Buscar..." class="bg-transparent border-none focus:ring-0 text-sm w-full outline-none text-gray-700" />
+        </div>
+        <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 text-gray-500 transition relative"><span class="material-symbols-outlined">notifications</span></button>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto space-y-8 pb-12">
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
+          <div class="flex items-center gap-5">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center bg-green-50 text-green-700"><span class="material-symbols-outlined text-3xl">delete</span></div>
+            <div><p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Total Descartado</p><h3 class="text-3xl font-extrabold text-gray-800 mt-1">15</h3><p class="text-xs text-gray-500 mt-1">Itens descartados</p></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
+          <div class="flex items-center gap-5">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center bg-yellow-50 text-yellow-600"><span class="material-symbols-outlined text-3xl">schedule</span></div>
+            <div><p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Aguardando Descarte</p><h3 class="text-3xl font-extrabold text-gray-800 mt-1">4</h3><p class="text-xs text-gray-500 mt-1">Itens na fila</p></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
+          <div class="flex items-center gap-5">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center bg-blue-50 text-blue-600"><span class="material-symbols-outlined text-3xl">assignment</span></div>
+            <div><p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Este Mês</p><h3 class="text-3xl font-extrabold text-gray-800 mt-1">6</h3><p class="text-xs text-gray-500 mt-1">Itens processados</p></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
+          <div class="flex items-center gap-5">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center bg-purple-50 text-purple-600"><span class="material-symbols-outlined text-3xl">trending_up</span></div>
+            <div><p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Total de Lotes</p><h3 class="text-3xl font-extrabold text-gray-800 mt-1">3</h3><p class="text-xs text-gray-500 mt-1">Lotes finalizados</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <button class="flex items-center gap-2 px-4 py-2 text-sm font-bold bg-white border border-gray-300 hover:bg-gray-50 rounded-xl transition"><span class="material-symbols-outlined text-base">description</span> Gerar Relatório CSV</button>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="xl:col-span-2 bg-surface-container-lowest border border-gray-100 rounded-3xl p-6 sm:p-8 flex flex-col gap-6 shadow-[0_12_32px_rgba(7,30,39,0.04)]">
+          <div class="flex justify-between items-center">
+            <div><h4 class="text-xl font-bold text-on-surface">Descartes por Mês</h4><p class="text-xs font-medium text-on-surface-variant">Quantidade de itens descartados ao longo do ano</p></div>
+            <select class="bg-gray-50 border-none text-xs font-bold rounded-lg py-2 px-3 text-gray-600 outline-none"><option>Este ano</option></select>
+          </div>
+          <div class="relative h-56 w-full flex items-end justify-between gap-2 sm:gap-4 px-2 sm:px-4">
+            <div class="flex-1 bg-green-200 rounded-t-lg min-w-[30px]" style="height: 35%"><span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">Jan</span></div>
+            <div class="flex-1 bg-green-200 rounded-t-lg min-w-[30px]" style="height: 45%"><span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">Fev</span></div>
+            <div class="flex-1 bg-green-200 rounded-t-lg min-w-[30px]" style="height: 55%"><span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">Mar</span></div>
+            <div class="flex-1 bg-primary/80 rounded-t-lg min-w-[30px]" style="height: 75%"><span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-800">Abr</span></div>
+            <div class="flex-1 bg-green-200 rounded-t-lg min-w-[30px]" style="height: 50%"><span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">Mai</span></div>
+            <div class="flex-1 bg-green-200 rounded-t-lg min-w-[30px]" style="height: 40%"><span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">Jun</span></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col items-center">
+          <h4 class="text-lg font-bold text-gray-800 mb-6 w-full text-left">Status dos Itens</h4>
+          <div class="relative w-48 h-48 rounded-full shadow-inner" style="background: conic-gradient(#16a34a 0% 60%, #f59e0b 60% 85%, #64748b 85% 100%)">
+            <div class="absolute inset-8 bg-white rounded-full flex flex-col items-center justify-center shadow-sm"><span class="text-[10px] font-bold text-gray-400 uppercase">Total</span><span class="text-2xl font-black text-gray-800">19</span></div>
+          </div>
+          <div class="mt-6 grid grid-cols-2 gap-3 text-[11px] font-semibold w-full">
+            <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background:#16a34a"></span>Descartado (60%)</div>
+            <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background:#f59e0b"></span>Aguardando (25%)</div>
+            <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background:#64748b"></span>Outros (15%)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DescarteTable inline -->
+      <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="p-5 md:p-6 border-b border-gray-100 bg-gray-50/50">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div class="md:col-span-2">
+              <div class="flex items-center gap-3 bg-white border border-gray-200 rounded-xl h-12 px-4 shadow-sm">
+                <span class="material-symbols-outlined text-gray-400 text-sm">search</span>
+                <input type="text" placeholder="Buscar por item, ID ou lote..." class="w-full text-sm outline-none bg-transparent text-gray-700" />
+              </div>
+            </div>
+            <select class="h-12 px-4 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 outline-none shadow-sm"><option>Status</option><option>Descartado</option><option>Aguardando</option></select>
+            <select class="h-12 px-4 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 outline-none shadow-sm"><option>Categoria</option><option>Notebooks</option><option>Monitores</option></select>
+            <div class="flex gap-3">
+              <select class="flex-1 h-12 px-4 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 outline-none shadow-sm"><option>Período</option></select>
+              <button class="h-12 w-12 rounded-xl bg-white border border-gray-200 text-gray-500 hover:text-red-600 hover:bg-red-50 transition flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-[20px]">filter_alt_off</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="bg-white border-b border-gray-100 text-xs uppercase text-gray-400 font-bold tracking-wider">
+              <tr><th class="px-6 py-4 hidden sm:table-cell">Item</th><th class="px-6 py-4">Descrição</th><th class="px-6 py-4">ID do Item</th><th class="px-6 py-4 hidden md:table-cell">Lote</th><th class="px-6 py-4">Status</th><th class="px-6 py-4 hidden lg:table-cell">Responsável</th><th class="px-6 py-4 text-center">Ações</th></tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+              <tr class="hover:bg-blue-50/50 transition-colors">
+                <td class="px-6 py-4 hidden sm:table-cell"><div class="w-10 h-10 rounded-xl flex items-center justify-center text-blue-600 bg-blue-50"><span class="material-symbols-outlined text-lg">laptop_mac</span></div></td>
+                <td class="px-6 py-4 font-bold text-gray-800">Notebook Dell Latitude</td>
+                <td class="px-6 py-4 text-gray-500 font-medium">EQ-005</td>
+                <td class="px-6 py-4 text-gray-500 font-medium hidden md:table-cell">L-2024-EX</td>
+                <td class="px-6 py-4"><span class="px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Aguardando</span></td>
+                <td class="px-6 py-4 text-gray-600 font-medium hidden lg:table-cell">Maria Silva</td>
+                <td class="px-6 py-4 text-center"><button onclick="openDrawer()" class="text-gray-400 hover:text-blue-600 transition p-1 rounded-md hover:bg-blue-100"><span class="material-symbols-outlined">more_vert</span></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Drawer Descarte -->
+  <div id="descarteDrawer" class="fixed top-0 right-0 w-full md:w-[480px] h-full bg-white z-[90] shadow-2xl flex flex-col border-l border-gray-200 transform transition-transform duration-300 translate-x-full">
+    <div class="p-6 border-b flex justify-between items-center bg-gray-50/70">
+      <div><p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Processo de Descarte</p><h2 class="text-xl font-black text-gray-800 mt-1">Confirmar Descarte</h2></div>
+      <button onclick="closeDrawer()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="flex-1 overflow-auto p-6 space-y-6">
+      <div><p class="text-xs text-gray-500">Equipamento</p><p class="font-bold text-lg">Notebook Dell Latitude</p><p class="text-sm text-gray-600">EQ-005 • L-2024-EX</p></div>
+      <div>
+        <label class="block text-xs font-bold text-gray-500 mb-2">LAUDO TÉCNICO / MOTIVO DO DESCARTE</label>
+        <textarea class="w-full bg-gray-50 border border-gray-200 rounded-2xl p-4 text-sm text-gray-800 whitespace-pre-wrap" rows="3">Equipamento com falha na placa mãe, não econômico para reparo.</textarea>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-gray-500 mb-2">STATUS FINAL</label>
+        <select class="w-full border border-gray-300 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d631b]">
+          <option>Descartado (Finalizar)</option><option>Manter como Aguardando</option>
+        </select>
+      </div>
+      <div class="bg-gray-50 p-4 rounded-2xl text-xs text-gray-600"><p><strong>Responsável pelo descarte:</strong> Administrador</p><p class="mt-1">Esta informação será registrada no histórico do equipamento.</p></div>
+    </div>
+    <div class="p-6 border-t bg-white flex gap-3">
+      <button onclick="closeDrawer()" class="flex-1 py-3 text-sm font-bold border border-gray-300 rounded-2xl hover:bg-gray-50">Cancelar</button>
+      <button onclick="finalizarDescarte()" class="flex-1 py-3 text-sm font-bold bg-[#0d631b] text-white rounded-2xl hover:bg-green-800 disabled:opacity-60">Salvar e Finalizar Descarte</button>
+    </div>
+  </div>
+
+  <script src="../script/descarte.js"></script>
+</body>
+</html>
