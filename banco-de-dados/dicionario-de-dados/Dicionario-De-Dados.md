@@ -17,7 +17,7 @@ Descrição: Armazena os equipamentos que passam pelo sistema.
 | `DataEntrada`   | TIMESTAMP       | NOT NULL     | -                      | CURRENT_TIMESTAMP |
 | `InstituicaoId` | INT             | NULL         | FK -> Instituicoes(Id) | -                 |
 | `Tipo`          | VARCHAR(50)     | NOT NULL     | -                      | -                 |
-| `AprovadoPor`   | VARCHAR(100)    | NULL         |    -                   | -                 |
+| `AprovadoPor`   | VARCHAR(100)    | NULL         | -                      | -                 |
 | `LaudoDescarte` | TEXT            | NULL         | -                      | -                 |
 
 ---
@@ -39,7 +39,7 @@ Descrição: Registros de solicitações de movimentação ou triagem.
 | Coluna           | Tipo       | Nulabilidade | Restrições           | Default           |
 | :---             | :---       | :---         | :---                 | :---              |
 | `Id`             | INT        | NOT NULL     | PK, Auto Increment   | -                 |
-| `SolicitanteId`  | INT        | NOT NULL     | FK -> Users(Id) | -  |                   |
+| `SolicitanteId`  | INT        | NOT NULL     | FK -> Users(Id)      | -                 |
 | `DataSolicitacao`| TIMESTAMP  | NOT NULL     | -                    | CURRENT_TIMESTAMP |
 | `Status`         | VARCHAR(20)| NOT NULL     | -                    | 'ABERTA'          |
 
@@ -91,7 +91,7 @@ Descrição: Histórico de movimentações dos equipamentos.
 | `EquipamentoId`   | INT           | NOT NULL     | FK -> Equipamentos(Id) | -       |
 | `Origem`          | VARCHAR(100)  | NOT NULL     | -                      | -       |
 | `Destino`         | VARCHAR(100)  | NOT NULL     | -                      | -       |
-| `DataMovimentacao`| TIMESTAMP     | NOT NULL     | - CURRENT_TIMESTAMP    |         |
+| `DataMovimentacao`| TIMESTAMP     | NOT NULL     | CURRENT_TIMESTAMP      | -       |
 
 ---
 

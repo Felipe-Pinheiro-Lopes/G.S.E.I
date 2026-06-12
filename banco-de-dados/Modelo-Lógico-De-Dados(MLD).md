@@ -1,6 +1,6 @@
 # Modelo Lógico de Dados (MLD) – G.S.E.I
 
-## Tabela: Instituicoes
+## 1° Tabela: Instituicoes
 
 **Chave Primária (PK)**
 
@@ -31,7 +31,7 @@
 
 ---
 
-## Tabela: Users
+## 2° Tabela: Users
 
 **Chave Primária (PK)**
 
@@ -62,7 +62,7 @@
 
 ---
 
-## Tabela: Equipamentos
+## 3° Tabela: Equipamentos
 
 **Chave Primária (PK)**
 
@@ -96,7 +96,7 @@
 
 ---
 
-## Tabela: Solicitacoes
+## 4° Tabela: Solicitacoes
 
 **Chave Primária (PK)**
 
@@ -128,7 +128,7 @@
 
 ---
 
-## Tabela: Triagens
+## 5° Tabela: Triagens
 
 **Chave Primária (PK)**
 
@@ -158,7 +158,7 @@
 
 ---
 
-## Tabela: ItensSolicitacao
+## 6° Tabela: ItensSolicitacao
 
 **Chave Primária (PK)**
 
