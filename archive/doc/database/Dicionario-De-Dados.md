@@ -80,18 +80,6 @@ Descrição: Usuários do sistema.
 | `Nome`  | VARCHAR(100) | NOT NULL     | -                  | -       |
 | `Email` | VARCHAR(100) | NOT NULL     | UNIQUE             | -       |
 
----
-
-## 7. Tabela: `Movimentacoes`
-Descrição: Histórico de movimentações dos equipamentos.
-
-| Coluna            | Tipo          | Nulabilidade | Restrições             | Default |
-| :---              | :---          | :---         | :---                   | :---    |
-| `Id`              | INT           | NOT NULL     | PK, Auto Increment     | -       |
-| `EquipamentoId`   | INT           | NOT NULL     | FK -> Equipamentos(Id) | -       |
-| `Origem`          | VARCHAR(100)  | NOT NULL     | -                      | -       |
-| `Destino`         | VARCHAR(100)  | NOT NULL     | -                      | -       |
-| `DataMovimentacao`| TIMESTAMP     | NOT NULL     | CURRENT_TIMESTAMP      | -       |
 
 ---
 
